@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  chat-service:
+    build: .
+    ports:
+    - 8080:8080
+    environment:
+    - RAG_API_URL=http://rag-service:5000
+    depends_on:
+    - rag-service
+  rag-service:
+    image: zypher/rag-service:dev
+    ports:
+    - 5000:5000
+    environment:
+    - DB_HOST=db
+    - DB_PORT=5432
+    depends_on:
+    - db
+  db:
+    image: postgres:13
+    environment:
+    - POSTGRES_DB=zypher
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    volumes:
+    - db-data:/var/lib/postgresql/data
+volumes:
+  db-data: null

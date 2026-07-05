@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: Indexing API
+  version: 1.0.0
+  description: API for managing code indexing operations.
+paths:
+  /index:
+    post:
+      summary: Initiate code indexing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                repo_url:
+                  type: string
+                branch:
+                  type: string
+                  default: main
+              required:
+              - repo_url
+      responses:
+        '202':
+          description: Indexing initiated

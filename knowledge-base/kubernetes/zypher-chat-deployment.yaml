@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zypher-chat
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: zypher-chat
+  template:
+    metadata:
+      labels:
+        app: zypher-chat
+    spec:
+      containers:
+      - name: chat-service
+        image: zypher/chat-service:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: RAG_API_URL
+          value: http://zypher-rag-service

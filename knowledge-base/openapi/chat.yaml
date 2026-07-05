@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: Chat API
+  version: 1.0.0
+  description: API for interacting with the AI coding chatbot.
+paths:
+  /message:
+    post:
+      summary: Send message to chatbot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                message:
+                  type: string
+              required:
+              - user_id
+              - message
+      responses:
+        '200':
+          description: Message received, response sent
