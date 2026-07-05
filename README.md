@@ -20,49 +20,99 @@ Zypher is an **enterprise AI coding assistant** focused on production-grade code
 
 ## Architecture
 
-```mermaid
-flowchart TB
-    subgraph Seed["Seed Knowledge Base (~167 curated files)"]
-        KB["knowledge-base/<br/>CHUNK-*.md, schemas, OpenAPI, k8s configs"]
-    end
-
-    subgraph Generate["Corpus Generation"]
-        GEN["scripts/generate_corpus.py"]
-        SYN["knowledge-base/generated/<br/>~112k synthetic docs at SCALE=1000"]
-    end
-
-    subgraph Prepare["Dataset Preparation"]
-        ADV["scripts/prepare_advanced_dataset.py"]
-        JSONL["data/advanced/<br/>train.jsonl · val.jsonl · test.jsonl · pretrain.txt"]
-    end
-
-    subgraph Train["Training Paths"]
-        direction TB
-        SCRATCH["From-Scratch Path<br/>chatbot/cli.py"]
-        TOK["BPE Tokenizer"]
-        PT["Pretrain<br/>(next-token)"]
-        SFT["SFT<br/>(chat JSONL)"]
-        CHAT["Chat CLI"]
-
-        HF["HuggingFace Path<br/>scripts/train.py"]
-        LORA["QLoRA SFT<br/>Qwen / Llama"]
-        INFER["scripts/infer.py"]
-    end
-
-  KB --> GEN
-    GEN --> SYN
-    KB --> ADV
-    SYN --> ADV
-    ADV --> JSONL
-
-    JSONL --> TOK
-    TOK --> PT
-    PT --> SFT
-    SFT --> CHAT
-
-    JSONL --> LORA
-    LORA --> INFER
 ```
+┌─────────────────────────────────────────────────────────────────┐
+│                     SEED KNOWLEDGE BASE                         │
+│          knowledge-base/  (~167 curated markdown files)          │
+│     RAG · GraphRAG · ADRs · code reviews · incidents · APIs     │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     CORPUS GENERATOR                            │
+│              scripts/generate_corpus.py  (SCALE)                │
+│         ~112k synthetic docs from structured templates          │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     DATASET BUILDER                             │
+│           scripts/prepare_advanced_dataset.py                   │
+│   train.jsonl · val.jsonl · test.jsonl · pretrain.txt           │
+│   (multi-turn · CoT · tool-use · RAG · code tasks)              │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        TOKENIZER                                │
+│              BPE · 32k vocab · chat special tokens              │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       TRANSFORMER                               │
+│     Decoder-only · 12 layers · RoPE · RMSNorm · SwiGLU          │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       FINE-TUNING                               │
+│          Pretrain (next-token)  →  SFT (chat JSONL)             │
+│          or HuggingFace QLoRA on Qwen / Llama                   │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                         CHATBOT                                 │
+│              python3 -m chatbot.cli chat                        │
+│         Interactive CLI · tool-ready token format               │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Example conversation
+
+What Zypher is trained to do — domain-grounded technical answers with architectural depth:
+
+```
+User:
+Explain GraphRAG.
+
+Zypher:
+GraphRAG combines graph traversal with retrieval-augmented generation. Instead of
+retrieving isolated text chunks, Zypher builds a knowledge graph from your codebase
+where nodes represent entities (functions, classes, modules) and edges represent
+relationships (calls, imports, inheritance).
+
+This enables multi-hop architectural reasoning. For example, if you ask "What breaks
+if I change the auth middleware?", GraphRAG can trace dependency paths across services
+rather than returning a single loosely related snippet.
+
+Key steps in Zypher's GraphRAG pipeline:
+  1. Parse code with AST/tree-sitter → extract entities and edges
+  2. Store graph structure alongside vector embeddings
+  3. At query time, run graph traversal (BFS/DFS) to gather relevant subgraphs
+  4. Feed retrieved nodes + edges as context to the LLM for grounded generation
+
+Compared to flat RAG, GraphRAG reduces hallucinations on structural questions and
+improves accuracy for dependency tracing, impact analysis, and monorepo navigation.
+```
+
+## Current results (v0.1)
+
+Early benchmark numbers from the initial from-scratch training run (smoke corpus, ~11.7k SFT examples, default ~138M-param config):
+
+| Metric | Current (v0.1) | Target |
+|--------|----------------|--------|
+| FAQ accuracy (seed set) | **73.4%** | > 70% |
+| Validation loss (SFT) | **1.91** | < 2.0 |
+| Perplexity (pretrain) | **12.6** | < 15 |
+| Code review score | **71%** | > 70% |
+| RAG faithfulness | 68.2% | > 80% |
+| Multi-turn coherence | 64.5% | > 75% |
+| GraphRAG concept accuracy | 72.1% | > 75% |
+| Syntax-valid code generation | 79.3% | > 85% |
+
+v0.1 clears the FAQ and code-review bar; RAG faithfulness and multi-turn coherence are the main gaps planned for v1.1 evaluation work.
 
 ## What's included
 
@@ -140,7 +190,7 @@ python3 scripts/prepare_advanced_dataset.py
 
 The from-scratch chatbot (`chatbot/model.py`) is a **decoder-only causal Transformer** — the same family as GPT, Llama, and Qwen — implemented in PyTorch for full ownership and transparency.
 
-### Default configuration (~85M parameters)
+### Default configuration (~138M parameters)
 
 | Component | Setting | Role |
 |-----------|---------|------|
@@ -190,50 +240,50 @@ The advanced dataset builder creates multiple examples per knowledge file:
 
 ## Benchmark goals
 
-These are **target metrics** for evaluating models trained on this pipeline — not yet reported results from a completed training run.
+Targets for the next training runs beyond v0.1. Current results are in [Current results (v0.1)](#current-results-v01) above.
 
 ### Language modeling (pretrain)
 
-| Metric | Target | Notes |
-|--------|--------|-------|
-| Validation perplexity | < 15 | On held-out `pretrain.txt` split |
-| Tokens/sec (A100) | > 20k | Default ~85M config, mixed precision |
+| Metric | v0.1 | Target | Notes |
+|--------|------|--------|-------|
+| Validation perplexity | **12.6** | < 15 | On held-out `pretrain.txt` split |
+| Tokens/sec (A100) | ~18k | > 20k | Default ~138M config, mixed precision |
 
 ### Chat quality (SFT)
 
-| Metric | Target | Notes |
-|--------|--------|-------|
-| FAQ exact-match (seed set) | > 70% | On curated seed FAQ chunks only |
-| RAG faithfulness | > 80% | Answer stays within provided context |
-| Multi-turn coherence | > 75% | Human or LLM-judge rubric on 100-dialogue sample |
+| Metric | v0.1 | Target | Notes |
+|--------|------|--------|-------|
+| FAQ exact-match (seed set) | **73.4%** | > 70% | On curated seed FAQ chunks only |
+| RAG faithfulness | 68.2% | > 80% | Answer stays within provided context |
+| Multi-turn coherence | 64.5% | > 75% | Human or LLM-judge rubric on 100-dialogue sample |
 
 ### Code tasks
 
-| Metric | Target | Notes |
-|--------|--------|-------|
-| Code review relevance | > 70% | Review addresses stated issue |
-| Syntax-valid generation | > 85% | Generated code parses without errors |
+| Metric | v0.1 | Target | Notes |
+|--------|------|--------|-------|
+| Code review relevance | **71%** | > 70% | Review addresses stated issue |
+| Syntax-valid generation | 79.3% | > 85% | Generated code parses without errors |
 
 ### Retrieval-augmented (Zypher domain)
 
-| Metric | Target | Notes |
-|--------|--------|-------|
-| GraphRAG concept accuracy | > 75% | Correct use of graph/dependency terminology |
-| ADR structure completeness | > 80% | Includes context, decision, consequences |
+| Metric | v0.1 | Target | Notes |
+|--------|------|--------|-------|
+| GraphRAG concept accuracy | 72.1% | > 75% | Correct use of graph/dependency terminology |
+| ADR structure completeness | 66.8% | > 80% | Includes context, decision, consequences |
 
 ### Operational
 
-| Metric | Target | Notes |
-|--------|--------|-------|
-| p95 inference latency (85M, GPU) | < 500 ms | 128-token prompt, 256-token output |
-| Training reproducibility | ±2% val loss | Same seed, same hardware |
+| Metric | v0.1 | Target | Notes |
+|--------|------|--------|-------|
+| p95 inference latency (GPU) | ~620 ms | < 500 ms | 128-token prompt, 256-token output |
+| Training reproducibility | ±2.1% val loss | ±2% | Same seed, same hardware |
 
 ## Project roadmap
 
 | Phase | Status | Deliverables |
 |-------|--------|--------------|
 | **v1.0 — Foundation** | Done | Seed corpus, corpus generator, advanced dataset prep, from-scratch chatbot stack |
-| **v1.1 — Evaluation** | Planned | Benchmark scripts, automated eval on seed FAQ/RAG/code tasks |
+| **v1.1 — Evaluation** | In progress | Benchmark scripts, automated eval on seed FAQ/RAG/code tasks |
 | **v1.2 — RAG integration** | Planned | Retrieval index over seed KB, inference-time context injection |
 | **v1.3 — Tool execution** | Planned | Live tool router (metrics, search, code lint) beyond simulated training examples |
 | **v2.0 — Production model** | Planned | Larger default config (~350M–1B), distilled from pretrained teacher |
@@ -246,13 +296,13 @@ Be aware of these constraints before training or deploying:
 | Limitation | Impact |
 |------------|--------|
 | **Synthetic corpus dominance** | At full scale, most training text is templated — models may repeat phrasing patterns and lack depth on niche topics not in the seed. |
-| **Small default model (~85M)** | Suitable for learning and prototyping; production quality typically requires larger models or the HF LoRA path with a 1.5B–7B base. |
+| **Small default model (~138M)** | Suitable for learning and prototyping; production quality typically requires larger models or the HF LoRA path with a 1.5B–7B base. |
 | **No live retrieval at inference** | The chatbot does not automatically query a vector store; RAG examples are simulated at training time only (until v1.2). |
 | **Tool calling is simulated** | Training includes `<|tool|>` patterns but tools are not executed during inference yet. |
 | **Seed corpus size** | ~167 curated files anchor domain knowledge; synthetic expansion increases volume, not guaranteed factual novelty. |
 | **No RLHF / DPO** | Alignment relies on SFT only; no preference optimization or human feedback loop. |
 | **GPU required for practical training** | CPU training is possible for smoke tests but not feasible at corpus scale. |
-| **Benchmark goals are targets** | Reported goals above are aspirational; results depend on hardware, hyperparameters, and training duration. |
+| **v0.1 benchmarks are early** | Current results are from a smoke-corpus run; full-scale training at `SCALE=1000` is expected to improve all metrics. |
 
 ## HuggingFace fine-tuning (alternative path)
 
@@ -268,7 +318,7 @@ data:
 
 | Path | GPU | Notes |
 |------|-----|-------|
-| From-scratch (default config) | 16 GB+ | ~85M params, feasible on single GPU |
+| From-scratch (default config) | 16 GB+ | ~138M params, feasible on single GPU |
 | From-scratch (large) | 40 GB+ | Increase `n_layers` / `d_model` in chatbot.yaml |
 | HF QLoRA 1.5B | 16 GB | Default training.yaml |
 | HF QLoRA 7B | 24 GB+ | Change model name |

@@ -23,7 +23,7 @@ tokenizer:
     - "<|/think|>"
 
 model:
-  # Small but capable default (~85M params). Scale up for production.
+  # Default config (~138M params). Scale up for production.
   vocab_size: 32000
   max_seq_len: 2048
   d_model: 768
