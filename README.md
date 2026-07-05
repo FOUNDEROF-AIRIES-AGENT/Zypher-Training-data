@@ -114,25 +114,6 @@ Early benchmark numbers from the initial from-scratch training run (smoke corpus
 
 v0.1 clears the FAQ and code-review bar; RAG faithfulness and multi-turn coherence are the main gaps planned for v1.1 evaluation work.
 
-## Training statistics (v0.1 run)
-
-| Statistic | Value |
-|-----------|-------|
-| Knowledge files (seed + generated) | 2,175 |
-| SFT training examples | 11,740 |
-| Pretrain corpus size | ~25 MB text (~6.3M tokens) |
-| Total tokens processed (pretrain + SFT) | ~42M (across all epochs) |
-| Vocabulary size | 32,000 (BPE) |
-| Model parameters | ~138M |
-| Context window | 2,048 tokens |
-| Pretrain steps | 2,000 |
-| SFT steps | 3,000 |
-| Training time | ~6.5 hours |
-| Hardware | 1× NVIDIA T4 (16 GB VRAM) |
-| Mixed precision | FP16 |
-
-*Full-scale run (`SCALE=1000`, ~800k examples) is projected at ~48–72 hours on a single A100 40GB.*
-
 ## What's included
 
 | Layer | Description |
