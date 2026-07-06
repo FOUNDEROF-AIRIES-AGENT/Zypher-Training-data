@@ -1,0 +1,186 @@
+# Zypher Brain Dataset End User License Agreement (EULA)
+
+**Version 1.0**
+**Last Updated:** July 6, 2026
+
+## 1. Agreement
+
+This End User License Agreement ("Agreement") is a legal agreement between you ("Licensee") and **Zypher AI** ("Licensor") governing the use of the Zypher Brain Dataset, including all associated documentation, metadata, training data, RAG datasets, JSONL files, Markdown files, examples, schemas, software scripts, and future updates (collectively, the "Dataset").
+
+By downloading, installing, accessing, or using the Dataset, you agree to be bound by this Agreement.
+
+If you do not agree to these terms, do not use the Dataset.
+
+---
+
+# 2. License Grant
+
+Subject to compliance with this Agreement, Licensor grants Licensee a limited, non-exclusive, non-transferable, non-sublicensable license to:
+
+* Use the Dataset for internal development.
+* Build Retrieval-Augmented Generation (RAG) systems.
+* Train or fine-tune machine learning models.
+* Create AI assistants and software applications.
+* Conduct research and development.
+* Integrate the Dataset into commercial software products.
+
+Ownership of the Dataset is not transferred.
+
+---
+
+# 3. Ownership
+
+The Dataset is licensed, not sold.
+
+All intellectual property rights in the Dataset remain the exclusive property of Zypher AI.
+
+No ownership rights are transferred to the Licensee.
+
+---
+
+# 4. Permitted Uses
+
+Licensee may:
+
+* Build AI applications.
+* Train language models.
+* Fine-tune open-weight models.
+* Create commercial software.
+* Deploy internal AI systems.
+* Modify the Dataset for internal use.
+* Generate embeddings from the Dataset.
+* Build vector databases.
+* Build GraphRAG systems.
+
+---
+
+# 5. Restrictions
+
+Unless expressly authorized in writing, Licensee may NOT:
+
+* Redistribute the Dataset.
+* Resell the Dataset.
+* Upload the Dataset for public download.
+* Share the Dataset with third parties.
+* Publish substantial portions of the Dataset.
+* Remove copyright or license notices.
+* Claim ownership of the original Dataset.
+* Sell the Dataset as a competing product.
+
+These restrictions apply whether the Dataset is modified or unmodified.
+
+---
+
+# 6. Derivative Works
+
+Licensee may create derivative works for internal or commercial use.
+
+Derivative software, AI models, embeddings, indexes, and applications created using the Dataset belong to the Licensee.
+
+However, redistribution of the original Dataset or substantially similar copies remains prohibited unless separately authorized.
+
+---
+
+# 7. AI Training
+
+The Dataset may be used to:
+
+* Pretrain models.
+* Fine-tune models.
+* Train Retrieval-Augmented Generation systems.
+* Generate embeddings.
+* Build vector indexes.
+* Build GraphRAG systems.
+* Develop autonomous AI agents.
+
+Models trained using the Dataset belong to the Licensee, subject to any applicable licenses of the underlying base models used.
+
+---
+
+# 8. Updates
+
+Licensor may provide updated versions of the Dataset.
+
+Updates may be offered free of charge or as paid upgrades.
+
+Nothing in this Agreement obligates Licensor to provide updates.
+
+---
+
+# 9. Support
+
+Unless otherwise agreed in writing, the Dataset is provided without technical support.
+
+Support packages may be offered separately.
+
+---
+
+# 10. Confidentiality
+
+If Licensee receives unreleased or private versions of the Dataset, Licensee agrees not to disclose, distribute, or publish those materials without written authorization.
+
+---
+
+# 11. Disclaimer of Warranty
+
+THE DATASET IS PROVIDED "AS IS" AND "AS AVAILABLE."
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, LICENSOR DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO:
+
+* MERCHANTABILITY
+* FITNESS FOR A PARTICULAR PURPOSE
+* NON-INFRINGEMENT
+* ACCURACY
+* COMPLETENESS
+* RELIABILITY
+
+Licensor does not guarantee that AI models trained using the Dataset will achieve any particular level of performance or accuracy.
+
+---
+
+# 12. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, LICENSOR SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF PROFITS, LOSS OF DATA, BUSINESS INTERRUPTION, OR LOSS OF GOODWILL, ARISING FROM THE USE OF THE DATASET.
+
+Licensor's total liability under this Agreement shall not exceed the amount paid by Licensee for the Dataset.
+
+---
+
+# 13. Export Compliance
+
+Licensee agrees to comply with all applicable export control laws and regulations.
+
+---
+
+# 14. Termination
+
+This Agreement automatically terminates if Licensee violates its terms.
+
+Upon termination, Licensee must cease use of the Dataset and destroy all copies under its control, except where retention is required by law.
+
+Sections relating to ownership, disclaimers, limitations of liability, and governing law survive termination.
+
+---
+
+# 15. Governing Law
+
+This Agreement shall be governed by the laws of the jurisdiction specified by Licensor, without regard to conflict-of-law principles.
+
+---
+
+# 16. Entire Agreement
+
+This Agreement constitutes the entire agreement between Licensor and Licensee regarding the Dataset and supersedes all prior understandings relating to the Dataset.
+
+---
+
+# 17. Contact
+
+**Zypher AI**
+
+Licensing and Commercial Inquiries:
+
+Email: [licensing@zypher.ai](mailto:licensing@zypher.ai)
+
+Website: https://zypher.ai
+
