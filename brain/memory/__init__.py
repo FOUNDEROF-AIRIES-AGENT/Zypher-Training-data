@@ -1,5 +1,3 @@
-"""Backward-compatible re-export."""
-
 from brain.memory.conversation import ConversationMemory
 
 __all__ = ["ConversationMemory"]

@@ -1,3 +1,3 @@
-"""Zypher — Enterprise RAG chatbot powered by Zypher XS."""
+"""Zypher — Brain-first enterprise AI coding assistant."""
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"

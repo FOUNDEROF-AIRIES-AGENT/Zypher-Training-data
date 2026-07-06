@@ -1,0 +1,20 @@
+# LLM reasoning engine — replaceable, knowledge lives in Zypher Brain
+
+provider: huggingface
+
+model:
+  name: poolside/Laguna-XS-2.1
+  load_in_4bit: true
+  trust_remote_code: true
+
+# Optional fine-tuning — NOT required. Brain is the primary knowledge source.
+adapter:
+  enabled: false
+  path: outputs/zypher-xs/final
+
+inference:
+  max_new_tokens: 1024
+  temperature: 0.3
+  top_p: 0.9
+
+# Future: openai, anthropic, vllm, ollama providers

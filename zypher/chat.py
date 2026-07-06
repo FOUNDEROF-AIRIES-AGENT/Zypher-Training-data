@@ -1,40 +1,41 @@
 #!/usr/bin/env python3
-"""Zypher final chatbot CLI — Enterprise RAG + Zypher XS."""
+"""Zypher chatbot — Zypher Brain (knowledge) + LLM (reasoning engine)."""
 
 from __future__ import annotations
 
 import argparse
 
 from zypher.backend import ZypherBackend
+from zypher.config import load_config
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Zypher enterprise chatbot")
-    parser.add_argument("--xs-config", default="config/zypher_xs.yaml")
-    parser.add_argument("--rag-config", default="config/rag.yaml")
-    parser.add_argument("--reindex", action="store_true", help="Rebuild vector index")
-    parser.add_argument("--index-only", action="store_true", help="Index KB and exit")
+    parser = argparse.ArgumentParser(description="Zypher — Brain-first enterprise chatbot")
+    parser.add_argument("--brain-config", default="config/brain.yaml")
+    parser.add_argument("--llm-config", default="config/llm.yaml")
+    parser.add_argument("--reindex", action="store_true", help="Rebuild Zypher Brain vector index")
+    parser.add_argument("--index-only", action="store_true", help="Index and exit")
     parser.add_argument("--question", default=None, help="Single question (non-interactive)")
     args = parser.parse_args()
 
-    from zypher.config import load_config
-
-    config = load_config(args.xs_config, args.rag_config)
+    config = load_config(args.brain_config, args.llm_config)
     backend = ZypherBackend(config)
 
-    print(f"Knowledge base: {len(backend.kb)} documents")
-    if args.reindex or args.index_only or backend.vector_store._collection is None:
-        n = backend.index_knowledge_base()
-        print(f"Indexed {n} documents into vector store")
+    print(f"Zypher Brain: {backend.brain.document_count} documents")
+    if args.reindex or args.index_only or not backend.brain.vector_index.is_indexed:
+        n = backend.index_knowledge_base(force=args.reindex)
+        print(f"Indexed {n} documents into Zypher Brain")
 
     if args.index_only:
         return
+
+    adapter_note = " (fine-tuned adapter)" if getattr(backend.llm, "uses_adapter", False) else " (base model)"
+    print(f"LLM reasoning engine{adapter_note}. Type 'quit' to exit.\n")
 
     if args.question:
         print(backend.chat(args.question))
         return
 
-    print("Zypher Chatbot (Enterprise RAG + Zypher XS). Type 'quit' to exit.\n")
     while True:
         user = input("You: ").strip()
         if user.lower() in {"quit", "exit"}:

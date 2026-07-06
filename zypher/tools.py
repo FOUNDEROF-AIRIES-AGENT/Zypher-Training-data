@@ -3,12 +3,13 @@ from __future__ import annotations
 import json
 from typing import Any, Callable
 
+from brain import ZypherBrain
 
 ToolFn = Callable[[dict[str, Any]], str]
 
 
 class ToolRegistry:
-    """Lightweight tool-calling registry for the Zypher backend."""
+    """Tool-calling registry — delegates knowledge search to Zypher Brain."""
 
     def __init__(self) -> None:
         self._tools: dict[str, tuple[str, ToolFn]] = {}
@@ -26,11 +27,21 @@ class ToolRegistry:
         return fn(arguments)
 
     @staticmethod
-    def default() -> "ToolRegistry":
+    def default(brain: ZypherBrain) -> "ToolRegistry":
         reg = ToolRegistry()
 
         def search_docs(args: dict[str, Any]) -> str:
-            return json.dumps({"status": "delegated_to_rag", "query": args.get("query", "")})
+            query = args.get("query", "")
+            result = brain.retrieve(query)
+            return json.dumps({
+                "status": "ok",
+                "documents": len(result.documents),
+                "context_preview": result.context[:2000],
+            })
 
-        reg.register("search_knowledge_base", "Search the Zypher enterprise knowledge base", search_docs)
+        reg.register(
+            "search_zypher_brain",
+            "Search Zypher Brain for documentation, APIs, runbooks, and code examples",
+            search_docs,
+        )
         return reg

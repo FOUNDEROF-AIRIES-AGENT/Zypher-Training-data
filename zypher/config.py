@@ -6,36 +6,32 @@ from typing import Any
 
 import yaml
 
+from brain import ZypherBrain
+from zypher.llm.provider import LLMProvider
+
 
 @dataclass
 class ZypherConfig:
-    xs_config_path: Path
-    rag_config_path: Path
-    xs: dict[str, Any]
-    rag: dict[str, Any]
-
-    @property
-    def base_model(self) -> str:
-        return self.xs.get("base_model") or self.xs["model"]["name"]
-
-    @property
-    def adapter_path(self) -> Path:
-        path = self.xs.get("inference", {}).get("adapter_path")
-        if path:
-            return Path(path)
-        return Path(self.xs["training"]["output_dir"]) / "final"
-
-    @property
-    def system_prompt(self) -> str:
-        return self.rag["zypher"]["system_prompt"].strip()
+    brain_config_path: Path
+    llm_config_path: Path
+    brain_cfg: dict[str, Any]
+    llm_cfg: dict[str, Any]
+    brain: ZypherBrain | None = None
+    llm: LLMProvider | None = None
 
 
 def load_config(
-    xs_path: Path | str = "config/zypher_xs.yaml",
-    rag_path: Path | str = "config/rag.yaml",
+    brain_path: Path | str = "config/brain.yaml",
+    llm_path: Path | str = "config/llm.yaml",
 ) -> ZypherConfig:
-    with Path(xs_path).open(encoding="utf-8") as f:
-        xs = yaml.safe_load(f)
-    with Path(rag_path).open(encoding="utf-8") as f:
-        rag = yaml.safe_load(f)
-    return ZypherConfig(Path(xs_path), Path(rag_path), xs, rag)
+    with Path(brain_path).open(encoding="utf-8") as f:
+        brain_cfg = yaml.safe_load(f)
+    with Path(llm_path).open(encoding="utf-8") as f:
+        llm_cfg = yaml.safe_load(f)
+    return ZypherConfig(Path(brain_path), Path(llm_path), brain_cfg, llm_cfg)
+
+
+def create_backend(config: ZypherConfig | None = None) -> "ZypherBackend":
+    from zypher.backend import ZypherBackend
+
+    return ZypherBackend(config)
