@@ -8,7 +8,7 @@ This repository contains the **knowledge layer only**: document corpus, export p
 
 ## Overview
 
-Zypher Brain is a modular RAG database composed of:
+Zypher is a modular RAG database composed of:
 
 | Layer | Description |
 |-------|-------------|
