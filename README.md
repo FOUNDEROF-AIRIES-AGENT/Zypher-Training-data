@@ -150,7 +150,24 @@ v0.1 clears the FAQ and code-review bar; RAG faithfulness and multi-turn coheren
 └── data/advanced/                # Generated training data (gitignored)
 ```
 
-## Quick start — full pipeline
+## Quick start — Google Colab (free GPU, no local install)
+
+Train from scratch entirely in the cloud — nothing on your PC:
+
+1. Open **[notebooks/train_from_scratch_colab.ipynb](notebooks/train_from_scratch_colab.ipynb)** on GitHub
+2. Click **Open in Colab** (or upload the notebook to [colab.research.google.com](https://colab.research.google.com))
+3. **Runtime → Change runtime type → T4 GPU**
+4. Run all cells top to bottom
+
+Or open directly:
+
+```
+https://colab.research.google.com/github/FOUNDEROF-AIRIES-AGENT/Zypher-Training-data/blob/cursor/llm-finetune-ready-da1e/notebooks/train_from_scratch_colab.ipynb
+```
+
+The notebook clones the repo from GitHub, prepares data, trains tokenizer → pretrain → SFT, and lets you download checkpoints before the session ends.
+
+## Quick start — full pipeline (local or cloud VM)
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
