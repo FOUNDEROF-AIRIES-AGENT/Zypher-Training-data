@@ -1,0 +1,38 @@
+# Zypher Platform — complete brain-first enterprise stack
+
+name: Zypher Platform
+version: 1.0.0
+
+server:
+  host: 0.0.0.0
+  port: 8080
+  reload: false
+
+brain:
+  config: config/brain.yaml
+
+llm:
+  config: config/llm.yaml
+  enabled: true          # set false for retrieve-only API (no GPU)
+
+sessions:
+  enabled: true
+  persist_dir: data/platform/sessions
+  ttl_hours: 72
+
+jobs:
+  enabled: true
+  queue_dir: data/platform/jobs
+
+agents:
+  enabled: true
+  max_tool_rounds: 3
+
+admin:
+  stats_path: knowledge-base/generated/brain_statistics.json
+  catalog_path: knowledge-base/generated/catalog.json
+
+cors:
+  enabled: true
+  origins:
+    - "*"

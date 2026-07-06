@@ -17,5 +17,10 @@ tqdm>=4.66.0
 chromadb>=0.5.0
 sentence-transformers>=3.0.0
 
+# Zypher Platform API
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.0.0
+
 # Optional: experiment tracking
 # wandb>=0.17.0

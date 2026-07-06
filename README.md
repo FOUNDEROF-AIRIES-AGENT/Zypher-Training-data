@@ -40,6 +40,55 @@ User Message
 | **LLM** | Reasoning over retrieved context (not internal knowledge) |
 | **Optional fine-tune** | Style/domain tuning — not required for knowledge |
 
+## Zypher Platform (complete stack)
+
+Mega brain + enterprise platform layer:
+
+```
+                    ┌─────────────────────────────────┐
+                    │       Zypher Platform API       │
+                    │  REST · Sessions · Jobs · Admin │
+                    └───────────────┬─────────────────┘
+                                    │
+          ┌─────────────────────────┼─────────────────────────┐
+          ▼                         ▼                         ▼
+   ┌─────────────┐          ┌─────────────┐          ┌─────────────┐
+   │ Zypher Brain│          │  LLM Engine │          │   Agents    │
+   │  (knowledge)│          │ (reasoning) │          │ (tools/RAG) │
+   └─────────────┘          └─────────────┘          └─────────────┘
+```
+
+```bash
+make generate-mega      # expand brain
+make platform-index     # index brain
+make serve              # REST API on :8080
+```
+
+### API endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/v1/stats` | GET | Brain + platform statistics |
+| `/v1/chat` | POST | Chat with brain retrieval + LLM |
+| `/v1/retrieve` | POST | Search brain only (no LLM) |
+| `/v1/documents` | POST | Ingest new doc (no retraining) |
+| `/v1/index` | POST | Enqueue index job |
+| `/v1/generate` | POST | Enqueue mega corpus job |
+| `/v1/sessions` | POST/GET | Conversation sessions |
+| `/v1/jobs/{id}/run` | POST | Run background job |
+
+### Platform module
+
+```
+zypher_platform/
+├── core.py           # ZypherPlatform orchestrator
+├── api/app.py        # FastAPI REST API
+├── sessions/         # Multi-user conversation store
+├── jobs/             # Background index + generate jobs
+└── agents/           # Tool-calling agent orchestrator
+```
+
 ## Quick start
 
 ```bash
