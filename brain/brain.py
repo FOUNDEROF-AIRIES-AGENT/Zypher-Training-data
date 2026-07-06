@@ -114,14 +114,57 @@ class ZypherBrain:
     def retrieve(self, query: str) -> RetrievalResult:
         return self.retrieval.retrieve(query)
 
+    def index_document(self, doc) -> None:
+        """Index a single document without full rebuild."""
+        self.metadata_index.refresh()
+        self.vector_index.index_document(doc)
+
     def build_messages(self, user_message: str, retrieval: RetrievalResult) -> list[dict[str, str]]:
+        """Build LLM messages with Brain context (step 8 prep)."""
         user_content = (
             f"<zypher_brain_context>\n{retrieval.context}\n</zypher_brain_context>\n\n"
             f"User question: {user_message}\n\n"
             "Answer using ONLY the Zypher Brain context above. "
             "If the context does not contain enough information, state what is missing."
         )
-        return self.memory.as_list() + [{"role": "user", "content": user_content}]
+        # History without the raw user turn saved in step 1
+        history = self.memory.as_list()
+        if history and history[-1]["role"] == "user" and history[-1]["content"] == user_message:
+            history = history[:-1]
+        return history + [{"role": "user", "content": user_content}]
+
+    def answer(
+        self,
+        user_message: str,
+        generate_fn,
+    ) -> str:
+        """
+        Full 9-step Zypher Brain + LLM flow:
+
+        1. Save conversation
+        2–7. Retrieve from Brain (embed → vector → metadata → graph → rerank → context)
+        8. Send context to language model
+        9. Return generated answer
+        """
+        # 1. Save conversation
+        self.memory.add("user", user_message)
+
+        # 2–7. Retrieve from Zypher Brain
+        retrieval = self.retrieve(user_message)
+
+        # 8. Send context to reasoning engine
+        messages = self.build_messages(user_message, retrieval)
+        if retrieval.has_context:
+            reply = generate_fn(messages)
+        else:
+            reply = (
+                "I could not find relevant information in Zypher Brain for this question. "
+                "Please add documentation to the knowledge base or rephrase your query."
+            )
+
+        # 9. Save and return answer
+        self.memory.add("assistant", reply)
+        return reply
 
     @property
     def document_count(self) -> int:

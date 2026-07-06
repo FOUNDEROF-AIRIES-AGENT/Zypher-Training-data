@@ -30,7 +30,17 @@ class MetadataIndex:
         self._by_hub: dict[str, list[Document]] = {}
         self._build()
 
+    def refresh(self) -> None:
+        """Rebuild metadata indexes after new documents are added."""
+        self._by_type.clear()
+        self._by_category.clear()
+        self._by_hub.clear()
+        self._build()
+
     def _build(self) -> None:
+        self._by_type.clear()
+        self._by_category.clear()
+        self._by_hub.clear()
         for doc in self.kb.documents:
             if doc.doc_type:
                 self._by_type.setdefault(doc.doc_type, []).append(doc)

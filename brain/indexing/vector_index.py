@@ -51,16 +51,34 @@ class VectorIndex:
         used.add(fallback)
         return fallback
 
-    def index(self) -> int:
+    def index(self, batch_size: int = 500) -> int:
         self._connect()
-        ids, texts, metas = [], [], []
+        total = 0
         used: set[str] = set()
+        batch_ids, batch_texts, batch_metas = [], [], []
+
+        def flush_batch() -> None:
+            nonlocal total
+            if not batch_ids:
+                return
+            embeddings = self.encoder.encode(batch_texts)
+            self._collection.add(
+                ids=batch_ids,
+                documents=batch_texts,
+                embeddings=embeddings,
+                metadatas=batch_metas,
+            )
+            total += len(batch_ids)
+            batch_ids.clear()
+            batch_texts.clear()
+            batch_metas.clear()
+
         for doc in self.kb.documents:
             doc_id = self._unique_id(doc, used)
             text = f"{doc.title}\n{doc.doc_type}\n{doc.content}"[:8000]
-            ids.append(doc_id)
-            texts.append(text)
-            metas.append({
+            batch_ids.append(doc_id)
+            batch_texts.append(text)
+            batch_metas.append({
                 "title": doc.title,
                 "path": doc.path,
                 "category": doc.category,
@@ -68,9 +86,36 @@ class VectorIndex:
                 "hub": doc.hub,
                 "original_id": doc.doc_id,
             })
-        embeddings = self.encoder.encode(texts)
-        self._collection.add(ids=ids, documents=texts, embeddings=embeddings, metadatas=metas)
-        return len(ids)
+            if len(batch_ids) >= batch_size:
+                flush_batch()
+                if total % 5000 == 0 and total > 0:
+                    print(f"  Indexed {total:,} documents...")
+        flush_batch()
+        return total
+
+    def index_document(self, doc: Document) -> None:
+        """Index a single new document (no full rebuild)."""
+        self._connect()
+        used: set[str] = set()
+        if self._collection.count() > 0:
+            existing = self._collection.get(include=[])
+            used = set(existing["ids"])
+        doc_id = self._unique_id(doc, used)
+        text = f"{doc.title}\n{doc.doc_type}\n{doc.content}"[:8000]
+        embedding = self.encoder.encode([text])
+        self._collection.add(
+            ids=[doc_id],
+            documents=[text],
+            embeddings=embedding,
+            metadatas=[{
+                "title": doc.title,
+                "path": doc.path,
+                "category": doc.category,
+                "doc_type": doc.doc_type,
+                "hub": doc.hub,
+                "original_id": doc.doc_id,
+            }],
+        )
 
     def search(self, query: str, top_k: int = 10) -> list[ScoredDocument]:
         self._connect()

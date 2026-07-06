@@ -33,9 +33,4 @@ class ZypherBackend:
         return self.brain.retrieve(query)
 
     def chat(self, user_message: str) -> str:
-        retrieval = self.brain.retrieve(user_message)
-        messages = self.brain.build_messages(user_message, retrieval)
-        reply = self.llm.generate(messages)
-        self.brain.memory.add("user", user_message)
-        self.brain.memory.add("assistant", reply)
-        return reply
+        return self.brain.answer(user_message, self.llm.generate)

@@ -4,6 +4,8 @@
 seed_dir: knowledge-base
 output_dir: knowledge-base/generated
 
+mega_multiplier: 1   # set to 100000000000 for hyper tier (see config/corpus_mega.yaml)
+
 scale: 1000
 variations_per_doc: 12
 max_files_per_category: 0

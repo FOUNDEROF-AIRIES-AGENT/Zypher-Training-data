@@ -28,6 +28,13 @@ from brain_schema import (
 )
 from code_snippets import CODE_SNIPPETS, DEFAULT_CODE_LANGS
 from corpus_templates import TOPICS, Topic
+from mega_scale import (
+    count_base_topics,
+    count_expanded_topics,
+    estimate_documents,
+    iter_all_topics,
+    resolve_mega_tier,
+)
 
 PARAPHRASE_OPENERS = [
     "In practice,",
@@ -202,7 +209,7 @@ def write_document(output_dir: Path, topic: Topic, doc_type: str, variant: int, 
     path = output_dir / topic.category / doc_type / filename
 
     frontmatter = yaml.safe_dump(metadata, sort_keys=False).strip()
-    content = f"---\n{frontmatter}---\n\n{body}\n"
+    content = f"---\n{frontmatter}\n---\n\n{body}\n"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
 
@@ -330,33 +337,87 @@ def copy_seed_corpus(seed_dir: Path, output_dir: Path) -> int:
     return count
 
 
-def build_jobs(
-    topics: list[Topic],
+def iter_jobs(
+    base_topics: list[Topic],
+    categories: list[str],
     doc_types: list[str],
     variations: int,
     scale: int,
     output_dir: Path,
-) -> list[tuple]:
-    effective_variants = max(1, int(variations * scale / 1000))
-    jobs = []
-    for topic in topics:
+    mega_multiplier: int = 1,
+):
+    tier = resolve_mega_tier(mega_multiplier)
+    effective_variants = max(1, int(variations * scale / 1000) * tier.variant_multiplier)
+    for topic in iter_all_topics(base_topics, categories, mega_multiplier):
         for doc_type in doc_types:
             for variant in range(effective_variants):
-                jobs.append(
-                    (
-                        topic.slug,
-                        topic.title,
-                        topic.category,
-                        topic.difficulty,
-                        "|".join(topic.keywords),
-                        variant,
-                        doc_type,
-                        str(scale),
-                        str(output_dir),
-                        topic.hub or "",
-                    )
+                yield (
+                    topic.slug,
+                    topic.title,
+                    topic.category,
+                    topic.difficulty,
+                    "|".join(topic.keywords),
+                    variant,
+                    doc_type,
+                    str(scale),
+                    str(output_dir),
+                    topic.hub or "",
                 )
-    return jobs
+
+
+def build_jobs(
+    base_topics: list[Topic],
+    categories: list[str],
+    doc_types: list[str],
+    variations: int,
+    scale: int,
+    output_dir: Path,
+    mega_multiplier: int = 1,
+) -> list[tuple]:
+    return list(iter_jobs(base_topics, categories, doc_types, variations, scale, output_dir, mega_multiplier))
+
+
+def _chunked(iterable, size: int):
+    batch: list = []
+    for item in iterable:
+        batch.append(item)
+        if len(batch) >= size:
+            yield batch
+            batch = []
+    if batch:
+        yield batch
+
+
+def run_streaming_generation(
+    job_iter,
+    workers: int,
+    max_files: int,
+    catalog_jsonl: Path,
+    batch_size: int = 500,
+) -> tuple[list[dict[str, Any]], int]:
+    """Generate documents in batches; stream catalog to JSONL."""
+    catalog: list[dict[str, Any]] = []
+    completed = 0
+    catalog_jsonl.parent.mkdir(parents=True, exist_ok=True)
+
+    with catalog_jsonl.open("w", encoding="utf-8") as catalog_handle:
+        with ProcessPoolExecutor(max_workers=workers) as executor:
+            for batch in _chunked(job_iter, batch_size):
+                if max_files and completed >= max_files:
+                    break
+                if max_files and completed + len(batch) > max_files:
+                    batch = batch[: max_files - completed]
+                futures = [executor.submit(_generate_job, job) for job in batch]
+                for future in as_completed(futures):
+                    row = future.result()
+                    catalog.append(row)
+                    catalog_handle.write(json.dumps(row) + "\n")
+                    completed += 1
+                    if completed % 10_000 == 0:
+                        print(f"Generated {completed:,} files...")
+                if max_files and completed >= max_files:
+                    break
+    return catalog, completed
 
 
 def compute_brain_statistics(catalog: list[dict[str, Any]], edge_count: int, seed_count: int) -> dict[str, Any]:
@@ -385,10 +446,14 @@ def main() -> None:
     parser.add_argument("--config", type=Path, default=Path("config/corpus_generation.yaml"))
     parser.add_argument("--scale", type=int, default=None)
     parser.add_argument("--variations", type=int, default=None)
+    parser.add_argument("--mega-multiplier", type=int, default=None, help="Mega expansion (e.g. 100000000000)")
     parser.add_argument("--output-dir", type=Path, default=None)
     parser.add_argument("--seed-dir", type=Path, default=None)
     parser.add_argument("--workers", type=int, default=None)
-    parser.add_argument("--max-files", type=int, default=0)
+    parser.add_argument("--max-files", type=int, default=0, help="Cap files (0=unlimited)")
+    parser.add_argument("--batch-size", type=int, default=500)
+    parser.add_argument("--skip-wiring", action="store_true", help="Skip graph wiring (fast mega runs)")
+    parser.add_argument("--append", action="store_true", help="Append to existing corpus")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -397,54 +462,73 @@ def main() -> None:
 
     scale = args.scale if args.scale is not None else int(cfg.get("scale", 1000))
     variations = args.variations if args.variations is not None else int(cfg.get("variations_per_doc", 12))
+    mega_multiplier = args.mega_multiplier if args.mega_multiplier is not None else int(cfg.get("mega_multiplier", 1))
     output_dir = args.output_dir or Path(cfg.get("output_dir", "knowledge-base/generated"))
     seed_dir = args.seed_dir or Path(cfg.get("seed_dir", "knowledge-base"))
     workers = args.workers or int(cfg.get("parallel_workers", 4))
     doc_types = cfg.get("document_types", DOCUMENT_TYPES)
-    categories = set(cfg.get("categories", []))
+    categories = list(cfg.get("categories", []))
 
-    topics = [t for t in TOPICS if t.category in categories] if categories else TOPICS
-    jobs = build_jobs(topics, doc_types, variations, scale, output_dir)
-    if args.max_files and len(jobs) > args.max_files:
-        jobs = jobs[: args.max_files]
+    tier = resolve_mega_tier(mega_multiplier)
+    base_count = count_base_topics(TOPICS, categories)
+    expanded_count = count_expanded_topics(categories, mega_multiplier)
+    estimated = estimate_documents(categories, len(doc_types), variations, scale, mega_multiplier, base_count)
 
-    print(f"Topics: {len(topics)}")
+    print(f"Tier: {tier.name} — {tier.description}")
+    print(f"Base topics: {base_count:,} | Expanded topics: {expanded_count:,}")
+    print(f"Total topics (virtual): {(base_count + expanded_count):,}")
     print(f"Document types: {len(doc_types)}")
-    print(f"Knowledge hubs: {len(KNOWLEDGE_HUBS)}")
-    print(f"Scale: {scale}, variations: {variations}")
-    print(f"Planned files: {len(jobs):,}")
+    print(f"Scale: {scale}, variations: {variations}, mega_multiplier: {mega_multiplier:,}")
+    print(f"Estimated documents: {estimated:,}")
+    if args.max_files:
+        print(f"Cap (max-files): {args.max_files:,}")
 
     if args.dry_run:
         return
 
-    if output_dir.exists():
+    if not args.append and output_dir.exists():
         shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    seed_count = copy_seed_corpus(seed_dir, output_dir)
-    print(f"Copied {seed_count} seed files to {output_dir / '_seed'}")
+    seed_count = 0
+    if not args.append:
+        seed_count = copy_seed_corpus(seed_dir, output_dir)
+        print(f"Copied {seed_count} seed files to {output_dir / '_seed'}")
 
-    catalog: list[dict[str, Any]] = []
-    completed = 0
+    job_iter = iter_jobs(TOPICS, categories, doc_types, variations, scale, output_dir, mega_multiplier)
+    catalog_jsonl = output_dir / "catalog.jsonl"
+    catalog, completed = run_streaming_generation(
+        job_iter,
+        workers=workers,
+        max_files=args.max_files,
+        catalog_jsonl=catalog_jsonl,
+        batch_size=args.batch_size,
+    )
+    print(f"Generated {completed:,} files")
 
-    with ProcessPoolExecutor(max_workers=workers) as executor:
-        futures = [executor.submit(_generate_job, job) for job in jobs]
-        for future in as_completed(futures):
-            catalog.append(future.result())
-            completed += 1
-            if completed % 5000 == 0:
-                print(f"Generated {completed:,} / {len(jobs):,} files...")
+    skip_wiring = args.skip_wiring or completed > 50_000 or mega_multiplier > 1_000_000
+    edge_count = 0
+    if skip_wiring:
+        print("Skipping relationship wiring (mega mode — use shard-local wiring for smaller batches)")
+    else:
+        print("Wiring document relationships...")
+        edge_count = wire_relationships(catalog, output_dir)
 
-    print("Wiring document relationships...")
-    edge_count = wire_relationships(catalog, output_dir)
-
-    catalog.sort(key=lambda row: row["path"])
     brain_stats = compute_brain_statistics(catalog, edge_count, seed_count)
+    brain_stats["mega_tier"] = tier.name
+    brain_stats["mega_multiplier"] = mega_multiplier
+    brain_stats["estimated_capacity"] = estimated
+
     stats = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "scale": scale,
+        "mega_multiplier": mega_multiplier,
+        "mega_tier": tier.name,
         "variations_per_doc": variations,
-        "topics": len(topics),
+        "topics_base": base_count,
+        "topics_expanded": expanded_count,
+        "topics_total": base_count + expanded_count,
+        "generated_files": completed,
         "brain_statistics": brain_stats,
         "by_category": {},
         "by_doc_type": {},
@@ -454,12 +538,13 @@ def main() -> None:
         stats["by_doc_type"][row["doc_type"]] = stats["by_doc_type"].get(row["doc_type"], 0) + 1
 
     catalog_path = output_dir / "catalog.json"
-    catalog_path.write_text(json.dumps({"stats": stats, "files": catalog}, indent=2), encoding="utf-8")
-    (output_dir / "brain_statistics.json").write_text(
-        json.dumps(brain_stats, indent=2), encoding="utf-8"
+    catalog_path.write_text(
+        json.dumps({"stats": stats, "files": catalog[:1000], "catalog_jsonl": str(catalog_jsonl)}, indent=2),
+        encoding="utf-8",
     )
-    print(json.dumps(stats, indent=2))
-    print(f"Catalog written to {catalog_path}")
+    (output_dir / "brain_statistics.json").write_text(json.dumps(brain_stats, indent=2), encoding="utf-8")
+    print(json.dumps({**stats, "by_category": f"{len(stats['by_category'])} categories"}, indent=2))
+    print(f"Catalog: {catalog_path} + {catalog_jsonl}")
 
 
 if __name__ == "__main__":

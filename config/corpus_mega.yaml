@@ -1,0 +1,64 @@
+# MEGA Zypher Brain corpus — hyper-scale generation
+# mega_multiplier maps to tiers (see scripts/mega_scale.py)
+
+seed_dir: knowledge-base
+output_dir: knowledge-base/generated
+
+scale: 10000
+variations_per_doc: 24
+mega_multiplier: 100000000000   # hyper tier → billions of documents
+parallel_workers: 16
+batch_size: 1000
+
+# Set max_files via CLI: --max-files 100000 (safety cap)
+# Full hyper run on Vast.ai:
+#   python3 scripts/generate_corpus.py --config config/corpus_mega.yaml --max-files 0 --skip-wiring
+
+categories:
+  - rag
+  - graphrag
+  - agentic
+  - python
+  - java
+  - javascript
+  - typescript
+  - go
+  - rust
+  - sql
+  - postgresql
+  - mongodb
+  - redis
+  - docker
+  - kubernetes
+  - aws
+  - azure
+  - gcp
+  - microservices
+  - security
+  - architecture
+  - api_design
+  - ci_cd
+  - testing
+  - incidents
+  - performance
+
+document_types:
+  - documentation
+  - guide
+  - tutorial
+  - faq
+  - troubleshooting
+  - runbook
+  - incident_report
+  - api_reference
+  - architecture_decision
+  - design_document
+  - code_walkthrough
+  - code_review
+  - database_schema
+  - sql_example
+  - migration_guide
+  - release_notes
+  - best_practices
+  - benchmark
+  - evaluation

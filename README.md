@@ -141,6 +141,28 @@ make train-xs          # optional — enable adapter in config/llm.yaml
 - Multi-agent workflows
 - Enterprise deployments
 
+## Scale the brain (mega)
+
+| Command | Documents | Where to run |
+|---------|-----------|--------------|
+| `make generate-smoke` | 2,000 | Local |
+| `make generate` | ~112,000 | Local / cloud |
+| `make generate-mega` | 100,000 | Vast.ai |
+| `make generate-ultra` | 1,000,000 | Vast.ai |
+| `make generate-hyper` | Billions (uncapped) | Vast.ai cluster |
+
+Hyper tier uses `mega_multiplier: 100000000000` — procedural streaming, no memory limit.
+
+```bash
+# On Vast.ai — mega brain
+make generate-mega && make index && make chat
+
+# Full hyper (100B× tier — billions of docs)
+make generate-hyper
+```
+
+Check stats: `cat knowledge-base/generated/brain_statistics.json`
+
 ## Hardware
 
 | Step | GPU | Notes |

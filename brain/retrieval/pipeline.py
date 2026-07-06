@@ -36,13 +36,14 @@ def build_context(documents: list[ScoredDocument], max_chars: int = 14000) -> st
 
 class RetrievalPipeline:
     """
-    Retrieval flow:
-    1. Embed query
-    2. Vector search
-    3. Metadata filter search
-    4. Graph relationship expansion
-    5. Merge and re-rank
-    6. Build context window
+    Zypher Brain retrieval flow (steps 2–7):
+
+    2. Generate embedding for user query
+    3. Search vector database
+    4. Search metadata filters
+    5. Search graph relationships
+    6. Merge and re-rank results
+    7. Build context window
     """
 
     def __init__(
@@ -66,10 +67,14 @@ class RetrievalPipeline:
         self.max_context_chars = max_context_chars
 
     def retrieve(self, query: str) -> RetrievalResult:
+        # Step 2: embedding generated inside vector search
         vector_hits = self.vector_index.search(query, top_k=self.vector_top_k)
+        # Step 4: metadata filter search
         metadata_hits = self.metadata_index.search(query, top_k=self.metadata_top_k)
+        # Step 5: graph relationship expansion
         graph_hits = self.graph_index.search_from_seeds(vector_hits + metadata_hits)
-
+        # Step 6: merge and re-rank
         merged = self.reranker.merge(vector_hits, metadata_hits, graph_hits, top_k=self.final_top_k)
+        # Step 7: build context window
         context = build_context(merged, max_chars=self.max_context_chars)
         return RetrievalResult(query=query, documents=merged, context=context)
