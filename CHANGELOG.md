@@ -2,6 +2,26 @@
 
 All notable changes to the Coltex product package are documented here.
 
+## [4.3.0] - 2026-07-07
+
+### Added — Enterprise RAG Vector Dataset (commercial tier)
+
+- **`config/product_enterprise.yaml`** — Enterprise tier v3.0.0 (13,000+ documents)
+- **`scripts/product/build_enterprise_product.py`** — Full enterprise build orchestrator
+- **`make product-enterprise`** / **`make product-enterprise-fast`** — Commercial build targets
+- **Commercial documentation** — `docs/commercial/product-overview.md`, `datasheet.md`, `sku-matrix.md`
+- **`examples/load_dataset.py`** — Buyer inspection script
+- **`knowledge-base/distributable/DATASET.md`** — Distributable package orientation
+
+### Changed — Scale & polish
+
+- Corpus expanded to **12,993 documents** across 63 domains (`make corpus-mega`)
+- Enterprise build produces **83,612 vector chunks**, **52,490 graph edges**, **1,100+ benchmark pairs**
+- Chunk deduplication scoped per document (preserves cross-doc coverage)
+- Distribution validation allows ≤1% thin documents on large corpora
+- Fixed manifest/audit crash when `generation_stats` path absent
+- README repositioned as commercial **Enterprise RAG Vector Dataset** with SKU matrix
+
 ## [4.2.2] - 2026-07-07
 
 ### Changed — Enterprise terminology (Phase 4)

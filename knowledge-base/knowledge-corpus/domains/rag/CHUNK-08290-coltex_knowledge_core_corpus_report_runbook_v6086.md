@@ -1,0 +1,56 @@
+---
+id: CHUNK-08290-COLTEX-KNOWLEDGE-CORE-CORPUS-REPORT-RUNBOOK-V6086
+title: "Chunk 08290 Coltex Knowledge Core: Corpus Report \u2014 Runbook (v6086)"
+category: CHUNK-08290-coltex_knowledge_core_corpus_report_runbook_v6086.md
+tags:
+- coltex_knowledge_core
+- corpus report
+- rag
+- runbook
+- rag
+- variant_6086
+difficulty: intermediate
+related:
+- CHUNK-08289
+- CHUNK-08288
+- CHUNK-08287
+last_updated: '2026-07-07'
+version: '2.0'
+---
+
+---
+id: CHUNK-08290
+title: "Coltex Knowledge Core: Corpus Report \u2014 Runbook (v6086)"
+category: rag
+doc_type: runbook
+tags:
+- coltex_knowledge_core
+- corpus report
+- rag
+- runbook
+- rag
+- variant_6086
+difficulty: intermediate
+related: []
+last_updated: '2026-07-07'
+version: '2.0'
+hub: coltex_knowledge_core
+---
+
+# Coltex Knowledge Core: Corpus Report — Runbook (v6086)
+
+## Trigger
+
+For security-sensitive deployments, **Trigger** for `Coltex Knowledge Core: Corpus Report` (runbook). This variant 6086 covers coltex_knowledge_core, corpus report, rag at intermediate level. Key considerations include reliability, observability, latency budgets, and safe rollout. Teams should validate assumptions with benchmarks, add tracing spans, and document failure modes. Recommended metrics: p95 latency, error rate, recall@k (if retrieval), and freshness of indexed data.
+## Severity
+
+For security-sensitive deployments, **Severity** for `Coltex Knowledge Core: Corpus Report` (runbook). This variant 6086 covers coltex_knowledge_core, corpus report, rag at intermediate level. Key considerations include reliability, observability, latency budgets, and safe rollout. Teams should validate assumptions with benchmarks, add tracing spans, and document failure modes. Recommended metrics: p95 latency, error rate, recall@k (if retrieval), and freshness of indexed data.
+## Immediate Actions
+
+For security-sensitive deployments, **Immediate Actions** for `Coltex Knowledge Core: Corpus Report` (runbook). This variant 6086 covers coltex_knowledge_core, corpus report, rag at intermediate level. Key considerations include reliability, observability, latency budgets, and safe rollout. Teams should validate assumptions with benchmarks, add tracing spans, and document failure modes. Recommended metrics: p95 latency, error rate, recall@k (if retrieval), and freshness of indexed data.
+## Escalation
+
+For security-sensitive deployments, **Escalation** for `Coltex Knowledge Core: Corpus Report` (runbook). This variant 6086 covers coltex_knowledge_core, corpus report, rag at intermediate level. Key considerations include reliability, observability, latency budgets, and safe rollout. Teams should validate assumptions with benchmarks, add tracing spans, and document failure modes. Recommended metrics: p95 latency, error rate, recall@k (if retrieval), and freshness of indexed data.
+## Recovery Verification
+
+For security-sensitive deployments, **Recovery Verification** for `Coltex Knowledge Core: Corpus Report` (runbook). This variant 6086 covers coltex_knowledge_core, corpus report, rag at intermediate level. Key considerations include reliability, observability, latency budgets, and safe rollout. Teams should validate assumptions with benchmarks, add tracing spans, and document failure modes. Recommended metrics: p95 latency, error rate, recall@k (if retrieval), and freshness of indexed data.

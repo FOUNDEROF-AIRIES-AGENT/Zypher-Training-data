@@ -10,7 +10,7 @@ tags: [memory, procedural]
 
 # Index rebuild runbook
 
-procedural steps for full brain reindex
+procedural steps for full corpus reindex
 
 ## Memory tier: procedural
 **Role:** Runbooks, tutorials, how-to guides

@@ -48,11 +48,13 @@ The following are downloaded at runtime and subject to their own licenses:
 ## Premium distributable corpus
 
 Streaming-generated documents in `knowledge-base/distributable/` are **original synthetic**
-content for the $1000+ premium RAG dataset. Generation uses in-repo templates only.
+content for the Coltex Premium RAG Vector Dataset. Generation uses in-repo templates only.
 
-| Tier | Multiplier | Command |
-|------|------------|---------|
-| Hyper | 100,000,000,000× | `make product-hyper` |
+| Tier | Documents | Command |
+|------|-----------|---------|
+| Enterprise Curated | 12,000+ | `make product-enterprise` |
+| Premium Smoke | 25,000 | `make product-premium-smoke` |
+| Premium Hyper | Uncapped | `make product-hyper` |
 
-Estimated document capacity exceeds 600 trillion unique combinations (procedural).
-Run on Vast.ai for uncapped generation.
+Estimated procedural capacity exceeds 600 trillion unique combinations (premium hyper tier).
+Run on cluster infrastructure for uncapped generation.

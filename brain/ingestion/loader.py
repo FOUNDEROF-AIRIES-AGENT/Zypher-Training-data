@@ -133,12 +133,18 @@ class KnowledgeBase:
         self.documents: list[Document] = []
         self.by_id: dict[str, Document] = {}
         exclude = exclude or []
+        excluded_dirs = {"_seed", "_excluded_from_distribution", "generated"}
+        for pat in exclude:
+            for segment in pat.replace("**", "").replace("*", "").strip("/").split("/"):
+                if segment:
+                    excluded_dirs.add(segment)
+
         for base in paths:
             root = Path(base)
             if not root.exists():
                 continue
             for path in sorted(root.glob(glob_pattern)):
-                if "_seed" in path.parts:
+                if any(part in excluded_dirs for part in path.parts):
                     continue
                 if any(path.match(pat) for pat in exclude):
                     continue

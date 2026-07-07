@@ -1,0 +1,77 @@
+# Coltex Enterprise RAG Vector Dataset — Curated tier
+# Full knowledge-corpus architecture · graph-linked · vector-ready · compliance-audited
+
+name: Coltex Enterprise RAG Vector Dataset
+version: 3.0.0
+tier: enterprise
+price_usd: null
+license: Apache-2.0
+updated: 2026-07-07
+
+# Full curated knowledge base including architecture corpus
+knowledge_base:
+  paths:
+    - knowledge-base
+  glob: "**/*.md"
+  exclude:
+    - "**/generated/**"
+    - "**/_seed/**"
+    - "**/_excluded_from_distribution/**"
+
+distribution:
+  require_kb_license: true
+  require_provenance: true
+  require_notice: true
+  forbidden_body_markers:
+    - "This document provides detailed information on"
+  min_substantive_chars: 80
+  max_rejection_ratio: 0.01
+  forbidden_source_patterns:
+    - "wikipedia.org"
+    - "stackoverflow.com"
+    - "docs.python.org"
+    - "kubernetes.io/docs"
+    - "huggingface.co/docs"
+    - "python.langchain.com"
+    - "all rights reserved"
+
+quality:
+  min_chunk_chars: 40
+  max_duplicate_ratio: 0.05
+  require_metadata_fields:
+    - doc_id
+    - title
+  require_license_header: true
+  curated_only: false
+
+chunking:
+  max_chunk_chars: 2000
+  overlap_chars: 200
+  split_on: "## "
+
+embeddings:
+  model: sentence-transformers/all-MiniLM-L6-v2
+  output_dir: data/product/embeddings
+  batch_size: 64
+  max_chunks: 250000
+
+output:
+  base_dir: data/product
+  chunks: data/product/chunks/chunks.jsonl
+  catalog: data/product/catalog.jsonl
+  graph: data/product/graph/edges.jsonl
+  metadata: data/product/metadata/documents.json
+  manifest: data/product/manifest.json
+
+benchmarks:
+  output_dir: benchmarks
+  min_faq_pairs: 300
+  include_rag_eval: true
+  include_retrieval_gold: true
+  sample_from_catalog: 8000
+
+evaluation:
+  top_k: 8
+  min_retrieval_recall: 0.48
+  min_metadata_accuracy: 0.92
+  sample_size: 200

@@ -121,7 +121,7 @@ def chunk_document(
                 "chunk_index": j,
                 "text": text,
                 "char_count": len(text),
-                "content_hash": hashlib.sha1(text.encode()).hexdigest(),
+                "content_hash": hashlib.sha1(f"{doc_id}|{text}".encode()).hexdigest(),
                 "license": license_name,
                 "curated": True,
             })

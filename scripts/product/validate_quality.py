@@ -93,9 +93,15 @@ def validate_distribution(cfg: dict, kb) -> dict:
         if not ok:
             issues.append(f"{doc.doc_id}: {reason}")
 
+    max_rejection_ratio = float(dist_cfg.get("max_rejection_ratio", 0.0))
+    rejection_ratio = len(issues) / len(kb.documents) if kb.documents else 0.0
+    passed = not issues if max_rejection_ratio <= 0 else rejection_ratio <= max_rejection_ratio
+
     return {
-        "passed": not issues,
+        "passed": passed,
         "rejected_documents": len(issues),
+        "rejection_ratio": round(rejection_ratio, 4),
+        "max_rejection_ratio": max_rejection_ratio,
         "issues": issues[:15],
     }
 

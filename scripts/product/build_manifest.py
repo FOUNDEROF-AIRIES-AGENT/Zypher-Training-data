@@ -34,13 +34,15 @@ def main() -> None:
     cfg = load_product_config(args.config)
     kb = load_knowledge_base(cfg)
     out_cfg = cfg["output"]
-    gen_stats_path = resolve_path(out_cfg.get("generation_stats", ""))
-    catalog_path = resolve_path(out_cfg.get("catalog", "data/product/catalog.jsonl"))
+    gen_stats_path_str = out_cfg.get("generation_stats", "")
+    gen_stats_path = resolve_path(gen_stats_path_str) if gen_stats_path_str else None
     streaming = cfg.get("quality", {}).get("streaming_mode", False)
 
     gen_stats: dict = {}
-    if gen_stats_path.exists():
+    if gen_stats_path and gen_stats_path.is_file():
         gen_stats = json.loads(gen_stats_path.read_text(encoding="utf-8"))
+
+    catalog_path = resolve_path(out_cfg.get("catalog", "data/product/catalog.jsonl"))
 
     artifacts = {
         "chunks": resolve_path(out_cfg["chunks"]),

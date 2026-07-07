@@ -10,26 +10,68 @@
   },
   "document_substance": {
     "passed": true,
-    "streaming_mode": true,
-    "note": "Validated during stream generation"
+    "total_documents": 12993,
+    "rejected": 6,
+    "rejection_ratio": 0.0005,
+    "max_rejection_ratio": 0.01,
+    "issues": [
+      "CHUNK-00133: content too short (79 < 80 chars)",
+      "CHUNK-00137: content too short (51 < 80 chars)",
+      "CHUNK-00142: content too short (50 < 80 chars)",
+      "CHUNK-00147: content too short (49 < 80 chars)",
+      "CHUNK-00152: content too short (50 < 80 chars)",
+      "CHUNK-00157: content too short (49 < 80 chars)"
+    ],
+    "rejected_samples": [
+      {
+        "doc_id": "CHUNK-00133",
+        "path": "knowledge-base/CHUNK-00133-problem.md",
+        "reason": "content too short (79 < 80 chars)"
+      },
+      {
+        "doc_id": "CHUNK-00137",
+        "path": "knowledge-base/CHUNK-00137-code_review_refactor_redundant_conditional_logic.md",
+        "reason": "content too short (51 < 80 chars)"
+      },
+      {
+        "doc_id": "CHUNK-00142",
+        "path": "knowledge-base/CHUNK-00142-code_review_improve_variable_naming_for_clarity.md",
+        "reason": "content too short (50 < 80 chars)"
+      },
+      {
+        "doc_id": "CHUNK-00147",
+        "path": "knowledge-base/CHUNK-00147-code_review_add_docstrings_to_public_functions.md",
+        "reason": "content too short (49 < 80 chars)"
+      },
+      {
+        "doc_id": "CHUNK-00152",
+        "path": "knowledge-base/CHUNK-00152-code_review_use_f-strings_for_string_formatting.md",
+        "reason": "content too short (50 < 80 chars)"
+      },
+      {
+        "doc_id": "CHUNK-00157",
+        "path": "knowledge-base/CHUNK-00157-code_review_extract_magic_numbers_to_constants.md",
+        "reason": "content too short (49 < 80 chars)"
+      }
+    ]
   },
   "chunk_content": {
     "passed": true,
     "issues": [],
     "total_issues": 0,
-    "sampled": 1000
+    "sampled": "all"
   },
   "copyright_scan": {
     "passed": true,
-    "streaming_mode": true
+    "issues": []
   },
   "summary": {
-    "distributable_documents": 25000,
-    "estimated_total_documents": 2534400173952000,
-    "mega_multiplier": 100000000000,
+    "distributable_documents": 12993,
+    "estimated_total_documents": null,
+    "mega_multiplier": null,
     "license": "Apache-2.0",
-    "content_origin": "coltex_premium_synthetic",
+    "content_origin": "original_synthetic",
     "third_party_docs_copied": false,
-    "price_tier_usd": 1000
+    "price_tier_usd": null
   }
 }

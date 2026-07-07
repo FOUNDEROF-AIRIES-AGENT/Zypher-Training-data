@@ -1,8 +1,6 @@
 .PHONY: install clean index retrieve stats report \
         corpus corpus-advanced corpus-grow corpus-mega corpus-report \
-        generate generate-smoke generate-mega generate-ultra generate-hyper \
-        expand-curated-kb \
-        product product-premium product-premium-smoke product-hyper stream-premium \
+        product product-enterprise product-premium product-premium-smoke product-hyper \
         chunks deduplicate validate-product export-graph embeddings benchmarks \
         manifest evaluate audit-distribution
 
@@ -73,6 +71,12 @@ expand-curated-kb:
 
 product:
 	python3 scripts/product/build_product.py
+
+product-enterprise:
+	python3 scripts/product/build_enterprise_product.py --config config/product_enterprise.yaml
+
+product-enterprise-fast:
+	python3 scripts/product/build_enterprise_product.py --config config/product_enterprise.yaml --skip-embeddings
 
 product-premium-smoke:
 	python3 scripts/product/build_premium_product.py --config config/product_hyper_smoke.yaml --skip-embeddings
