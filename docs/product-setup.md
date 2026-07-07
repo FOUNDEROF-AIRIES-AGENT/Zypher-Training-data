@@ -22,7 +22,7 @@ See [Platform API guide](api/getting-started.md) and [Docker deployment](deploym
 ## Build dataset
 
 ```bash
-# Premium smoke (10,000 documents)
+# Premium smoke (25,000 documents)
 make product-premium-smoke
 
 # Full hyper tier (100B× — run on cluster)
