@@ -1,0 +1,71 @@
+# Coltex AI Governance
+# Enterprise policies for retention, access, audit, and compliance
+
+version: 1.0.0
+updated: 2026-07-07
+
+policies:
+  data_retention:
+    description: How long knowledge artifacts are retained by state
+    rules:
+      - state: archived
+        retain_days: 2555  # ~7 years default enterprise
+      - state: deprecated
+        retain_days: 365
+      - audit_logs
+        retain_days: 2555
+
+  access_control:
+    description: Role-based access to knowledge operations
+    roles:
+      - id: admin
+        permissions: [read, write, publish, deprecate, archive, govern, audit]
+      - id: editor
+        permissions: [read, write, review, submit_for_verification]
+      - id: viewer
+        permissions: [read, search]
+      - id: auditor
+        permissions: [read, audit, export_compliance_report]
+    status: planned
+
+  audit_trail:
+    description: Immutable log of knowledge operations
+    events_logged:
+      - document.created
+      - document.updated
+      - document.deleted
+      - lifecycle.transition
+      - access.granted
+      - access.denied
+      - export.requested
+      - governance.policy.applied
+    status: partial  # distribution audit available today
+
+  compliance_reports:
+    description: Scheduled and on-demand governance reports
+    report_types:
+      - provenance_summary
+      - license_compliance
+      - retention_status
+      - access_review
+      - health_snapshot
+    status: planned
+
+  version_approvals:
+    description: Require approval before published state
+    require_approval_for: [published]
+    approver_roles: [admin]
+    status: planned
+
+# Available today
+available_controls:
+  - distribution_audit
+  - provenance_tracking
+  - tiered_licensing
+  - manifest_checksums
+  - excluded_path_quarantine
+
+references:
+  provenance: knowledge-base/PROVENANCE.md
+  licenses: licenses/README.md
+  audit_command: make audit-distribution

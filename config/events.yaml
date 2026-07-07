@@ -1,0 +1,99 @@
+# Coltex Event System
+# Event-driven knowledge pipeline — every state change propagates asynchronously
+
+version: 1.0.0
+updated: 2026-07-07
+
+bus:
+  name: coltex-knowledge-events
+  delivery: at_least_once  # roadmap: configurable
+
+# Core pipeline events (in propagation order)
+pipeline_events:
+  - id: document.uploaded
+    description: New document ingested from connector or upload
+    emits: [chunk.created]
+
+  - id: document.updated
+    description: Existing document content or metadata changed
+    emits: [chunk.updated, metadata.updated]
+
+  - id: document.deleted
+    description: Document removed or archived
+    emits: [chunk.deleted, graph.updated, search.index.updated]
+
+  - id: chunk.created
+    description: Text chunk generated from document
+    emits: [embedding.requested]
+
+  - id: chunk.updated
+    description: Chunk content changed
+    emits: [embedding.requested]
+
+  - id: metadata.updated
+    description: Document or chunk metadata enriched
+    emits: [graph.updated]
+
+  - id: embedding.generated
+    description: Vector embedding computed for chunk
+    emits: [search.index.updated]
+
+  - id: graph.updated
+    description: Relationship edges added, removed, or changed
+    emits: [analytics.updated, health.rescored]
+
+  - id: search.index.updated
+    description: Search/retrieval index refreshed
+    emits: [analytics.updated]
+
+  - id: analytics.updated
+    description: Usage and coverage analytics recalculated
+    emits: []
+
+  - id: health.rescored
+    description: Knowledge Health metrics recalculated
+    emits: []
+
+# Intelligence engine events
+intelligence_events:
+  - id: knowledge.contradiction.detected
+    description: Conflicting claims found across documents
+
+  - id: knowledge.duplicate.detected
+    description: Near-duplicate document or chunk identified
+
+  - id: knowledge.deprecation.detected
+    description: Deprecated entity with dependent documents
+
+  - id: knowledge.merge.recommended
+    description: Merge candidate pair identified
+
+  - id: knowledge.gap.detected
+    description: Taxonomy or hub coverage gap found
+
+  - id: knowledge.health.updated
+    description: Composite health score changed
+
+# Lifecycle events
+lifecycle_events:
+  - id: knowledge.lifecycle.transition
+    description: Document moved between lifecycle states
+    payload: [from_state, to_state, actor, reason]
+
+# Governance events
+governance_events:
+  - id: governance.access.denied
+    description: Access policy blocked an operation
+
+  - id: governance.audit.logged
+    description: Audit trail entry recorded
+
+  - id: governance.retention.triggered
+    description: Retention policy applied to document or chunk
+
+# Subscriber types (roadmap)
+subscriber_types:
+  - webhook
+  - internal_handler
+  - plugin_hook
+  - notification

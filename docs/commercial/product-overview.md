@@ -1,8 +1,18 @@
-# Coltex — AI Knowledge Infrastructure Platform
+# Coltex — The Knowledge Operating System for AI
 
-**Enterprise knowledge infrastructure for RAG, AI agents, and governed organizational knowledge.**
+**Enterprise knowledge intelligence — not a vector database.**
 
-Coltex unifies datasets, knowledge graphs, vector search, retrieval pipelines, and knowledge management. The enterprise RAG vector dataset is a core deliverable — alongside graph linking, hybrid retrieval, quality analytics, and a roadmap toward Knowledge Studio, live connectors, and automatic synchronization.
+Coltex is a Knowledge OS that **understands**, **connects**, **reasons over**, **retrieves from**, and **improves** organizational knowledge. The dataset and graph are foundation layers; the **Knowledge Intelligence Engine** is the heart.
+
+---
+
+## Intelligence loop
+
+```
+Understand  →  Connect  →  Reason  →  Retrieve  →  Improve
+```
+
+Full vision: [Knowledge OS](../platform/knowledge-os.md) · [Intelligence Engine](../platform/intelligence-engine.md) · [Roadmap](../platform/roadmap.md)
 
 ---
 
@@ -10,15 +20,18 @@ Coltex unifies datasets, knowledge graphs, vector search, retrieval pipelines, a
 
 | Component | Status | Detail |
 |-----------|--------|--------|
-| Knowledge Dataset | Available | 13k+ docs · 83k+ chunks · 52k+ graph edges |
-| Knowledge Graph | Available | Hubs, routes, 20 relationship types, GraphRAG |
-| Search & Retrieval | Available | Hybrid RAG with GraphRouter |
-| Quality & Audit | Available | Benchmarks, provenance, distribution audit |
-| Knowledge Studio | Roadmap | Visual document, graph, and metadata management |
-| Connectors & Sync | Roadmap | GitHub, Notion, Confluence, Drive, Slack, and more |
-| AI Quality Dashboard | Roadmap | Retrieval accuracy, chunk health, coverage metrics |
+| Knowledge Intelligence Engine | Roadmap | Discover, detect contradictions, recommend merges |
+| Knowledge Health | Roadmap | Score, coverage, duplicates, staleness, graph integrity |
+| AI Memory | Partial | Working → Project → Org → Long-term → Archive |
+| Reasoning Layer | Partial | Intent → Planner → Retrieve → Rank → Evidence |
+| Event System & Scheduler | Roadmap | Event-driven pipeline, automated jobs |
+| Trust & Provenance | Partial | Source, author, version, verification per chunk |
+| Knowledge Lifecycle | Roadmap | Created → Verified → Published → Deprecated |
+| AI Governance | Partial | Retention, access, audit, compliance reports |
+| Extensibility | Roadmap | Plugins, hooks, SDK |
+| Dataset & Graph | Available | 13k+ docs, GraphRouter, audit pipeline |
 
-Full vision: [Platform overview](../platform/overview.md) · [Roadmap](../platform/roadmap.md)
+Config manifests: [events.yaml](../../config/events.yaml) · [lifecycle.yaml](../../config/knowledge-lifecycle.yaml) · [scheduler.yaml](../../config/scheduler.yaml) · [governance.yaml](../../config/governance.yaml) · [extensibility.yaml](../../config/extensibility.yaml)
 
 ---
 
@@ -34,67 +47,24 @@ Full tier comparison: [licenses/README.md](../../licenses/README.md)
 
 ---
 
-## Why Coltex
+## Available today
 
-| Capability | Detail |
-|------------|--------|
-| **Platform scope** | Dataset + graph + search + governance — not a static export |
-| **Scale** | 35,000+ deliverable documents; procedural capacity to billions+ |
-| **Structure** | 63 domains · 18 hubs · 306 graph links · 90 domain routes |
-| **Vector-ready** | Pre-chunked JSONL · optional embeddings (MiniLM-L6-v2) |
-| **GraphRAG** | Typed edges · hub clustering · region-aware GraphRouter |
-| **Compliance** | Tiered licensing · full provenance · audit pipeline |
-| **Roadmap** | Knowledge Studio, connectors, sync, dashboards, multi-tenancy |
-
----
-
-## Architecture
-
-```
-Connectors (roadmap)  →  L1–L6 Processing  →  Graph + Vectors  →  Search & Analytics
-                              ↓
-                    Knowledge Dataset (available today)
-```
-
-Six processing layers (L1 ingestion through L6 governance), ten functional clusters, and four memory tiers organize content for retrieval routing and enterprise governance.
-
----
-
-## Ideal use cases
-
-- **Enterprise RAG copilots** — domain coverage across cloud, security, data, and platform engineering
-- **Agent toolchains** — graph-linked runbooks, ADRs, and API references for multi-hop reasoning
-- **Living knowledge systems** — connector-driven sync from GitHub, Confluence, Notion (roadmap)
-- **Vector database seeding** — load chunks and embeddings into Pinecone, Weaviate, Chroma, pgvector
-- **Knowledge governance** — audit trail, quality dashboards, gap analytics (roadmap)
-
----
-
-## What's included in a commercial build
-
-| Artifact | Format | Purpose |
-|----------|--------|---------|
-| `catalog.jsonl` | JSONL | Full document metadata catalog |
-| `chunks/chunks.jsonl` | JSONL | Vector-index-ready text chunks |
-| `embeddings/embeddings.jsonl` | JSONL | Pre-computed 384-dim vectors |
-| `graph/edges.jsonl` | JSONL | Typed relationship graph |
-| `manifest.json` | JSON | SHA-256 checksums and build provenance |
-| `benchmarks/` | JSONL | FAQ, retrieval gold, RAG eval sets |
-
-Compliance: `licenses/`, `NOTICE`, `PROVENANCE.md`, `distribution_audit.json`
+- **Knowledge dataset** — graph-linked, vector-ready, audit-ready exports
+- **GraphRouter retrieval** — region-aware hybrid RAG
+- **Distribution audit** — compliance gates, benchmark evidence
+- **Memory tier model** — corpus-level working / episodic / semantic / procedural
 
 ---
 
 ## Build commands
 
 ```bash
-make product-enterprise       # Enterprise curated tier
-make product-premium-smoke    # Premium validation build
-make audit-distribution       # Compliance check
-make evaluate                 # Retrieval benchmarks
+make product-enterprise
+make audit-distribution
+make evaluate
 ```
 
-See [SKU matrix](sku-matrix.md) · [Datasheet](datasheet.md) · [Platform roadmap](../platform/roadmap.md)
+See [SKU matrix](sku-matrix.md) · [Datasheet](datasheet.md)
 
 ---
 

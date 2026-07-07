@@ -222,15 +222,151 @@ Authentication  →  JWT  →  Database  →  API  →  Services
 
 ---
 
+## Knowledge Intelligence Engine
+
+**Status:** Planned · **Priority:** P0 · **Impact:** Heart of Coltex
+
+Actively improves the knowledge base — not just indexes it.
+
+| Capability | Description |
+|------------|-------------|
+| Relationship discovery | Infer edges from semantic similarity and co-occurrence |
+| Contradiction detection | Flag conflicting claims across related documents |
+| Staleness detection | Age, sync lag, and deprecation markers |
+| Duplicate detection | Near-duplicate documents and chunks |
+| Merge recommendations | Propose canonical docs with diff preservation |
+| Doc improvement suggestions | Gap analysis from taxonomy and search patterns |
+
+Example flow: `API v2 → Deprecated → 18 dependent docs → suggest replacements → update graph → notify`
+
+Details: [intelligence-engine.md](intelligence-engine.md)
+
+---
+
+## Knowledge Health
+
+**Status:** Planned · **Priority:** P0
+
+Operational insight dashboard — rare in RAG tooling.
+
+| Metric | Example | Source |
+|--------|---------|--------|
+| Knowledge Score | 94% | Composite health |
+| Coverage | 98% | Taxonomy completeness |
+| Duplicate Risk | 3% | Duplicate scanner |
+| Outdated Docs | 12 | Staleness scanner |
+| Broken References | 4 | Graph integrity validator |
+| Graph Integrity | 96% | Orphan / dangling edge check |
+
+Foundation today: `make audit-distribution`, `make evaluate`.
+
+---
+
+## AI Memory
+
+**Status:** Partial (corpus tiers) · **Priority:** P1
+
+Depth beyond a vector database:
+
+```
+Working Memory → Project Memory → Organization Memory → Long-term Knowledge → Archive
+```
+
+Corpus path: `knowledge-corpus/memory/`. Platform-unified memory services on roadmap.
+
+---
+
+## Event System
+
+**Status:** Planned · **Priority:** P0
+
+Event-driven architecture for scalable propagation:
+
+`document.uploaded → chunk.created → metadata.updated → embedding.generated → graph.updated → search.updated → analytics.updated → health.rescored`
+
+Manifest: [config/events.yaml](../../config/events.yaml)
+
+---
+
+## Knowledge Scheduler
+
+**Status:** Planned · **Priority:** P1
+
+Automated enterprise jobs:
+
+- Nightly re-indexing
+- Broken link detection
+- Embedding refresh
+- Duplicate scans
+- Quality scoring
+- Metadata cleanup
+- Staleness and contradiction scans
+
+Manifest: [config/scheduler.yaml](../../config/scheduler.yaml)
+
+---
+
+## Trust & Provenance
+
+**Status:** Partial · **Priority:** P0
+
+Every chunk should carry: original source, author, creation date, last update, confidence, version, license, verification status.
+
+Available today: `PROVENANCE.md`, manifest checksums, distribution audit. Per-chunk provenance schema on roadmap.
+
+---
+
+## Reasoning Layer
+
+**Status:** Partial (GraphRouter retrieval) · **Priority:** P0
+
+Full pipeline: Question → Intent → Planner → Retriever → Re-ranking → Reasoning → Evidence Assembly → Answer.
+
+Separates retrieval from response generation for trustworthy AI.
+
+---
+
+## Knowledge Lifecycle
+
+**Status:** Planned · **Priority:** P1
+
+Governed state machine: **Created → Reviewed → Verified → Published → Deprecated → Archived**
+
+Manifest: [config/knowledge-lifecycle.yaml](../../config/knowledge-lifecycle.yaml)
+
+---
+
+## AI Governance
+
+**Status:** Partial (audit, licensing) · **Priority:** P1
+
+Enterprise controls: data retention, access policies, audit trails, compliance reports, version approvals.
+
+Manifest: [config/governance.yaml](../../config/governance.yaml)
+
+---
+
+## Extensibility
+
+**Status:** Planned · **Priority:** P0
+
+Plugin types: source connectors, transformers, intelligence modules, reasoning modules, exporters, governance policies, UI extensions.
+
+Hook points at every pipeline stage. SDK for registration without forking core.
+
+Manifest: [config/extensibility.yaml](../../config/extensibility.yaml)
+
+---
+
 ## Implementation phases
 
 | Phase | Focus | Key deliverables |
 |-------|-------|------------------|
-| **Phase 1** (current) | Foundation | Dataset, graph, retrieval, audit, licensing |
-| **Phase 2** | Integration | Connectors, sync, plugin SDK |
-| **Phase 3** | Experience | Knowledge Studio, visual graph, timeline |
-| **Phase 4** | Intelligence | Quality dashboard, analytics, AI document writer |
-| **Phase 5** | Scale | Multi-tenancy, enterprise deployment |
+| **Phase 1** (current) | Foundation | Dataset, graph, retrieval, audit, licensing, memory tiers |
+| **Phase 2** | Intelligence core | Intelligence Engine, events, health dashboard, reasoning layer |
+| **Phase 3** | Integration | Connectors, sync, scheduler, plugin SDK, extensibility |
+| **Phase 4** | Experience | Knowledge Studio, visual graph, lifecycle UI, governance UI |
+| **Phase 5** | Scale | Multi-tenancy, enterprise deployment, compliance automation |
 
 ---
 

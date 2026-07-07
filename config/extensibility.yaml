@@ -1,0 +1,78 @@
+# Coltex Extensibility
+# Plugin system, hooks, and SDK extension points
+
+version: 1.0.0
+updated: 2026-07-07
+
+philosophy: >
+  Coltex is designed to be extended, not forked. Every major subsystem
+  exposes registration points for connectors, transformers, intelligence
+  modules, exporters, and event subscribers.
+
+plugin_types:
+  - id: source_connector
+    description: Ingest knowledge from external systems
+    examples: [github, notion, confluence, custom_rest, filesystem, sql]
+    manifest: config/connectors.yaml
+
+  - id: destination_export
+    description: Export chunks, embeddings, or graph to external systems
+    examples: [pinecone, weaviate, chroma, pgvector, s3, parquet]
+
+  - id: transformer
+    description: Modify documents or chunks during ingestion
+    examples: [custom_chunker, metadata_enricher, pii_redactor, classifier]
+
+  - id: intelligence
+    description: Custom detectors, scorers, and recommenders
+    examples: [compliance_checker, contradiction_detector, merge_recommender]
+    manifest: docs/platform/intelligence-engine.md
+
+  - id: reasoning
+    description: Custom intent, planner, or re-ranker modules
+    examples: [domain_planner, policy_reranker, evidence_filter]
+
+  - id: governance
+    description: Custom access, retention, or audit policies
+    examples: [hipaa_retention, soc2_access_review]
+    manifest: config/governance.yaml
+
+  - id: ui_extension
+    description: Knowledge Studio panels and widgets
+    examples: [custom_health_widget, connector_status_panel]
+
+# Event hooks — subscribe to any event in config/events.yaml
+hook_points:
+  - pre_ingest
+  - post_ingest
+  - pre_chunk
+  - post_chunk
+  - pre_embed
+  - post_embed
+  - pre_graph_update
+  - post_graph_update
+  - pre_retrieve
+  - post_retrieve
+  - pre_lifecycle_transition
+  - post_lifecycle_transition
+  - on_health_rescore
+  - on_scheduler_job
+
+# SDK surface (roadmap)
+sdk:
+  language: python
+  status: planned
+  registration:
+    - register_connector(id, ingest_fn, sync_fn)
+    - register_transform(id, transform_fn)
+    - register_intelligence(id, scan_fn)
+    - register_export(id, export_fn)
+    - subscribe_event(event_id, handler_fn)
+    - register_lifecycle_hook(state, hook_fn)
+
+# Built-in extension without plugins
+built_in:
+  - make targets and product configs
+  - YAML manifests (events, lifecycle, scheduler, governance)
+  - GraphRouter region-aware retrieval
+  - Custom corpus expansion scripts

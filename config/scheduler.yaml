@@ -1,0 +1,72 @@
+# Coltex Knowledge Scheduler
+# Automated maintenance jobs for enterprise operations
+
+version: 1.0.0
+updated: 2026-07-07
+
+jobs:
+  - id: nightly_reindex
+    name: Nightly Re-indexing
+    schedule: "0 2 * * *"
+    status: planned
+    description: Refresh search and vector indexes from latest corpus state
+    emits: [search.index.updated]
+
+  - id: broken_link_scan
+    name: Broken Link Detection
+    schedule: "0 3 * * *"
+    status: planned
+    description: Validate see_also, related, and depends_on targets
+    emits: [knowledge.health.updated]
+
+  - id: embedding_refresh
+    name: Embedding Refresh
+    schedule: "0 4 * * 0"
+    status: planned
+    description: Re-embed chunks where model or content changed
+    emits: [embedding.generated, search.index.updated]
+
+  - id: duplicate_scan
+    name: Duplicate Scan
+    schedule: "0 5 * * *"
+    status: planned
+    description: Detect near-duplicate documents and chunks
+    emits: [knowledge.duplicate.detected, knowledge.health.updated]
+
+  - id: quality_scoring
+    name: Quality Scoring
+    schedule: "0 6 * * *"
+    status: planned
+    description: Recalculate Knowledge Health composite scores
+    emits: [knowledge.health.updated]
+
+  - id: metadata_cleanup
+    name: Metadata Cleanup
+    schedule: "0 1 * * 0"
+    status: planned
+    description: Normalize tags, fill missing required fields, prune orphans
+    emits: [metadata.updated, graph.updated]
+
+  - id: staleness_scan
+    name: Staleness Scan
+    schedule: "0 7 * * 1"
+    status: planned
+    description: Flag outdated documents based on age and source sync
+    emits: [knowledge.deprecation.detected, knowledge.health.updated]
+
+  - id: contradiction_scan
+    name: Contradiction Scan
+    schedule: "0 8 * * 1"
+    status: planned
+    description: Detect conflicting claims across related documents
+    emits: [knowledge.contradiction.detected]
+
+# Available today (manual invocation)
+manual_jobs:
+  - id: audit_distribution
+    command: make audit-distribution
+    status: available
+
+  - id: evaluate_retrieval
+    command: make evaluate
+    status: available

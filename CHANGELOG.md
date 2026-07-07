@@ -2,6 +2,16 @@
 
 All notable changes to the Coltex product package are documented here.
 
+## [4.5.0] - 2026-07-07
+
+### Changed — Knowledge OS & intelligence-first architecture
+
+- Repositioned as **The Knowledge Operating System for AI** (from infrastructure platform)
+- Architecture centered on intelligence loop: Understand → Connect → Reason → Retrieve → Improve
+- Added [docs/platform/knowledge-os.md](docs/platform/knowledge-os.md) and [docs/platform/intelligence-engine.md](docs/platform/intelligence-engine.md)
+- Added config manifests: events, lifecycle, scheduler, governance, extensibility
+- Expanded roadmap with Knowledge Intelligence Engine, Health, Memory, Reasoning Layer, Governance
+
 ## [4.4.0] - 2026-07-07
 
 ### Changed — Platform repositioning

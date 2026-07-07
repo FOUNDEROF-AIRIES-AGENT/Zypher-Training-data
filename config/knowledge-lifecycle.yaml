@@ -1,0 +1,55 @@
+# Coltex Knowledge Lifecycle
+# Documents progress through governed states — knowledge is not static
+
+version: 1.0.0
+updated: 2026-07-07
+
+states:
+  - id: created
+    label: Created
+    description: Initial ingest; unreviewed
+    allowed_transitions: [reviewed, archived]
+
+  - id: reviewed
+    label: Reviewed
+    description: Human or automated review completed
+    allowed_transitions: [verified, created, archived]
+
+  - id: verified
+    label: Verified
+    description: Accuracy and provenance confirmed
+    allowed_transitions: [published, reviewed]
+
+  - id: published
+    label: Published
+    description: Active, searchable, retrieval-preferred
+    allowed_transitions: [deprecated, verified]
+
+  - id: deprecated
+    label: Deprecated
+    description: Superseded; retained for reference; lower retrieval rank
+    allowed_transitions: [archived, published]
+
+  - id: archived
+    label: Archived
+    description: Retained for audit; excluded from active retrieval
+    allowed_transitions: []
+
+default_state: created
+retrieval_preference_order: [published, verified, reviewed, created, deprecated]
+
+# Lifecycle actions triggered on transition
+transition_hooks:
+  published:
+    - emit: knowledge.lifecycle.transition
+    - action: refresh_search_index
+    - action: rescore_health
+
+  deprecated:
+    - emit: knowledge.deprecation.detected
+    - action: notify_dependents
+    - action: update_graph_edges
+
+  archived:
+    - action: apply_retention_policy
+    - action: remove_from_active_index

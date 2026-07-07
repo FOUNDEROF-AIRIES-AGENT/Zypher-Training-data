@@ -1,97 +1,154 @@
-# Coltex — AI Knowledge Infrastructure Platform
+# Coltex — The Knowledge Operating System for AI
 
-Enterprise-grade knowledge infrastructure for RAG, AI agents, and domain-specific copilots. Coltex unifies **datasets**, **knowledge graphs**, **vector search**, **retrieval pipelines**, and **knowledge management** into a single platform — not a static document dump.
+Enterprise knowledge intelligence for organizations that need more than a vector database. Coltex is a **Knowledge OS** — it understands, connects, reasons over, retrieves from, and continuously improves organizational knowledge.
 
-[![Documents: 13k+](https://img.shields.io/badge/documents-13k%2B-green.svg)](docs/commercial/datasheet.md)
+[![Knowledge Score](https://img.shields.io/badge/knowledge%20health-audit%20ready-green.svg)](docs/platform/intelligence-engine.md)
 [![Graph edges: 52k+](https://img.shields.io/badge/graph%20edges-52k%2B-purple.svg)](docs/commercial/datasheet.md)
 [![Domains: 63](https://img.shields.io/badge/domains-63-blue.svg)](docs/commercial/datasheet.md)
-[![Platform](https://img.shields.io/badge/platform-knowledge%20infrastructure-blue.svg)](docs/platform/overview.md)
+[![Knowledge OS](https://img.shields.io/badge/product-knowledge%20OS-blue.svg)](docs/platform/knowledge-os.md)
 
 ---
 
 ## Overview
 
-Coltex is an **AI knowledge infrastructure platform** that helps organizations ingest, structure, connect, search, and govern knowledge at scale. The enterprise RAG vector dataset is one component — alongside graph linking, hybrid retrieval, quality analytics, and (on the roadmap) visual management, live connectors, and automatic synchronization.
+Customers aren't buying vectors. They're buying an **operating system that manages organizational knowledge** — with intelligence at the center, not storage.
 
-**Platform components**
+Coltex runs a continuous intelligence loop:
 
-| Component | Description | Status |
-|-----------|-------------|--------|
-| **Knowledge Dataset** | Graph-linked, vector-ready corpus with typed metadata and provenance | Available |
-| **Knowledge Graph** | Hub clusters, domain routes, typed relationship edges (GraphRAG) | Available |
-| **Search & Retrieval** | Hybrid RAG pipeline with region-aware GraphRouter | Available |
-| **Quality & Audit** | Distribution audit, benchmarks, compliance artifacts | Available |
-| **Knowledge Studio** | Visual explorer for documents, graph, embeddings, and metadata | Roadmap |
-| **Connectors & Sync** | GitHub, Notion, Confluence, Drive, Slack, and more — live sync | Roadmap |
-| **Knowledge Timeline** | Version history, diff, and rollback per document | Roadmap |
-| **AI Quality Dashboard** | Retrieval accuracy, chunk health, coverage, graph density | Roadmap |
-| **Multi-tenancy** | Organization → Workspace → Project → Knowledge Base | Roadmap |
-| **Plugin System** | Extensible connectors and custom integrations | Roadmap |
+```
+Understand  →  Connect  →  Reason  →  Retrieve  →  Improve
+     │            │           │           │            │
+  ingest &     graph &     planner &    hybrid      health,
+  classify     relate      evidence     search      merges,
+                                                      alerts
+```
 
-Full platform vision: [Platform overview](docs/platform/overview.md) · [Roadmap](docs/platform/roadmap.md)
+The enterprise RAG dataset, graph, and retrieval engine are **foundation layers**. The **Knowledge Intelligence Engine** is the heart — actively discovering relationships, detecting contradictions, scoring health, and recommending improvements.
+
+Platform vision: [Knowledge OS](docs/platform/knowledge-os.md) · [Intelligence Engine](docs/platform/intelligence-engine.md) · [Roadmap](docs/platform/roadmap.md)
 
 ---
 
-## Why teams choose Coltex
+## Platform stack
 
-- **Living knowledge, not static files** — graph-linked documents with cross-reference edges and cluster routing
-- **Production-ready exports** — pre-chunked JSONL, optional embeddings, manifest checksums, benchmark evidence
-- **Enterprise governance** — auditable provenance, tiered licensing, distribution compliance pipeline
-- **Graph-aware retrieval** — GraphRouter expands context across hubs, domains, and relationship types
-- **Built to grow** — connector ecosystem, sync, and Knowledge Studio on the roadmap ([details](docs/platform/roadmap.md))
+Intelligence-first — not storage-first.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Knowledge Studio · Governance · Lifecycle · Extensibility      │
+├─────────────────────────────────────────────────────────────────┤
+│  ★ Knowledge Intelligence Engine · Knowledge Health · Memory    │
+├─────────────────────────────────────────────────────────────────┤
+│  Reasoning Layer (intent → plan → retrieve → rank → evidence)   │
+├─────────────────────────────────────────────────────────────────┤
+│  Event Bus · Scheduler · Connectors · Plugins                   │
+├─────────────────────────────────────────────────────────────────┤
+│  Graph · Embeddings · Chunks · Trust & Provenance               │
+├─────────────────────────────────────────────────────────────────┤
+│  Dataset · Audit · Licensing  (available today)                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+| Layer | Role | Status |
+|-------|------|--------|
+| **Knowledge Intelligence Engine** | Discover, detect, recommend, improve | Roadmap |
+| **Knowledge Health** | Operational scores: coverage, duplicates, staleness | Roadmap |
+| **AI Memory** | Working → Project → Org → Long-term → Archive | Partial |
+| **Reasoning Layer** | Intent, planner, re-rank, evidence assembly | Partial |
+| **Event System** | Event-driven pipeline propagation | Roadmap |
+| **Knowledge Scheduler** | Nightly re-index, link scan, quality jobs | Roadmap |
+| **Trust & Provenance** | Source, author, confidence, verification per chunk | Partial |
+| **Knowledge Lifecycle** | Created → Reviewed → Verified → Published → Deprecated | Roadmap |
+| **AI Governance** | Retention, access, audit, compliance reports | Roadmap |
+| **Extensibility** | Plugins, hooks, custom connectors, SDK | Roadmap |
+| **Dataset & Graph** | Corpus, edges, GraphRouter retrieval | Available |
+
+Config manifests: [events](config/events.yaml) · [lifecycle](config/knowledge-lifecycle.yaml) · [scheduler](config/scheduler.yaml) · [governance](config/governance.yaml) · [extensibility](config/extensibility.yaml)
 
 ---
 
-## Architecture
+## Knowledge Intelligence Engine
+
+The heart of Coltex. Not just indexing — **actively improving** the knowledge base.
 
 ```
-  Connectors (roadmap)          Knowledge Studio (roadmap)
-         │                              │
-         ▼                              ▼
-  ┌────────────── L6 Governance (Catalog & policy) ──────────────┐
-  │  L5 Assembly   L4 Graph (GraphRAG)   L3 Integration         │
-  │  L2 Metadata   L1 Ingestion                                  │
-  └──────────────────────────┬───────────────────────────────────┘
-                             │
-         ┌───────────────────┼───────────────────┐
-         ▼                   ▼                   ▼
-    63 Domains         18 Knowledge Hubs    4 Memory Tiers
-         │                   │                   │
-         └──────► Graph Links + Domain Routes ◄─┘
-                             │
-              Vector + Metadata + GraphRouter
-                             │
-                    Search · Retrieval · Analytics
+API v2 marked Deprecated
+         │
+         ▼
+Intelligence Engine detects 18 related documents
+         │
+         ├──► Suggest replacements & merges
+         ├──► Update graph edges
+         └──► Notify owner via event
 ```
 
-| Layer | Path | Purpose |
-|-------|------|---------|
-| Processing stack | `knowledge-corpus/processing-layers/` | L1–L6 ingestion through governance |
-| Functional clusters | `knowledge-corpus/clusters/` | Domain groupings by function |
-| Domains | `knowledge-corpus/domains/` | 63 technology categories |
-| Knowledge hubs | `knowledge-corpus/hubs/` | 18 service-level clusters |
-| Graph links | `knowledge-corpus/graph-links/` | Hub-to-hub relationships |
-| Domain routes | `knowledge-corpus/domain-routes/` | Inter-cluster routes |
+Capabilities: relationship discovery · contradiction detection · stale doc alerts · duplicate detection · merge recommendations · documentation improvement suggestions.
 
-Detailed architecture: [Knowledge architecture](docs/architecture/knowledge-architecture.md)
+Details: [Intelligence Engine](docs/platform/intelligence-engine.md)
+
+---
+
+## Knowledge Health
+
+Enterprise operational insight — not just search metrics.
+
+| Metric | Example | Meaning |
+|--------|---------|---------|
+| **Knowledge Score** | 94% | Overall corpus health |
+| **Coverage** | 98% | Taxonomy completeness |
+| **Duplicate Risk** | 3% | Near-duplicate chunk ratio |
+| **Outdated Docs** | 12 | Stale or deprecated count |
+| **Broken References** | 4 | Invalid see_also / related targets |
+| **Graph Integrity** | 96% | Documents with valid edges |
+
+Built on today's audit pipeline; continuous monitoring on the roadmap.
+
+---
+
+## Reasoning layer
+
+Retrieval is not the answer. Reasoning is.
+
+```
+Question
+    │
+    ▼
+Intent Detection
+    │
+    ▼
+Planner
+    │
+    ▼
+Retriever (vector + graph)
+    │
+    ▼
+Re-ranking
+    │
+    ▼
+Reasoning
+    │
+    ▼
+Evidence Assembly
+    │
+    ▼
+Answer
+```
+
+Today's `brain retrieve` + GraphRouter is the retrieval foundation. Full reasoning pipeline on the roadmap.
 
 ---
 
 ## Available today
 
-### Dataset specifications
-
-| Metric | Value |
-|--------|-------|
+| Capability | Detail |
+|------------|--------|
 | Curated documents | **12,993** |
 | Vector chunks | **83,612** |
 | Graph edges | **52,490** |
 | Technology domains | **63** |
-| Knowledge hubs | **18** |
-| Benchmark FAQ pairs | **1,100+** |
-| Embedding model | `sentence-transformers/all-MiniLM-L6-v2` (384 dimensions) |
-
-Full specifications: [Technical datasheet](docs/commercial/datasheet.md)
+| GraphRouter retrieval | Region-aware hybrid RAG |
+| Distribution audit | Compliance and quality gates |
+| Memory tier model | Working, episodic, semantic, procedural (corpus) |
 
 ### Getting started
 
@@ -101,12 +158,9 @@ pip install -r requirements.txt
 
 make corpus-mega
 make product-enterprise
-
-python3 examples/load_dataset.py
 make audit-distribution
+make evaluate
 ```
-
-### Retrieval engine
 
 ```bash
 make index
@@ -114,51 +168,30 @@ python3 -m brain retrieve "How does GraphRAG routing work?" --context
 python3 -m brain report
 ```
 
-Build and deployment: [Product setup](docs/product-setup.md)
-
-### Deliverables (`data/product/`)
-
-| Artifact | Format | Description |
-|----------|--------|-------------|
-| `chunks/chunks.jsonl` | JSONL | Vector-index-ready text chunks |
-| `embeddings/embeddings.jsonl` | JSONL | Pre-computed 384-dimensional vectors |
-| `catalog.jsonl` | JSONL | Full document metadata catalog |
-| `graph/edges.jsonl` | JSONL | Typed relationship graph |
-| `manifest.json` | JSON | SHA-256 checksums and build provenance |
-| `benchmarks/` | JSONL | FAQ, retrieval gold, and RAG evaluation sets |
+Full specifications: [Technical datasheet](docs/commercial/datasheet.md) · [Product setup](docs/product-setup.md)
 
 ---
 
 ## Platform roadmap
 
-The highest-impact enterprise capabilities in development:
+### Intelligence & operations
 
-1. **[Knowledge Studio](docs/platform/roadmap.md#1-knowledge-studio)** — visual management of documents, graph, embeddings, search, and clusters
-2. **[Automatic Connectors](docs/platform/roadmap.md#2-automatic-connectors)** — GitHub, GitLab, Notion, Confluence, Google Drive, SharePoint, Jira, Slack, and more
-3. **[Automatic Synchronization](docs/platform/roadmap.md#3-automatic-synchronization)** — commit-triggered knowledge, graph, and vector updates
-4. **[Knowledge Timeline](docs/platform/roadmap.md#4-knowledge-timeline)** — version history and rollback per document
-5. **[AI Quality Dashboard](docs/platform/roadmap.md#5-ai-quality-dashboard)** — retrieval accuracy, chunk health, coverage, graph density
-6. **[Knowledge Analytics](docs/platform/roadmap.md#6-knowledge-analytics)** — search trends, gaps, weak areas, broken links
-7. **[Multi-tenancy](docs/platform/roadmap.md#7-multi-tenancy)** — Organization → Workspace → Project → Knowledge Base
-8. **[Plugin System](docs/platform/roadmap.md#8-plugin-system)** — extensible connector and integration framework
-9. **[AI Document Writer](docs/platform/roadmap.md#9-ai-document-writer)** — auto-generate API docs, FAQs, runbooks from uploads
-10. **[Visual Knowledge Graph](docs/platform/roadmap.md#10-visual-knowledge-graph)** — interactive, clickable graph exploration
+1. [Knowledge Intelligence Engine](docs/platform/roadmap.md#knowledge-intelligence-engine) — discover, detect, recommend, improve
+2. [Knowledge Health](docs/platform/roadmap.md#knowledge-health) — operational health dashboard
+3. [AI Memory](docs/platform/roadmap.md#ai-memory) — working → org → archive tiers
+4. [Event System](docs/platform/roadmap.md#event-system) — event-driven architecture
+5. [Knowledge Scheduler](docs/platform/roadmap.md#knowledge-scheduler) — automated maintenance jobs
+6. [Reasoning Layer](docs/platform/roadmap.md#reasoning-layer) — intent through evidence assembly
+7. [Knowledge Lifecycle](docs/platform/roadmap.md#knowledge-lifecycle) — created through archived
+8. [AI Governance](docs/platform/roadmap.md#ai-governance) — retention, access, compliance
+9. [Extensibility](docs/platform/roadmap.md#extensibility) — plugins, hooks, SDK
+
+### Experience & integration
+
+10. [Knowledge Studio](docs/platform/roadmap.md#1-knowledge-studio) — visual knowledge management
+11. [Connectors & Sync](docs/platform/roadmap.md#2-automatic-connectors) — living knowledge from GitHub, Notion, etc.
 
 Connector manifest: [config/connectors.yaml](config/connectors.yaml)
-
----
-
-## Package tiers
-
-| Package | Build command | Documents | Intended use |
-|---------|---------------|-----------|--------------|
-| Personal | `make product-personal` | Full corpus | Non-commercial learning and research |
-| Professional | `make product-professional` | Full corpus | Commercial applications — single entity |
-| Enterprise Curated | `make product-enterprise` | 12,993 | Production RAG deployment |
-| Premium Standard | `make product-premium-smoke` | 25,000 | Validation and evaluation |
-| Premium Hyper | `make product-hyper` | Uncapped | Maximum-scale production |
-
-Full comparison: [SKU matrix](docs/commercial/sku-matrix.md)
 
 ---
 
@@ -166,13 +199,12 @@ Full comparison: [SKU matrix](docs/commercial/sku-matrix.md)
 
 | Document | Description |
 |----------|-------------|
-| [Platform overview](docs/platform/overview.md) | AI knowledge infrastructure vision |
-| [Platform roadmap](docs/platform/roadmap.md) | Enterprise features and timeline |
+| [Knowledge OS](docs/platform/knowledge-os.md) | Product vision and mental model |
+| [Intelligence Engine](docs/platform/intelligence-engine.md) | Core intelligence architecture |
+| [Platform roadmap](docs/platform/roadmap.md) | Feature specifications |
 | [Licenses](licenses/README.md) | License tiers and terms |
-| [Product overview](docs/commercial/product-overview.md) | Commercial positioning |
 | [Technical datasheet](docs/commercial/datasheet.md) | Dataset specifications |
-| [Knowledge architecture](docs/architecture/knowledge-architecture.md) | Corpus structure and design |
-| [Product setup](docs/product-setup.md) | Build and deployment instructions |
+| [Knowledge architecture](docs/architecture/knowledge-architecture.md) | Corpus structure |
 
 ---
 
