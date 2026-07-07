@@ -3,7 +3,7 @@
 **Effective date:** July 7, 2026  
 **Version:** 1.0  
 **Price:** $79 USD (One-Time Purchase)  
-**Licensor:** Coltex / FOUNDEROF-AIRIES-AGENT
+**Licensor:** Elijah Maxwell / Coltex
 
 ---
 

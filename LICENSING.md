@@ -1,6 +1,6 @@
 # Coltex Licensing
 
-Copyright © 2026 Coltex / FOUNDEROF-AIRIES-AGENT. All rights reserved.
+Copyright © 2026 Elijah Maxwell / Coltex. All rights reserved.
 
 Use of the Coltex Enterprise RAG Vector Dataset is governed by a commercial license agreement. Select the tier that matches your deployment scope and intended use.
 

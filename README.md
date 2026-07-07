@@ -179,4 +179,4 @@ Architecture manifest: `data/brain/architecture-manifest.json`
 
 ## Copyright
 
-Copyright © 2026 Coltex / FOUNDEROF-AIRIES-AGENT. All rights reserved. See [LICENSING.md](LICENSING.md) for terms of use.
+Copyright © 2026 Elijah Maxwell / Coltex. All rights reserved. See [LICENSING.md](LICENSING.md) for terms of use.

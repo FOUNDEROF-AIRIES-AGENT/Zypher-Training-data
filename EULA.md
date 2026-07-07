@@ -2,7 +2,7 @@
 
 **Effective date:** July 7, 2026  
 **Version:** 1.0  
-**Licensor:** Coltex / FOUNDEROF-AIRIES-AGENT ("Licensor", "we", "us")
+**Licensor:** Elijah Maxwell / Coltex ("Licensor", "we", "us")
 
 ---
 
