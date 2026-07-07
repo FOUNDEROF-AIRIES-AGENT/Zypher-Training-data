@@ -18,6 +18,88 @@ RELATIONSHIP_TYPES = (
     "see_also",
 )
 
+# Premium dataset tier — 50 categories × 20 doc types (single source of truth)
+PREMIUM_CATEGORIES: tuple[str, ...] = (
+    # RAG & AI (13)
+    "rag", "graphrag", "agentic", "chunking", "embeddings", "vector_stores",
+    "vector_search", "retrieval", "indexing", "fine_tuning", "prompt_engineering",
+    "tool_use", "memory",
+    # Languages (8)
+    "python", "java", "javascript", "typescript", "go", "rust", "sql", "csharp",
+    # Databases (4)
+    "postgresql", "mongodb", "redis", "mysql",
+    # Cloud & DevOps (8)
+    "docker", "kubernetes", "aws", "azure", "gcp", "terraform", "ci_cd", "linux",
+    # Architecture (5)
+    "microservices", "event_driven", "architecture", "api_design", "domain_driven_design",
+    # Engineering practice (8)
+    "security", "observability", "testing", "performance", "code_review", "incidents",
+    "data_quality", "mlops",
+    # Tools (4)
+    "git", "github_actions", "nginx", "bash",
+)
+
+PREMIUM_DOC_TYPES: tuple[str, ...] = (
+    "documentation", "guide", "tutorial", "faq", "api_reference", "runbook",
+    "architecture_decision", "code_walkthrough", "best_practices", "benchmark",
+    "evaluation", "troubleshooting", "incident_report", "design_document",
+    "migration_guide", "release_notes", "database_schema", "deep_dive",
+    "comparison", "case_study",
+)
+
+PREMIUM_CATEGORY_PHRASES: dict[str, str] = {
+    "rag": "RAG Systems",
+    "graphrag": "GraphRAG",
+    "agentic": "Agentic AI",
+    "chunking": "Document Chunking",
+    "embeddings": "Embedding Models",
+    "vector_stores": "Vector Stores",
+    "vector_search": "Vector Search",
+    "retrieval": "Retrieval Pipelines",
+    "indexing": "Indexing Pipelines",
+    "fine_tuning": "Fine-Tuning",
+    "prompt_engineering": "Prompt Engineering",
+    "tool_use": "Tool Use",
+    "memory": "Agent Memory",
+    "python": "Python",
+    "java": "Java",
+    "javascript": "JavaScript",
+    "typescript": "TypeScript",
+    "go": "Go",
+    "rust": "Rust",
+    "sql": "SQL",
+    "csharp": "C#",
+    "postgresql": "PostgreSQL",
+    "mongodb": "MongoDB",
+    "redis": "Redis",
+    "mysql": "MySQL",
+    "docker": "Docker",
+    "kubernetes": "Kubernetes",
+    "aws": "AWS",
+    "azure": "Azure",
+    "gcp": "Google Cloud",
+    "terraform": "Terraform",
+    "ci_cd": "CI/CD",
+    "linux": "Linux",
+    "microservices": "Microservices",
+    "event_driven": "Event-Driven Architecture",
+    "architecture": "System Architecture",
+    "api_design": "API Design",
+    "domain_driven_design": "Domain-Driven Design",
+    "security": "Security",
+    "observability": "Observability",
+    "testing": "Testing",
+    "performance": "Performance",
+    "code_review": "Code Review",
+    "incidents": "Incident Management",
+    "data_quality": "Data Quality",
+    "mlops": "MLOps",
+    "git": "Git",
+    "github_actions": "GitHub Actions",
+    "nginx": "Nginx",
+    "bash": "Bash",
+}
+
 # Document types the brain can generate and index
 DOCUMENT_TYPES = [
     # Core documentation

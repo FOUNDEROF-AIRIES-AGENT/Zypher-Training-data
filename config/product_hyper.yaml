@@ -22,6 +22,16 @@ generation:
     - rag
     - graphrag
     - agentic
+    - chunking
+    - embeddings
+    - vector_stores
+    - vector_search
+    - retrieval
+    - indexing
+    - fine_tuning
+    - prompt_engineering
+    - tool_use
+    - memory
     - python
     - java
     - javascript
@@ -29,22 +39,36 @@ generation:
     - go
     - rust
     - sql
+    - csharp
     - postgresql
     - mongodb
     - redis
+    - mysql
     - docker
     - kubernetes
     - aws
     - azure
     - gcp
+    - terraform
+    - ci_cd
+    - linux
     - microservices
-    - security
+    - event_driven
     - architecture
     - api_design
-    - ci_cd
+    - domain_driven_design
+    - security
+    - observability
     - testing
-    - incidents
     - performance
+    - code_review
+    - incidents
+    - data_quality
+    - mlops
+    - git
+    - github_actions
+    - nginx
+    - bash
 
 # Knowledge sources: seed CHUNK docs + streamed premium corpus
 knowledge_base:
@@ -108,7 +132,7 @@ benchmarks:
   min_faq_pairs: 500
   include_rag_eval: true
   include_retrieval_gold: true
-  sample_from_catalog: 10000
+  sample_from_catalog: 15000
 
 evaluation:
   top_k: 8

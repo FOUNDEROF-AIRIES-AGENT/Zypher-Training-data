@@ -29,32 +29,9 @@ MEGA_ASPECTS = (
     "deprecation", "governance", "automation", "orchestration", "resilience",
 )
 
-CATEGORY_PHRASES: dict[str, str] = {
-    "rag": "RAG Systems",
-    "graphrag": "GraphRAG",
-    "agentic": "Agentic AI",
-    "python": "Python",
-    "java": "Java",
-    "javascript": "JavaScript",
-    "typescript": "TypeScript",
-    "go": "Go",
-    "rust": "Rust",
-    "sql": "SQL",
-    "postgresql": "PostgreSQL",
-    "kubernetes": "Kubernetes",
-    "docker": "Docker",
-    "aws": "AWS",
-    "azure": "Azure",
-    "gcp": "GCP",
-    "microservices": "Microservices",
-    "security": "Security",
-    "architecture": "Architecture",
-    "api_design": "API Design",
-    "ci_cd": "CI/CD",
-    "testing": "Testing",
-    "incidents": "Incidents",
-    "performance": "Performance",
-}
+from brain_schema import PREMIUM_CATEGORY_PHRASES
+
+CATEGORY_PHRASES: dict[str, str] = PREMIUM_CATEGORY_PHRASES
 
 
 @dataclass(frozen=True)

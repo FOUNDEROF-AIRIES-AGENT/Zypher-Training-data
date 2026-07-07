@@ -13,8 +13,8 @@ All notable changes to the Coltex product package are documented here.
 
 ### Changed
 
-- Premium smoke build increased to **25,000 documents** (from 10,000) across **22 categories**
-- Benchmark datasets increased to **200 FAQ pairs**, **220 retrieval gold**, **200 RAG eval** (from 20 each)
+- Premium smoke build increased to **25,000 documents** (from 10,000) across **50 categories** and **20 doc types**
+- Benchmark datasets increased to **250 FAQ pairs**, **270 retrieval gold**, **250 RAG eval** (from 20 each)
 - Premium generator now round-robins topics for category diversity in bounded builds
 - Premium document sections include concrete operational details and checklists
 - Fixed Go/C++ code snippet template escaping for corpus generation

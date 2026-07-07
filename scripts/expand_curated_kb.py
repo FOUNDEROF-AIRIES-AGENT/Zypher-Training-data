@@ -16,22 +16,14 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from corpus_templates import TOPICS, Topic
 from generate_corpus import build_document, SECTION_TEMPLATES
+from brain_schema import PREMIUM_CATEGORIES, PREMIUM_DOC_TYPES
 
 KB_DIR = ROOT / "knowledge-base"
 START_CHUNK = 162
 
-CURATED_DOC_TYPES = (
-    "faq", "guide", "runbook", "api_reference", "architecture_decision",
-    "troubleshooting", "best_practices", "code_walkthrough", "benchmark",
-)
+CURATED_DOC_TYPES = PREMIUM_DOC_TYPES
 
-PRIORITY_CATEGORIES = (
-    "rag", "graphrag", "agentic", "python", "java", "javascript", "typescript",
-    "go", "rust", "sql", "postgresql", "mongodb", "redis", "docker", "kubernetes",
-    "aws", "azure", "gcp", "microservices", "security", "architecture", "api_design",
-    "ci_cd", "testing", "incidents", "performance", "observability", "vector_stores",
-    "fine_tuning", "data_quality",
-)
+PRIORITY_CATEGORIES = PREMIUM_CATEGORIES
 
 
 def _existing_chunk_max() -> int:

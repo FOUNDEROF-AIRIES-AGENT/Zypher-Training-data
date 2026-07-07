@@ -20,6 +20,16 @@ generation:
     - rag
     - graphrag
     - agentic
+    - chunking
+    - embeddings
+    - vector_stores
+    - vector_search
+    - retrieval
+    - indexing
+    - fine_tuning
+    - prompt_engineering
+    - tool_use
+    - memory
     - python
     - java
     - javascript
@@ -27,18 +37,36 @@ generation:
     - go
     - rust
     - sql
+    - csharp
     - postgresql
     - mongodb
     - redis
+    - mysql
     - docker
     - kubernetes
     - aws
-    - security
-    - architecture
-    - microservices
+    - azure
+    - gcp
+    - terraform
     - ci_cd
+    - linux
+    - microservices
+    - event_driven
+    - architecture
+    - api_design
+    - domain_driven_design
+    - security
+    - observability
     - testing
     - performance
+    - code_review
+    - incidents
+    - data_quality
+    - mlops
+    - git
+    - github_actions
+    - nginx
+    - bash
 
 knowledge_base:
   paths:
@@ -93,10 +121,10 @@ output:
 
 benchmarks:
   output_dir: benchmarks
-  min_faq_pairs: 200
+  min_faq_pairs: 250
   include_rag_eval: true
   include_retrieval_gold: true
-  sample_from_catalog: 5000
+  sample_from_catalog: 8000
 
 evaluation:
   top_k: 8

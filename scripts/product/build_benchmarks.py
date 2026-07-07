@@ -88,6 +88,41 @@ QUESTION_TEMPLATES: dict[str, list[str]] = {
         "What was the root cause of {topic}?",
         "How was {topic} resolved?",
     ],
+    "design_document": [
+        "What is the design for {topic}?",
+        "What components make up {topic}?",
+        "What are the data flows in {topic}?",
+    ],
+    "migration_guide": [
+        "How do I migrate to {topic}?",
+        "What are the rollback steps for {topic} migration?",
+        "What prerequisites are needed before migrating {topic}?",
+    ],
+    "release_notes": [
+        "What changed in the latest {topic} release?",
+        "Are there breaking changes in {topic}?",
+        "What migration steps are required for {topic}?",
+    ],
+    "database_schema": [
+        "What is the database schema for {topic}?",
+        "What indexes should {topic} use?",
+        "How are tables related in {topic}?",
+    ],
+    "deep_dive": [
+        "Explain the internals of {topic}.",
+        "What are the trade-offs of {topic}?",
+        "How does {topic} work under the hood?",
+    ],
+    "comparison": [
+        "How does {topic} compare to alternatives?",
+        "What criteria should I use to evaluate {topic}?",
+        "Which option is recommended for {topic}?",
+    ],
+    "case_study": [
+        "What is a real-world example of {topic}?",
+        "What outcomes were achieved with {topic}?",
+        "What lessons were learned from {topic}?",
+    ],
 }
 
 PARAPHRASE_PREFIXES = (

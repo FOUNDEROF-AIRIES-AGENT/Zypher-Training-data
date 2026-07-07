@@ -13,15 +13,10 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from brain.types import Document
+from brain_schema import PREMIUM_DOC_TYPES
 from code_snippets import CODE_SNIPPETS, DEFAULT_CODE_LANGS
 from corpus_templates import TOPICS, Topic
 from mega_scale import estimate_documents, iter_all_topics, resolve_mega_tier, count_base_topics
-
-PREMIUM_DOC_TYPES = (
-    "documentation", "guide", "tutorial", "faq", "api_reference", "runbook",
-    "architecture_decision", "code_walkthrough", "best_practices", "benchmark",
-    "evaluation", "troubleshooting",
-)
 
 PREMIUM_SECTIONS: dict[str, list[str]] = {
     "documentation": ["Executive Summary", "Architecture", "Implementation", "Operations", "Security", "Metrics"],
@@ -36,6 +31,14 @@ PREMIUM_SECTIONS: dict[str, list[str]] = {
     "benchmark": ["Methodology", "Dataset", "Metrics", "Results", "Comparison", "Recommendations"],
     "evaluation": ["Rubric", "Gold Answer", "Acceptable Answer", "Poor Answer", "Scoring", "Calibration"],
     "troubleshooting": ["Symptoms", "Diagnostics", "Root Causes", "Resolution", "Prevention", "Verification"],
+    "incident_report": ["Summary", "Timeline", "Root Cause", "Impact", "Resolution", "Lessons Learned"],
+    "design_document": ["Goals", "Architecture", "Components", "Data Flow", "Trade-offs", "Open Questions"],
+    "migration_guide": ["Overview", "Prerequisites", "Migration Steps", "Rollback", "Validation", "Post-Migration"],
+    "release_notes": ["Version", "Highlights", "Breaking Changes", "Migration", "Known Issues", "Upgrade Path"],
+    "database_schema": ["Overview", "Tables", "Indexes", "Constraints", "Relationships", "Migration Notes"],
+    "deep_dive": ["Background", "Internals", "Trade-offs", "Benchmarks", "Expert Notes", "Further Reading"],
+    "comparison": ["Criteria", "Option A", "Option B", "Recommendation", "Migration Path", "Decision Matrix"],
+    "case_study": ["Scenario", "Constraints", "Solution", "Outcome", "Metrics", "Lessons Learned"],
 }
 
 OPENERS = (
@@ -64,7 +67,8 @@ CONCRETE_DETAILS = (
 
 LANGUAGE_MAP = {
     "python": "python", "java": "java", "javascript": "javascript", "typescript": "typescript",
-    "go": "go", "rust": "rust", "sql": "sql", "postgresql": "sql",
+    "go": "go", "rust": "rust", "sql": "sql", "postgresql": "sql", "mysql": "sql",
+    "csharp": "csharp", "bash": "bash", "mongodb": "javascript", "redis": "bash",
 }
 
 
@@ -135,7 +139,11 @@ def build_premium_body(topic: Topic, doc_type: str, variant: int) -> str:
     parts = [f"# {title}\n"]
     for section in sections:
         parts.append(f"\n## {section}\n\n{_section_body(section, topic, doc_type, variant)}")
-    if doc_type in ("code_walkthrough", "tutorial", "api_reference", "guide", "best_practices"):
+    code_doc_types = (
+        "code_walkthrough", "tutorial", "api_reference", "guide", "best_practices",
+        "database_schema", "migration_guide", "design_document",
+    )
+    if doc_type in code_doc_types:
         parts.append(f"\n## Reference Implementation\n\n```\n{_render_code(topic, variant)}\n```")
     if doc_type == "faq":
         parts.append(

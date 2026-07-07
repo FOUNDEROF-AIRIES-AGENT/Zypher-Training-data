@@ -1,0 +1,59 @@
+# Premium tier: 50 categories (imported manually into product configs)
+categories:
+  # RAG & AI
+  - rag
+  - graphrag
+  - agentic
+  - chunking
+  - embeddings
+  - vector_stores
+  - vector_search
+  - retrieval
+  - indexing
+  - fine_tuning
+  - prompt_engineering
+  - tool_use
+  - memory
+  # Languages
+  - python
+  - java
+  - javascript
+  - typescript
+  - go
+  - rust
+  - sql
+  - csharp
+  # Databases
+  - postgresql
+  - mongodb
+  - redis
+  - mysql
+  # Cloud & DevOps
+  - docker
+  - kubernetes
+  - aws
+  - azure
+  - gcp
+  - terraform
+  - ci_cd
+  - linux
+  # Architecture
+  - microservices
+  - event_driven
+  - architecture
+  - api_design
+  - domain_driven_design
+  # Engineering practice
+  - security
+  - observability
+  - testing
+  - performance
+  - code_review
+  - incidents
+  - data_quality
+  - mlops
+  # Tools
+  - git
+  - github_actions
+  - nginx
+  - bash

@@ -1,13 +1,13 @@
 {
-  "faq_pairs": 200,
-  "retrieval_gold": 220,
-  "rag_eval": 200,
-  "categories_covered": 22,
-  "doc_types_covered": 12,
+  "faq_pairs": 250,
+  "retrieval_gold": 270,
+  "rag_eval": 250,
+  "categories_covered": 50,
+  "doc_types_covered": 20,
   "difficulty_distribution": {
-    "easy": 67,
-    "medium": 67,
-    "hard": 66
+    "easy": 84,
+    "medium": 83,
+    "hard": 83
   },
   "output_dir": "/workspace/benchmarks"
 }
