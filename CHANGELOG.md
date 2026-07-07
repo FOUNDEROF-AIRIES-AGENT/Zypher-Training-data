@@ -2,6 +2,16 @@
 
 All notable changes to the Coltex product package are documented here.
 
+## [4.4.0] - 2026-07-07
+
+### Changed — Platform repositioning
+
+- Repositioned Coltex as **AI Knowledge Infrastructure Platform** (not dataset-only)
+- Rewrote README with platform components, available vs. roadmap status
+- Added [docs/platform/overview.md](docs/platform/overview.md) and [docs/platform/roadmap.md](docs/platform/roadmap.md)
+- Added [config/connectors.yaml](config/connectors.yaml) connector ecosystem manifest
+- Updated commercial product overview for platform framing
+
 ## [4.3.4] - 2026-07-07
 
 ### Added — Coltex Enterprise License (Custom Quote)

@@ -1,8 +1,24 @@
-# Coltex Enterprise RAG Vector Dataset
+# Coltex — AI Knowledge Infrastructure Platform
 
-**Production-grade retrieval-augmented generation corpus for commercial deployment.**
+**Enterprise knowledge infrastructure for RAG, AI agents, and governed organizational knowledge.**
 
-Coltex is a fully auditable, graph-linked, vector-ready knowledge dataset designed for teams building enterprise RAG products, AI agents, and domain-specific copilots. Every document carries typed metadata, cross-reference edges, and compliance provenance.
+Coltex unifies datasets, knowledge graphs, vector search, retrieval pipelines, and knowledge management. The enterprise RAG vector dataset is a core deliverable — alongside graph linking, hybrid retrieval, quality analytics, and a roadmap toward Knowledge Studio, live connectors, and automatic synchronization.
+
+---
+
+## Platform components
+
+| Component | Status | Detail |
+|-----------|--------|--------|
+| Knowledge Dataset | Available | 13k+ docs · 83k+ chunks · 52k+ graph edges |
+| Knowledge Graph | Available | Hubs, routes, 20 relationship types, GraphRAG |
+| Search & Retrieval | Available | Hybrid RAG with GraphRouter |
+| Quality & Audit | Available | Benchmarks, provenance, distribution audit |
+| Knowledge Studio | Roadmap | Visual document, graph, and metadata management |
+| Connectors & Sync | Roadmap | GitHub, Notion, Confluence, Drive, Slack, and more |
+| AI Quality Dashboard | Roadmap | Retrieval accuracy, chunk health, coverage metrics |
+
+Full vision: [Platform overview](../platform/overview.md) · [Roadmap](../platform/roadmap.md)
 
 ---
 
@@ -22,23 +38,22 @@ Full tier comparison: [licenses/README.md](../../licenses/README.md)
 
 | Capability | Detail |
 |------------|--------|
-| **Scale** | 35,000+ deliverable documents (Enterprise tier); procedural capacity to billions+ |
-| **Structure** | 63 technology domains · 18 knowledge hubs · 306 graph links · 90 domain routes |
-| **Vector-ready** | Pre-chunked JSONL · optional pre-computed embeddings (MiniLM-L6-v2) |
-| **GraphRAG** | Typed relationship edges · hub clustering · region-aware GraphRouter |
-| **Compliance** | Personal, Professional, Enterprise, or Dataset EULA · full provenance · audit pipeline |
-| **Benchmarks** | FAQ pairs · retrieval gold · RAG evaluation datasets included |
+| **Platform scope** | Dataset + graph + search + governance — not a static export |
+| **Scale** | 35,000+ deliverable documents; procedural capacity to billions+ |
+| **Structure** | 63 domains · 18 hubs · 306 graph links · 90 domain routes |
+| **Vector-ready** | Pre-chunked JSONL · optional embeddings (MiniLM-L6-v2) |
+| **GraphRAG** | Typed edges · hub clustering · region-aware GraphRouter |
+| **Compliance** | Tiered licensing · full provenance · audit pipeline |
+| **Roadmap** | Knowledge Studio, connectors, sync, dashboards, multi-tenancy |
 
 ---
 
-## Architecture at a glance
+## Architecture
 
 ```
-Documents → Chunks → Embeddings → Vector index
-     ↓
-  Graph edges → GraphRAG expansion
-     ↓
-  Benchmarks → Quality evidence
+Connectors (roadmap)  →  L1–L6 Processing  →  Graph + Vectors  →  Search & Analytics
+                              ↓
+                    Knowledge Dataset (available today)
 ```
 
 Six processing layers (L1 ingestion through L6 governance), ten functional clusters, and four memory tiers organize content for retrieval routing and enterprise governance.
@@ -47,11 +62,11 @@ Six processing layers (L1 ingestion through L6 governance), ten functional clust
 
 ## Ideal use cases
 
-- **Enterprise RAG copilots** — pre-built domain coverage across cloud, security, data, and platform engineering
+- **Enterprise RAG copilots** — domain coverage across cloud, security, data, and platform engineering
 - **Agent toolchains** — graph-linked runbooks, ADRs, and API references for multi-hop reasoning
-- **Vector database seeding** — load `chunks.jsonl` + `embeddings.jsonl` into Pinecone, Weaviate, Chroma, or pgvector
-- **Benchmark baselines** — reproducible recall@k and metadata accuracy evidence for buyer due diligence
-- **Fine-tuning prep** — structured Q&A and retrieval gold pairs for domain adaptation
+- **Living knowledge systems** — connector-driven sync from GitHub, Confluence, Notion (roadmap)
+- **Vector database seeding** — load chunks and embeddings into Pinecone, Weaviate, Chroma, pgvector
+- **Knowledge governance** — audit trail, quality dashboards, gap analytics (roadmap)
 
 ---
 
@@ -63,30 +78,23 @@ Six processing layers (L1 ingestion through L6 governance), ten functional clust
 | `chunks/chunks.jsonl` | JSONL | Vector-index-ready text chunks |
 | `embeddings/embeddings.jsonl` | JSONL | Pre-computed 384-dim vectors |
 | `graph/edges.jsonl` | JSONL | Typed relationship graph |
-| `metadata/documents.json` | JSON | Sample metadata for inspection |
 | `manifest.json` | JSON | SHA-256 checksums and build provenance |
 | `benchmarks/` | JSONL | FAQ, retrieval gold, RAG eval sets |
 
-Compliance files: `licenses/`, `NOTICE`, `PROVENANCE.md`, `distribution_audit.json`
+Compliance: `licenses/`, `NOTICE`, `PROVENANCE.md`, `distribution_audit.json`
 
 ---
 
 ## Build commands
 
 ```bash
-# Enterprise curated tier (recommended starting point)
-make product-enterprise
-
-# Premium hyper tier (25k smoke / uncapped production)
-make product-premium-smoke
-make product-premium
-
-# Verify compliance
-make audit-distribution
-make evaluate
+make product-enterprise       # Enterprise curated tier
+make product-premium-smoke    # Premium validation build
+make audit-distribution       # Compliance check
+make evaluate                 # Retrieval benchmarks
 ```
 
-See [SKU matrix](sku-matrix.md) for tier comparison and [datasheet](datasheet.md) for technical specifications.
+See [SKU matrix](sku-matrix.md) · [Datasheet](datasheet.md) · [Platform roadmap](../platform/roadmap.md)
 
 ---
 

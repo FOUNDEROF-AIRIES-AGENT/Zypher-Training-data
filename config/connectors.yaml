@@ -1,0 +1,96 @@
+# Coltex Connector Ecosystem
+# Planned first-party connectors for automatic knowledge synchronization
+
+version: 1.0.0
+updated: 2026-07-07
+
+connectors:
+  - id: github
+    name: GitHub
+    status: planned
+    source_types: [repository, readme, wiki, issues, pull_requests]
+    sync_modes: [webhook, poll]
+    docs: docs/platform/roadmap.md#2-automatic-connectors
+
+  - id: gitlab
+    name: GitLab
+    status: planned
+    source_types: [repository, wiki, issues, merge_requests]
+    sync_modes: [webhook, poll]
+
+  - id: notion
+    name: Notion
+    status: planned
+    source_types: [pages, databases]
+    sync_modes: [webhook, poll]
+
+  - id: confluence
+    name: Confluence
+    status: planned
+    source_types: [spaces, pages, attachments]
+    sync_modes: [webhook, poll]
+
+  - id: google_drive
+    name: Google Drive
+    status: planned
+    source_types: [docs, sheets, slides, files]
+    sync_modes: [poll]
+
+  - id: sharepoint
+    name: SharePoint
+    status: planned
+    source_types: [sites, documents, lists]
+    sync_modes: [poll, webhook]
+
+  - id: dropbox
+    name: Dropbox
+    status: planned
+    source_types: [files, folders]
+    sync_modes: [poll, webhook]
+
+  - id: onedrive
+    name: OneDrive
+    status: planned
+    source_types: [files, folders]
+    sync_modes: [poll]
+
+  - id: jira
+    name: Jira
+    status: planned
+    source_types: [issues, epics, comments]
+    sync_modes: [webhook, poll]
+
+  - id: slack
+    name: Slack
+    status: planned
+    source_types: [channels, threads, files]
+    sync_modes: [webhook, poll]
+
+  - id: discord
+    name: Discord
+    status: planned
+    source_types: [channels, threads, attachments]
+    sync_modes: [webhook, poll]
+
+# Built-in non-connector sources (available via build pipeline)
+builtin_sources:
+  - id: filesystem
+    name: Filesystem
+    status: available
+    description: Markdown corpus under knowledge-base/
+
+  - id: rest_api
+    name: REST API
+    status: planned
+    description: Custom HTTP ingestion endpoint
+
+  - id: sql
+    name: SQL
+    status: planned
+    description: Database table or query as knowledge source
+
+plugin_types:
+  - source_connector
+  - destination_export
+  - transformer
+  - custom_integration
