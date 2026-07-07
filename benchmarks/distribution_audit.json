@@ -27,7 +27,7 @@
     "distributable_documents": 25000,
     "estimated_total_documents": 9600000691840000,
     "mega_multiplier": 100000000000,
-    "license": "Apache-2.0",
+    "license": "Coltex-EULA",
     "content_origin": "coltex_premium_synthetic",
     "third_party_docs_copied": false,
     "price_tier_usd": 1000

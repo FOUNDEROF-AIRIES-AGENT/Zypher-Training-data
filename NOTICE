@@ -1,20 +1,18 @@
 Coltex
 Copyright 2026 Coltex / FOUNDEROF-AIRIES-AGENT
 
-Third-party open-source dependencies used by the RAG database engine:
+Third-party open-source dependencies used by the RAG database engine
+(each subject to its own upstream license — see project repositories):
 
-================================================================================
-Apache License 2.0
-================================================================================
 - sentence-transformers (https://github.com/UKPLab/sentence-transformers)
 - ChromaDB (https://github.com/chroma-core/chroma)
 - PyYAML (https://github.com/yaml/pyyaml)
 - tqdm (https://github.com/tqdm/tqdm)
-- Embedding model: sentence-transformers/all-MiniLM-L6-v2 (Apache-2.0)
+- Embedding model: sentence-transformers/all-MiniLM-L6-v2
 
 ================================================================================
 Coltex knowledge base content
 ================================================================================
 Original synthetic documentation under knowledge-base/ (excluding
-_excluded_from_distribution/ and generated/) is licensed Apache-2.0.
-See knowledge-base/LICENSE and knowledge-base/PROVENANCE.md.
+_excluded_from_distribution/ and generated/) is governed by the Coltex EULA.
+See EULA, knowledge-base/LICENSE, and knowledge-base/PROVENANCE.md.

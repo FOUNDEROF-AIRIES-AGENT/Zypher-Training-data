@@ -1,25 +1,11 @@
-                                 Apache License
-                           Version 2.0, January 2004
-                        http://www.apache.org/licenses/
+# Coltex Dataset License
 
-   Copyright 2026 Coltex / FOUNDEROF-AIRIES-AGENT
+Copyright 2026 Coltex AI. All rights reserved.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use files in this directory except in compliance with the License.
-   You may obtain a copy of the License at
+The Coltex knowledge base, product artifacts, benchmarks, and associated
+documentation are governed by the **Coltex Dataset End User License Agreement (EULA)**.
 
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-
-## Scope
-
-This license applies to all markdown, YAML, SQL, and configuration files
-under `knowledge-base/` that are included in the Coltex Product distribution.
+See the root [`EULA`](../EULA) for permitted uses, restrictions, and terms.
 
 Files under `knowledge-base/_excluded_from_distribution/` and
-`knowledge-base/generated/` are **not** part of the commercial product package.
+`knowledge-base/generated/` are not part of the commercial product package.

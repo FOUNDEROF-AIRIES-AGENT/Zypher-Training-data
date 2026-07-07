@@ -43,7 +43,7 @@ Each product build exports a versioned, checksum-signed artifact set:
 | Benchmarks | `benchmarks/*.jsonl` | FAQ pairs, retrieval gold, and RAG evaluation sets |
 | Manifest | `data/product/manifest.json` | SHA-256 checksums, version, and build metadata |
 
-All distributable content is original synthetic material licensed under **Apache-2.0**. See `knowledge-base/PROVENANCE.md` and `NOTICE` for provenance and third-party attribution.
+All distributable content is original synthetic material governed by the **Coltex EULA**. See `knowledge-base/PROVENANCE.md` and `NOTICE` for provenance and third-party attribution.
 
 ---
 

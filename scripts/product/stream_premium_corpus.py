@@ -38,7 +38,7 @@ def main() -> None:
     sample_md = args.sample_md if args.sample_md is not None else int(gen.get("sample_md_files", 5000))
     dist_cfg = distribution_cfg(cfg)
     chunk_cfg = cfg["chunking"]
-    license_name = cfg.get("license", "Apache-2.0")
+    license_name = cfg.get("license", "Coltex-EULA")
 
     out_cfg = cfg["output"]
     chunks_path = resolve_path(out_cfg["chunks"])

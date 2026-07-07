@@ -75,7 +75,7 @@ def main() -> None:
                 "tags": rec.get("tags", []),
                 "hub": rec.get("hub", ""),
                 "source_path": rec.get("path"),
-                "license": cfg.get("license", "Apache-2.0"),
+                "license": cfg.get("license", "Coltex-EULA"),
             })
     else:
         for doc in kb.documents:
@@ -89,7 +89,7 @@ def main() -> None:
                 "related_count": len(doc.related),
                 "relationship_types": list(doc.relationships.keys()),
                 "source_path": doc.path,
-                "license": cfg.get("license", "Apache-2.0"),
+                "license": cfg.get("license", "Coltex-EULA"),
             })
 
     catalog_count = count_jsonl(catalog_path) if catalog_path.exists() else len(kb.documents)
@@ -112,7 +112,7 @@ def main() -> None:
         "version": str(cfg.get("version", "1.0.0")),
         "tier": cfg.get("tier", "standard"),
         "price_usd": cfg.get("price_usd"),
-        "license": cfg.get("license", "Apache-2.0"),
+        "license": cfg.get("license", "Coltex-EULA"),
         "updated": str(cfg.get("updated", datetime.now(timezone.utc).strftime("%Y-%m-%d"))),
         "built_at": datetime.now(timezone.utc).isoformat(),
         "curated_only": cfg["quality"].get("curated_only", True),

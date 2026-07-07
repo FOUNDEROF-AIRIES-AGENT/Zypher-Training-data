@@ -8,56 +8,59 @@ web scraping, or proprietary sources.
 
 | Content | License | Included in product? |
 |---------|---------|---------------------|
-| Distributable `CHUNK-*.md` files | Apache-2.0 | Yes |
-| `knowledge-base/LICENSE` | Apache-2.0 | Yes |
-| `knowledge-base/_excluded_from_distribution/` | Apache-2.0 | **No** — quarantined stubs |
-| `knowledge-base/generated/` | Apache-2.0 | **No** — stress-test corpus only |
+| Distributable `CHUNK-*.md` files | Coltex EULA | Yes |
+| `knowledge-base/LICENSE` | Coltex EULA | Yes |
+| `knowledge-base/_excluded_from_distribution/` | Coltex EULA | **No** — quarantined stubs |
+| `knowledge-base/generated/` | Coltex EULA | **No** — stress-test corpus only |
 
 See `knowledge-base/PROVENANCE.md` for full content origin documentation.
 
 ## Project license
 
-The Coltex product package is released under the **Apache License 2.0**.
-See the root [`LICENSE`](../LICENSE) file for the full legal text.
+The Coltex Dataset is governed by the **[End User License Agreement (EULA)](../EULA)**.
 
 ## NOTICE file
 
-Third-party open-source dependencies are listed in the root [`NOTICE`](../NOTICE)
-file, as required by Apache-2.0 distribution.
+Third-party open-source runtime dependencies are listed in the root [`NOTICE`](../NOTICE) file.
 
 ## What is covered
 
 | Component | License |
 |-----------|---------|
-| Curated knowledge base (distributable CHUNK docs) | Apache-2.0 |
-| Product artifacts (`data/product/`) | Apache-2.0 |
-| Benchmark datasets (`benchmarks/`) | Apache-2.0 |
-| Scripts and tooling (`scripts/product/`) | Apache-2.0 |
-| Examples (`examples/`) | Apache-2.0 |
+| Curated knowledge base (distributable CHUNK docs) | Coltex EULA |
+| Product artifacts (`data/product/`) | Coltex EULA |
+| Benchmark datasets (`benchmarks/`) | Coltex EULA |
+| Scripts and tooling (`scripts/product/`) | Coltex EULA |
+| Examples (`examples/`) | Coltex EULA |
 
 ## Third-party dependencies (runtime)
 
 These are **not bundled** in the knowledge package but are used when running
-the RAG pipeline:
+the RAG pipeline. Each dependency is subject to its own upstream license:
 
-| Dependency | License | Notes |
-|------------|---------|-------|
-| sentence-transformers | Apache-2.0 | Embedding library |
-| `all-MiniLM-L6-v2` model | Apache-2.0 | Downloaded from Hugging Face |
-| chromadb | Apache-2.0 | Vector store |
-| PyTorch | BSD-style | ML framework |
-| transformers | Apache-2.0 | Model loading |
-| FastAPI / uvicorn | MIT | Platform API |
+| Dependency | Notes |
+|------------|-------|
+| sentence-transformers | Embedding library |
+| `all-MiniLM-L6-v2` model | Downloaded from Hugging Face |
+| chromadb | Vector store |
+| PyTorch | ML framework |
+| transformers | Model loading |
 
-## Runtime dependencies (not bundled)
+See upstream repositories for license terms.
 
-| Component | License |
-|-----------|---------|
-| sentence-transformers | Apache-2.0 |
-| `all-MiniLM-L6-v2` model | Apache-2.0 |
-| chromadb | Apache-2.0 |
+## Commercial use
 
-This package is a **RAG database only** — no LLM weights are included.
+Per the EULA, you **may**:
+
+- Build and sell commercial software and AI applications using the Dataset
+- Train or fine-tune models and deploy RAG systems commercially
+- Create derivative works (embeddings, indexes, applications) for commercial use
+
+Per the EULA, you **may not** (without written authorization):
+
+- Resell or redistribute the Dataset itself
+- Share the Dataset with third parties
+- Sell the Dataset as a competing product
 
 ## Commercial distribution checklist
 
@@ -75,22 +78,7 @@ The audit checks for:
 - No forbidden third-party source patterns in content
 - No placeholder boilerplate in distributable documents
 
-## Usage rights
-
-You may:
-
-- Use the product package in commercial applications
-- Modify and redistribute under Apache-2.0 terms
-- Build derivative datasets with attribution
-
-You must:
-
-- Include the Apache-2.0 license notice and `NOTICE` file
-- State significant changes in derivative works
-- Not use Coltex trademarks without permission
-- Not redistribute quarantined or generated corpus as curated knowledge
-
 ## Disclaimer
 
-This document describes the project's licensing approach. It is not legal advice.
-Consult qualified counsel before commercial distribution.
+This document summarizes the project's licensing approach. It is not legal advice.
+Consult qualified counsel and read the full EULA before commercial use.

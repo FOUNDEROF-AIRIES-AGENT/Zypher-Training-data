@@ -1,12 +1,12 @@
 # Coltex Premium RAG Dataset — $1000+ tier
 # 100,000,000,000× hyper-scale distributable corpus
-# Original synthetic content · Apache-2.0 · compliance-audited
+# Original synthetic content · Coltex EULA · compliance-audited
 
 name: Coltex Premium RAG Dataset
 version: 2.1.0
 tier: premium
 price_usd: 1000
-license: Apache-2.0
+license: Coltex-EULA
 updated: 2026-07-07
 
 # Hyper-scale generation (procedural streaming — no memory blowup)

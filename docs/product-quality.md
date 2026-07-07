@@ -32,7 +32,7 @@ Additional metadata exported in `data/product/metadata/documents.json`:
 
 ### Clear licensing
 
-- All product artifacts carry `license: Apache-2.0`
+- All product artifacts are governed by the Coltex EULA
 - See [product-licensing.md](product-licensing.md) and root `LICENSE`
 
 ### Regular updates

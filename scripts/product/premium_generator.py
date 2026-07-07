@@ -129,7 +129,7 @@ def _section_body(section: str, topic: Topic, doc_type: str, variant: int) -> st
         f"3. Run retrieval gold benchmarks after each corpus update\n"
         f"4. Monitor duplicate chunk ratio stays below 5%\n\n"
         f"**Coltex note:** Ground all agent responses in indexed context; never rely on uncited model knowledge.\n"
-        f"**License:** Apache-2.0 · **Origin:** Coltex premium synthetic corpus · **Type:** {doc_type}"
+        f"**Origin:** Coltex premium synthetic corpus · **Type:** {doc_type}"
     )
 
 
@@ -178,7 +178,7 @@ def build_premium_metadata(
         "tags": list(dict.fromkeys([topic.category, doc_type, topic.difficulty, "premium", "distributable"])),
         "difficulty": topic.difficulty,
         "related": related_ids or [],
-        "license": "Apache-2.0",
+        "license": "Coltex-EULA",
         "origin": "coltex_premium_synthetic",
         "variant": variant,
     }

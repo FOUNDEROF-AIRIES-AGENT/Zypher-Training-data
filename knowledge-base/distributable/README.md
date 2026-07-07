@@ -18,4 +18,4 @@ make product-premium-smoke
 make product-hyper
 ```
 
-All content is **original synthetic** · **Apache-2.0** · passes distribution audit.
+All content is **original synthetic** · governed by **Coltex EULA** · passes distribution audit.

@@ -5,7 +5,7 @@ name: Coltex Premium RAG Dataset (Smoke)
 version: 2.1.0-smoke
 tier: premium-smoke
 price_usd: 1000
-license: Apache-2.0
+license: Coltex-EULA
 updated: 2026-07-07
 
 generation:
