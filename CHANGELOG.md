@@ -2,6 +2,22 @@
 
 All notable changes to the Coltex product package are documented here.
 
+## [4.6.0] - 2026-07-07
+
+### Added — Coltex Runtime (live platform centerpiece)
+
+- New `runtime/` package — Coltex Runtime orchestrates all platform engines
+- Event Bus with full ingest pipeline cascade and `data/runtime/events.jsonl` logging
+- Knowledge DNA schema (`config/knowledge-dna.yaml`) — objects not files
+- Knowledge Evolution states (`config/knowledge-evolution.yaml`)
+- AI Curator engine — merge, quality, disconnect, embedding regen recommendations
+- Analytics engine — Knowledge Quality, Coverage, Graph Integrity, Duplicate Risk
+- CLI: `python3 -m runtime status|health|curator|ingest|events|dna|search`
+- Makefile targets: `runtime-status`, `runtime-health`, `runtime-curator`, `runtime-events`
+- Marketplace manifest (`config/marketplace.yaml`)
+- [docs/platform/runtime.md](docs/platform/runtime.md)
+- README centered on Coltex Runtime, not dataset specification
+
 ## [4.5.0] - 2026-07-07
 
 ### Changed — Knowledge OS & intelligence-first architecture

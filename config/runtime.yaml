@@ -1,0 +1,42 @@
+version: 1.0.0
+updated: 2026-07-07
+
+runtime:
+  name: coltex-runtime
+  data_dir: data/runtime
+  event_log: data/runtime/events.jsonl
+
+engines:
+  intelligence: runtime.engines.intelligence.IntelligenceEngine
+  search: runtime.engines.search.SearchEngine
+  memory: runtime.engines.memory.MemoryEngine
+  scheduler: runtime.engines.scheduler.SchedulerEngine
+  event_bus: runtime.events.bus.EventBus
+  plugins: runtime.plugins.manager.PluginManager
+  retrieval: runtime.engines.retrieval.RetrievalEngine
+  graph: runtime.engines.graph.GraphEngine
+  curator: runtime.engines.curator.CuratorEngine
+  analytics: runtime.engines.analytics.AnalyticsEngine
+  security: runtime.security.gateway.SecurityGateway
+  api: runtime.api.gateway.APIGateway
+
+knowledge_studio:
+  modules:
+    - explorer
+    - search
+    - graph
+    - relationships
+    - analytics
+    - health
+    - lifecycle
+    - scheduler
+    - plugins
+    - connectors
+  status: planned_ui
+  runtime_api: available
+
+brain_config: config/brain.yaml
+product_config: config/product_enterprise.yaml
+events_config: config/events.yaml
+dna_config: config/knowledge-dna.yaml
+evolution_config: config/knowledge-evolution.yaml

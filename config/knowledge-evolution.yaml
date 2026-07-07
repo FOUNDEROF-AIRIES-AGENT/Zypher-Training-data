@@ -1,0 +1,44 @@
+# Knowledge Evolution — how knowledge changes over time
+# Stronger than version history: v1 → v2 → Merged → Expanded → Deprecated → Archived
+
+version: 1.0.0
+updated: 2026-07-07
+
+states:
+  - id: v1
+    label: Initial
+    description: First version of knowledge object
+
+  - id: v2
+    label: Revised
+    description: Updated revision with tracked lineage
+
+  - id: merged
+    label: Merged
+    description: Combined from duplicate or overlapping objects
+
+  - id: expanded
+    label: Expanded
+    description: Enriched with additional content or relationships
+
+  - id: deprecated
+    label: Deprecated
+    description: Superseded; lower retrieval priority
+
+  - id: archived
+    label: Archived
+    description: Retained for audit; excluded from active retrieval
+
+transitions:
+  v1: [v2, merged, expanded, deprecated, archived]
+  v2: [merged, expanded, deprecated, archived]
+  merged: [expanded, deprecated, archived]
+  expanded: [v2, deprecated, archived]
+  deprecated: [archived, expanded]
+  archived: []
+
+events:
+  - knowledge.evolution.transition
+  - knowledge.evolution.merged
+  - knowledge.evolution.expanded
+  - knowledge.evolution.deprecated

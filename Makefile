@@ -34,6 +34,22 @@ corpus-structure:
 corpus-links:
 	python3 scripts/knowledge_corpus.py graph-links
 
+# Coltex Runtime CLI
+runtime-status:
+	python3 -m runtime status
+
+runtime-health:
+	python3 -m runtime health
+
+runtime-curator:
+	python3 -m runtime curator
+
+runtime-events:
+	python3 -m runtime events --simulate
+
+runtime-dna:
+	python3 -m runtime dna --limit 3
+
 # Coltex retrieval engine
 index:
 	python3 -m brain index --reindex

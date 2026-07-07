@@ -1,0 +1,91 @@
+# Knowledge DNA — identity schema for every knowledge object
+# AI retrieves knowledge objects, not files
+
+version: 1.0.0
+updated: 2026-07-07
+
+schema_version: "1.0"
+
+fields:
+  id:
+    type: string
+    required: true
+    description: Unique knowledge object identifier
+
+  source:
+    type: string
+    required: true
+    description: Origin connector, upload, or generator (github, notion, upload, ai_builder)
+
+  parent:
+    type: string
+    required: false
+    description: Parent knowledge object id
+
+  children:
+    type: array
+    items: string
+    description: Child knowledge object ids
+
+  dependencies:
+    type: array
+    items: string
+    description: depends_on targets — required upstream knowledge
+
+  confidence:
+    type: float
+    range: [0.0, 1.0]
+    description: Extraction or generation confidence
+
+  freshness:
+    type: float
+    range: [0.0, 1.0]
+    description: Recency score based on updated_at and source sync
+
+  quality_score:
+    type: float
+    range: [0.0, 1.0]
+    description: Composite quality from substance, metadata, graph linkage
+
+  usage_count:
+    type: integer
+    default: 0
+    description: Retrieval and search frequency
+
+  related_concepts:
+    type: array
+    items: string
+    description: Semantic and graph-linked concept tags
+
+  evolution_state:
+    type: string
+    enum: [v1, v2, merged, expanded, deprecated, archived]
+    description: Current point in knowledge evolution
+
+  verification_status:
+    type: string
+    enum: [draft, reviewed, verified, published]
+    default: draft
+
+  license:
+    type: string
+    description: Applicable license tier or agreement
+
+  author:
+    type: string
+    description: Creator or last editor
+
+  created_at:
+    type: string
+    format: datetime
+
+  updated_at:
+    type: string
+    format: datetime
+
+object_types:
+  - document
+  - chunk
+  - hub
+  - concept
+  - generated_bundle

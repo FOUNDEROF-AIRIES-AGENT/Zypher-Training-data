@@ -1,0 +1,40 @@
+# Coltex Marketplace — extensibility ecosystem (roadmap)
+
+version: 1.0.0
+updated: 2026-07-07
+
+status: planned
+
+categories:
+  - id: connectors
+    label: Connectors
+    examples: [github, confluence, notion, sql]
+
+  - id: processors
+    label: Processors
+    examples: [chunk_optimizer, metadata_enricher, pii_redactor]
+
+  - id: graph_algorithms
+    label: Graph Algorithms
+    examples: [community_detection, path_finder, hub_ranker]
+
+  - id: ai_curators
+    label: AI Curators
+    examples: [merge_recommender, staleness_detector, gap_analyzer]
+
+  - id: knowledge_templates
+    label: Knowledge Templates
+    examples: [runbook_pack, api_doc_pack, incident_response_pack]
+
+  - id: industry_packs
+    label: Industry Packs
+    examples: [fintech_compliance, healthcare_hipaa, cloud_platform]
+
+publishing:
+  review_required: true
+  license_required: true
+  provenance_required: true
+
+runtime_integration:
+  plugin_manager: runtime.plugins.manager.PluginManager
+  registry_path: data/runtime/marketplace/registry.json

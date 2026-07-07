@@ -2,7 +2,13 @@
 
 **Coltex — The Knowledge Operating System for AI**
 
-Coltex is enterprise knowledge intelligence: a unified OS for understanding, connecting, reasoning over, retrieving from, and improving organizational knowledge — not a vector database with a file browser.
+The **Coltex Runtime** is the live platform centerpiece. Documentation describes the vision; the runtime executes it.
+
+```bash
+python3 -m runtime status
+```
+
+Runtime docs: [runtime.md](runtime.md)
 
 ---
 
