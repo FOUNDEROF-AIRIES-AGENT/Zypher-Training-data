@@ -2,6 +2,28 @@
 
 All notable changes to the Coltex product package are documented here.
 
+## [4.0.0] - 2026-07-07
+
+### Added — Coltex RAG-as-a-Service Platform
+
+- **`coltex_platform/`** — Full multi-tenant FastAPI platform restored and rebranded
+  - Tenant registration, API key authentication, usage metering
+  - Workspaces, collections, document ingestion (text, URL, file upload)
+  - Async indexing jobs with background worker
+  - Hybrid retrieval API and RAG chat completions (mock + OpenAI providers)
+- **Docker & Kubernetes** — `Dockerfile`, `docker-compose.yml`, `deploy/kubernetes/coltex-platform.yaml`
+- **Sales & commercial docs** — `docs/sales/` (overview, pricing, feature matrix)
+- **API & architecture docs** — `docs/api/`, `docs/architecture/`, `docs/deployment/`
+- **Enterprise knowledge base** — CHUNK-00500+ platform overview, API reference, deployment guide
+- **Platform tests** — `tests/test_platform.py`
+- **Examples** — `examples/platform_client.py`
+- Makefile targets: `make platform`, `make platform-dev`, `make docker-up`, `make test`
+
+### Changed
+
+- README repositioned as **enterprise RAG-as-a-Service** (platform + brain + dataset)
+- `requirements.txt` expanded with FastAPI, uvicorn, httpx, pydantic, pytest
+
 ## [2.1.0] - 2026-07-07
 
 ### Added

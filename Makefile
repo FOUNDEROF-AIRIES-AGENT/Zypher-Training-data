@@ -1,4 +1,6 @@
 .PHONY: install clean index retrieve stats \
+        platform platform-dev docker-build docker-up \
+        test \
         generate generate-smoke generate-mega generate-ultra generate-hyper \
         expand-curated-kb \
         product product-premium product-premium-smoke product-hyper stream-premium \
@@ -7,6 +9,22 @@
 
 install:
 	pip install -r requirements.txt
+
+# Coltex Platform — RAG-as-a-Service API
+platform:
+	python3 -m coltex_platform
+
+platform-dev:
+	python3 -m coltex_platform --reload
+
+docker-build:
+	docker compose build
+
+docker-up:
+	docker compose up -d
+
+test:
+	pytest tests/ -v --tb=short
 
 clean:
 	rm -rf data/brain data/vector_store knowledge-base/generated data/product \
