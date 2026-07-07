@@ -18,6 +18,16 @@ categories:
   - rag
   - graphrag
   - agentic
+  - chunking
+  - embeddings
+  - vector_stores
+  - vector_search
+  - retrieval
+  - indexing
+  - fine_tuning
+  - prompt_engineering
+  - tool_use
+  - memory
   - python
   - java
   - javascript
@@ -25,40 +35,55 @@ categories:
   - go
   - rust
   - sql
+  - csharp
   - postgresql
   - mongodb
   - redis
+  - mysql
   - docker
   - kubernetes
   - aws
   - azure
   - gcp
+  - terraform
+  - ci_cd
+  - linux
   - microservices
-  - security
+  - event_driven
   - architecture
   - api_design
-  - ci_cd
+  - domain_driven_design
+  - security
+  - observability
   - testing
-  - incidents
   - performance
+  - code_review
+  - incidents
+  - data_quality
+  - mlops
+  - git
+  - github_actions
+  - nginx
+  - bash
 
 document_types:
   - documentation
   - guide
   - tutorial
   - faq
-  - troubleshooting
-  - runbook
-  - incident_report
   - api_reference
+  - runbook
   - architecture_decision
-  - design_document
   - code_walkthrough
-  - code_review
-  - database_schema
-  - sql_example
-  - migration_guide
-  - release_notes
   - best_practices
   - benchmark
   - evaluation
+  - troubleshooting
+  - incident_report
+  - design_document
+  - migration_guide
+  - release_notes
+  - database_schema
+  - deep_dive
+  - comparison
+  - case_study

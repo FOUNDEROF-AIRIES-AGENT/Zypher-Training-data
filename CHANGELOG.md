@@ -94,15 +94,18 @@ All notable changes to the Coltex product package are documented here.
 
 ### Added
 
-- **Expanded curated seed knowledge-base** — 340+ new CHUNK documents via `make expand-curated-kb`
+- **`PREMIUM_CATEGORIES` (50) and `PREMIUM_DOC_TYPES` (20)** in `brain_schema.py` as single source of truth
+- 8 new premium doc types: incident_report, design_document, migration_guide, release_notes, database_schema, deep_dive, comparison, case_study
+- 28 additional categories covering RAG/AI, languages, databases, cloud, architecture, and tooling
+- `config/categories_premium.yaml` reference list for premium tier builds
 - 24 new corpus topic seeds (hybrid reranking, observability, vector stores, agentic patterns, and more)
 - Doc-type-aware benchmark question templates with difficulty tiers and category stratification
 - Multi-hop retrieval gold queries from knowledge hub graph links
 
 ### Changed
 
-- Premium smoke build increased to **25,000 documents** (from 10,000) across **22 categories**
-- Benchmark datasets increased to **200 FAQ pairs**, **220 retrieval gold**, **200 RAG eval** (from 20 each)
+- Premium smoke build increased to **25,000 documents** (from 10,000) across **50 categories** and **20 doc types**
+- Benchmark datasets increased to **250 FAQ pairs**, **270 retrieval gold**, **250 RAG eval** (from 20 each)
 - Premium generator now round-robins topics for category diversity in bounded builds
 - Premium document sections include concrete operational details and checklists
 - Fixed Go/C++ code snippet template escaping for corpus generation
@@ -176,7 +179,7 @@ All notable changes to the Coltex product package are documented here.
 - Curated brain config (`config/brain_curated.yaml`) — CHUNK docs only
 - Example applications (`examples/rag_query.py`, `brain_retrieve.py`, `api_client.py`)
 - Documentation: setup guide, quality standards, evaluation guide, licensing
-- Apache-2.0 license
+- Coltex EULA
 
 ### Design
 

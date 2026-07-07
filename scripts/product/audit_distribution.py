@@ -155,7 +155,7 @@ def main() -> None:
             "distributable_documents": doc_count,
             "estimated_total_documents": gen_stats.get("estimated_total_documents"),
             "mega_multiplier": gen_stats.get("mega_multiplier"),
-            "license": cfg.get("license", "Apache-2.0"),
+            "license": cfg.get("license", "Coltex-EULA"),
             "content_origin": gen_stats.get("content_origin", "original_synthetic"),
             "third_party_docs_copied": gen_stats.get("third_party_docs_copied", False),
             "price_tier_usd": cfg.get("price_usd"),

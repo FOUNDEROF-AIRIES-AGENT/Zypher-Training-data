@@ -41,7 +41,7 @@ The following are downloaded at runtime and subject to their own licenses:
 
 | Component | License | Notes |
 |-----------|---------|-------|
-| `sentence-transformers/all-MiniLM-L6-v2` | Apache-2.0 | Embedding model |
+| `sentence-transformers/all-MiniLM-L6-v2` | Upstream HF license | Embedding model |
 | `poolside/Laguna-XS-2.1` | Custom HF license | LLM — accept terms on Hugging Face before use |
 | PyTorch, transformers, chromadb | Various open source | See root `NOTICE` |
 

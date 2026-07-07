@@ -16,7 +16,7 @@ Example marker:
 
 ## License status
 
-These files remain Apache-2.0 licensed (see `knowledge-base/LICENSE`) but are
+These files are included under the commercial use license (see `knowledge-base/LICENSE`) but are
 quarantined because they do not meet product quality standards — not because of
 third-party copyright concerns.
 

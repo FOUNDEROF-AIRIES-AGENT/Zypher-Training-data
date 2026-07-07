@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from brain_schema import KNOWLEDGE_HUBS
+from brain_schema import KNOWLEDGE_HUBS, PREMIUM_CATEGORY_PHRASES
 
 ADVANCED_TASK_TYPES = [
     "single_turn_qa",
@@ -194,38 +194,7 @@ def _topics() -> list[Topic]:
 
     topics.extend(_hub_topics())
 
-    category_phrases = {
-        "rag": "Retrieval-Augmented Generation",
-        "graphrag": "GraphRAG",
-        "agentic": "Agentic Workflows",
-        "vector_search": "Vector Search",
-        "python": "Python Engineering",
-        "java": "Java Development",
-        "javascript": "JavaScript",
-        "typescript": "TypeScript",
-        "csharp": "C# Development",
-        "cpp": "C++ Systems",
-        "go": "Go Microservices",
-        "rust": "Rust Systems",
-        "sql": "SQL and Databases",
-        "postgresql": "PostgreSQL",
-        "mysql": "MySQL",
-        "mongodb": "MongoDB",
-        "redis": "Redis",
-        "docker": "Docker",
-        "kubernetes": "Kubernetes",
-        "aws": "AWS Cloud",
-        "azure": "Azure Cloud",
-        "gcp": "Google Cloud",
-        "microservices": "Microservices",
-        "event_driven": "Event-Driven Architecture",
-        "architecture": "System Architecture",
-        "incidents": "Incident Management",
-        "testing": "Software Testing",
-        "security": "Security Engineering",
-        "git": "Git Version Control",
-        "terminal": "Terminal Commands",
-    }
+    category_phrases = PREMIUM_CATEGORY_PHRASES
 
     aspects = [
         "fundamentals", "patterns", "pitfalls", "scaling", "monitoring",

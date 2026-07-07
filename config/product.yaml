@@ -3,7 +3,7 @@
 
 name: Coltex Product
 version: 1.0.0
-license: Apache-2.0
+license: Coltex-EULA
 updated: 2026-07-06
 
 # Curated sources only (exclude synthetic generated corpus for product builds)
