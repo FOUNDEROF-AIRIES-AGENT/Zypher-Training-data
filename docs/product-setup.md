@@ -1,6 +1,6 @@
 # Coltex — Setup Guide
 
-Build and export the premium RAG dataset artifacts.
+Build the RAG-as-a-Service platform, export premium dataset artifacts, or query via CLI.
 
 ## Install
 
@@ -9,10 +9,20 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Run Platform API
+
+```bash
+make platform
+# Docs: http://localhost:8080/docs
+# Demo API key: data/platform/DEMO_API_KEY.txt
+```
+
+See [Platform API guide](api/getting-started.md) and [Docker deployment](deployment/docker.md).
+
 ## Build dataset
 
 ```bash
-# Premium smoke (10,000 documents)
+# Premium smoke (25,000 documents)
 make product-premium-smoke
 
 # Full hyper tier (100B× — run on cluster)

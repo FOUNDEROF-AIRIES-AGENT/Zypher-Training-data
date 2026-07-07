@@ -1,0 +1,40 @@
+services:
+  coltex-api:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - coltex-data:/data
+      - ./knowledge-base:/app/knowledge-base:ro
+      - ./config:/app/config:ro
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - COLTEX_DATA_DIR=/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8080/health').raise_for_status()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+    restart: unless-stopped
+
+  coltex-worker:
+    build: .
+    command: ["python", "-m", "coltex_platform", "--host", "0.0.0.0", "--port", "8081"]
+    volumes:
+      - coltex-data:/data
+      - ./knowledge-base:/app/knowledge-base:ro
+      - ./config:/app/config:ro
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - COLTEX_DATA_DIR=/data
+    depends_on:
+      coltex-api:
+        condition: service_healthy
+    restart: unless-stopped
+    profiles:
+      - scale
+
+volumes:
+  coltex_db:
+  coltex-data:

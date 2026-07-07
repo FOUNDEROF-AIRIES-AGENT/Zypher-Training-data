@@ -1,162 +1,168 @@
 # Coltex
 
-Enterprise-grade retrieval-augmented generation (RAG) dataset and indexing engine. Coltex delivers curated knowledge artifacts—vector-ready chunks, embeddings, graph relationships, metadata, benchmarks, and compliance tooling—designed for production RAG pipelines.
+**Enterprise RAG-as-a-Service** — multi-tenant API, hybrid retrieval engine, premium dataset export, and compliance tooling. Ship production knowledge AI in days, not months.
 
-This repository contains the **knowledge layer only**: document corpus, export pipeline, and retrieval engine. It does not include chat interfaces, model hosting, fine-tuning workflows, or API servers.
+Coltex is the complete stack for building, selling, and operating retrieval-augmented generation:
+
+| Product | Description |
+|---------|-------------|
+| **Coltex Platform** | REST API — ingest, index, retrieve, RAG chat |
+| **Coltex Brain** | Hybrid retrieval — vector + metadata + GraphRAG |
+| **Coltex Premium Dataset** | Distributable chunks, embeddings, graph, benchmarks |
 
 ---
 
-## Overview
-
-Coltex is a modular RAG database composed of:
-
-| Layer | Description |
-|-------|-------------|
-| **Knowledge base** | Original synthetic documents with typed metadata and graph links |
-| **Export pipeline** | Chunking, deduplication, embedding generation, and manifest signing |
-| **Retrieval engine** | Vector search, metadata filtering, graph traversal, and re-ranking |
-| **Quality assurance** | Benchmark datasets, evaluation reports, and distribution audits |
+## Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                            COLTEX                                │
-│                                                                  │
-│   Knowledge Base  →  Chunks  →  Embeddings  →  Vector Index      │
-│        │              │            │              │              │
-│        └──────── Graph Relationships · Metadata · Catalog ──────┘
-└──────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         COLTEX RAG-AS-A-SERVICE                         │
+│                                                                         │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────────┐  │
+│  │  Platform    │    │  Coltex      │    │  Dataset Product         │  │
+│  │  API         │───▶│  Brain       │    │  Pipeline                │  │
+│  │  (FastAPI)   │    │  (Retrieval) │    │  (Export & Audit)        │  │
+│  └──────────────┘    └──────────────┘    └──────────────────────────┘  │
+│         │                    │                        │                  │
+│         ▼                    ▼                        ▼                  │
+│   Multi-tenant          ChromaDB +              chunks.jsonl            │
+│   Auth & Jobs           Graph + Metadata        embeddings.jsonl        │
+│                                                 manifest.json           │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Dataset Deliverables
+## Quick Start
 
-Each product build exports a versioned, checksum-signed artifact set:
-
-| Artifact | Path | Description |
-|----------|------|-------------|
-| Chunks | `data/product/chunks/chunks.jsonl` | Vector-ready text segments with metadata |
-| Catalog | `data/product/catalog.jsonl` | Per-document index and provenance |
-| Embeddings | `data/product/embeddings/embeddings.jsonl` | Pre-computed sentence-transformer vectors |
-| Graph | `data/product/graph/edges.jsonl` | Typed relationship edges (`depends_on`, `see_also`, …) |
-| Metadata | `data/product/metadata/documents.json` | Document-level schema index |
-| Benchmarks | `benchmarks/*.jsonl` | FAQ pairs, retrieval gold, and RAG evaluation sets |
-| Manifest | `data/product/manifest.json` | SHA-256 checksums, version, and build metadata |
-
-All distributable content is original synthetic material licensed under **Apache-2.0**. See `knowledge-base/PROVENANCE.md` and `NOTICE` for provenance and third-party attribution.
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.10+
-- 4 GB RAM minimum (embedding generation benefits from additional memory)
-
-### Installation
+### Platform API (RAG-as-a-Service)
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+make platform
+# API docs: http://localhost:8080/docs
+# Demo key:  data/platform/DEMO_API_KEY.txt
 ```
 
-### Build a dataset (smoke test)
-
+**Docker:**
 ```bash
-make product-premium-smoke
+docker compose up -d
+curl http://localhost:8080/health
 ```
 
-This generates 25,000 premium documents with full pipeline validation. Artifacts are written to `data/product/`.
-
-### Index and query
+### CLI Retrieval (Brain)
 
 ```bash
 make index
-python3 -m brain retrieve "What is retrieval-augmented generation for code?" --context
+python3 -m brain retrieve "What is retrieval-augmented generation?" --context
 ```
+
+### Premium Dataset Build
+
+```bash
+make product-premium-smoke   # 25,000 documents — local validation
+make product-premium         # Full premium pipeline
+make evaluate                # Benchmark evidence report
+```
+
+---
+
+## Platform API Highlights
+
+| Feature | Endpoint |
+|---------|----------|
+| Tenant registration | `POST /v1/tenants` |
+| API key auth | `X-API-Key` or Bearer token |
+| Workspaces & collections | `/v1/workspaces`, `/v1/collections` |
+| Ingest text / URL / file | `/v1/collections/{id}/documents/*` |
+| Async indexing | `POST /v1/collections/{id}/index` |
+| Hybrid retrieval | `POST /v1/collections/{id}/retrieve` |
+| RAG chat | `POST /v1/chat/completions` |
+
+Full guide: [docs/api/getting-started.md](docs/api/getting-started.md)
 
 ---
 
 ## Product Tiers
 
-Coltex supports three build tiers for the premium RAG dataset. Configuration is defined in `config/product_hyper.yaml`.
+### Platform (SaaS)
+
+| Tier | Collections | Documents | Queries/day |
+|------|-------------|-----------|-------------|
+| Free | 1 | 1,000 | 500 |
+| Starter | 5 | 25,000 | 10,000 |
+| Professional | 25 | 250,000 | 100,000 |
+| Enterprise | Unlimited | Unlimited | Unlimited |
+
+See [docs/sales/pricing.md](docs/sales/pricing.md)
+
+### Dataset Export
 
 | Tier | Command | Scope |
 |------|---------|-------|
-| Smoke | `make product-premium-smoke` | 25,000 documents — local validation |
-| Premium | `make product-premium` | Full premium pipeline per configuration |
-| Hyper | `make product-hyper` | Uncapped streaming generation for cluster deployment |
-
-The hyper tier uses a `mega_multiplier` of 100,000,000,000, enabling procedural expansion to hundreds of trillions of unique document combinations via streaming generation. Hyper builds are intended for distributed execution (e.g., Vast.ai or equivalent compute clusters).
-
-```bash
-# Cluster deployment
-make product-hyper
-```
+| Smoke | `make product-premium-smoke` | 25,000 documents |
+| Premium | `make product-premium` | Full configuration |
+| Hyper | `make product-hyper` | Uncapped streaming generation |
 
 ---
 
 ## Retrieval Engine
 
-The `brain/` package implements the full retrieval stack:
+The `brain/` package implements hybrid RAG retrieval:
 
 ```
 brain/
-├── brain.py           # Orchestrator and public API
-├── ingestion/         # Markdown document loading and parsing
+├── brain.py           # Coltex orchestrator
+├── ingestion/         # Markdown + frontmatter parsing
 ├── embeddings/        # Sentence-transformer encoding
-├── indexing/          # ChromaDB persistent vector store
-├── metadata/          # doc_type, category, and tag filtering
-├── graph/             # Multi-hop relationship traversal
-├── reranking/         # Source-weighted result merging
-└── retrieval/         # End-to-end retrieval pipeline
+├── indexing/          # ChromaDB vector store
+├── metadata/          # doc_type, category filtering
+├── graph/             # Multi-hop GraphRAG traversal
+├── reranking/         # Source-weighted merging
+└── retrieval/         # End-to-end pipeline
 ```
 
-### CLI reference
-
-```bash
-python3 -m brain index --reindex     # Rebuild the vector index
-python3 -m brain stats                 # Report document and index counts
-python3 -m brain retrieve "<query>"   # Retrieve ranked documents
-python3 -m brain retrieve "<query>" --context   # Include assembled context window
-```
-
-### Retrieval pipeline
-
-1. Encode the query embedding
-2. Search the vector index
-3. Apply metadata filters
-4. Expand results via graph relationships
-5. Merge and re-rank by source weight
-6. Assemble the context window for downstream consumption
+Pipeline: **embed query → vector search → metadata filter → graph expand → rerank → context**
 
 ---
 
-## Corpus Generation
+## Knowledge Base & Corpus
 
-Raw markdown corpus expansion is available for seed document generation prior to product export:
-
-| Command | Approximate output |
-|---------|-------------------|
-| `make generate-smoke` | 2,000 documents |
-| `make generate-mega` | 100,000 documents |
-| `make generate-ultra` | 1,000,000 documents |
-| `make generate-hyper` | Uncapped (streaming) |
-
-Generated markdown under `knowledge-base/generated/` is excluded from commercial distribution builds.
+- **340+ curated CHUNK documents** — RAG, GraphRAG, K8s, security, vector stores, and more
+- **Procedural expansion** — `make expand-curated-kb`, `make generate-mega`
+- **Platform docs** — CHUNK-00500+ enterprise deployment and API reference
+- **Compliance** — Apache-2.0 synthetic corpus, `PROVENANCE.md`, distribution audit
 
 ---
 
-## Quality and Compliance
+## Deployment
 
-The product pipeline enforces quality gates and distribution audits on every build:
+| Method | Guide |
+|--------|-------|
+| Docker Compose | [docs/deployment/docker.md](docs/deployment/docker.md) |
+| Kubernetes + HPA | [deploy/kubernetes/coltex-platform.yaml](deploy/kubernetes/coltex-platform.yaml) |
+| Architecture | [docs/architecture/platform-architecture.md](docs/architecture/platform-architecture.md) |
+
+---
+
+## Sales & Commercial
+
+Ready-to-use materials for selling Coltex:
+
+- [Sales overview](docs/sales/overview.md) — pitch, proof points, demo flow
+- [Pricing & packaging](docs/sales/pricing.md) — platform tiers, dataset SKUs, reseller program
+- [Feature matrix](docs/sales/feature-matrix.md) — competitive comparison by tier
+
+---
+
+## Quality & Compliance
 
 ```bash
-make validate-product      # Metadata, chunk size, and duplication checks
-make audit-distribution    # License files, provenance, and content compliance
-make evaluate              # Retrieval recall@k and benchmark evidence report
+make validate-product      # Metadata, chunk size, duplication checks
+make audit-distribution    # License, provenance, content compliance
+make evaluate              # Retrieval recall@k benchmark report
+make test                  # Platform API tests
 ```
 
 | Gate | Threshold |
@@ -164,21 +170,6 @@ make evaluate              # Retrieval recall@k and benchmark evidence report
 | Maximum duplicate chunk ratio | ≤ 5% |
 | Metadata accuracy | ≥ 90% |
 | Retrieval recall@8 | ≥ 45–50% (tier-dependent) |
-| Third-party content | None (`third_party_docs_copied: false`) |
-
-Reports are written to `benchmarks/evaluation_report.json` and `benchmarks/distribution_audit.json`.
-
----
-
-## Configuration
-
-| File | Purpose |
-|------|---------|
-| `config/product_hyper.yaml` | Premium hyper-tier dataset build |
-| `config/product_hyper_smoke.yaml` | Local smoke-test configuration |
-| `config/product.yaml` | Seed corpus product build |
-| `config/brain.yaml` | Vector index and retrieval settings |
-| `config/corpus_mega.yaml` | Mega-scale corpus generation |
 
 ---
 
@@ -186,22 +177,28 @@ Reports are written to `benchmarks/evaluation_report.json` and `benchmarks/distr
 
 ```
 .
-├── brain/                  # Retrieval engine and CLI
-├── knowledge-base/         # Source documents and audit samples
-├── data/product/           # Exported dataset artifacts (build output)
-├── benchmarks/             # Evaluation and compliance reports
-├── scripts/
-│   ├── product/            # Dataset build, audit, and export pipeline
-│   ├── generate_corpus.py  # Markdown corpus generator
-│   └── mega_scale.py       # Hyper-scale procedural topic expansion
-├── docs/                   # Setup, quality, evaluation, and licensing guides
-└── examples/               # Retrieval usage examples
+├── coltex_platform/        # RAG-as-a-Service API (FastAPI)
+├── brain/                  # Hybrid retrieval engine + CLI
+├── knowledge-base/         # Curated + generated document corpus
+├── scripts/product/        # Dataset build, audit, export pipeline
+├── deploy/kubernetes/      # Production K8s manifests
+├── docs/
+│   ├── api/                # API getting started
+│   ├── architecture/       # Platform architecture
+│   ├── deployment/         # Docker & K8s guides
+│   └── sales/              # Pricing, features, pitch materials
+├── examples/               # RAG query + platform client examples
+├── benchmarks/             # Evaluation datasets and reports
+├── Dockerfile
+└── docker-compose.yml
 ```
 
 ---
 
 ## Documentation
 
+- [Platform API guide](docs/api/getting-started.md)
+- [Platform architecture](docs/architecture/platform-architecture.md)
 - [Product setup](docs/product-setup.md)
 - [Quality standards](docs/product-quality.md)
 - [Evaluation guide](docs/product-evaluation.md)

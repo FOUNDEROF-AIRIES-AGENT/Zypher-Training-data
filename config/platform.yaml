@@ -1,0 +1,69 @@
+# Coltex RAG-as-a-Service platform configuration
+
+server:
+  host: 0.0.0.0
+  port: 8080
+  workers: 1
+  cors_origins:
+    - "*"
+  public_url: http://localhost:8080
+
+auth:
+  jwt_secret: coltex-dev-secret-change-in-production
+  jwt_expiry_hours: 24
+  api_key_prefix: ctx_
+
+storage:
+  data_dir: data/platform
+  sqlite_path: data/platform/coltex.db
+
+brain:
+  config_path: config/brain.yaml
+  default_collection: default
+
+llm:
+  provider: mock  # mock | openai
+  model: coltex-rag-v1
+  openai_base_url: https://api.openai.com/v1
+  openai_api_key_env: OPENAI_API_KEY
+  max_tokens: 2048
+  temperature: 0.2
+
+ingestion:
+  max_upload_bytes: 52428800
+  allowed_extensions:
+    - .md
+    - .txt
+    - .json
+    - .csv
+    - .html
+    - .pdf
+  chunk_size: 1200
+  chunk_overlap: 150
+
+jobs:
+  max_concurrent: 4
+  poll_interval_seconds: 2
+
+rate_limits:
+  requests_per_minute: 120
+  retrieve_per_minute: 60
+  chat_per_minute: 30
+
+tiers:
+  free:
+    collections: 1
+    documents: 1000
+    queries_per_day: 500
+  starter:
+    collections: 5
+    documents: 25000
+    queries_per_day: 10000
+  professional:
+    collections: 25
+    documents: 250000
+    queries_per_day: 100000
+  enterprise:
+    collections: -1
+    documents: -1
+    queries_per_day: -1
