@@ -38,6 +38,9 @@ corpus-links:
 	python3 scripts/knowledge_corpus.py graph-links
 
 # Coltex Runtime CLI
+runtime-serve:
+	python3 coltex serve
+
 runtime-status:
 	python3 coltex status
 

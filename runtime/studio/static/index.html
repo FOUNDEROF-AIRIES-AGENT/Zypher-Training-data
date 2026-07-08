@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coltex</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2f3d;
+      --text: #e8eaef;
+      --muted: #8b92a5;
+      --accent: #5b8def;
+      --accent-hover: #4a7de0;
+      --success: #3dd68c;
+      --warn: #f5a623;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+    aside {
+      width: 220px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 1.25rem 0;
+      flex-shrink: 0;
+    }
+    .logo {
+      padding: 0 1.25rem 1.5rem;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--accent); }
+    nav button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.65rem 1.25rem;
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    nav button:hover, nav button.active {
+      background: rgba(91, 141, 239, 0.12);
+      color: var(--text);
+    }
+    nav button.active { border-left: 3px solid var(--accent); }
+    main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .subtitle { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .card .label { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .card .value { font-size: 1.75rem; font-weight: 600; margin-top: 0.35rem; }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+    textarea { min-height: 100px; resize: vertical; }
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
+      margin-top: 0.25rem;
+    }
+    .btn:hover { background: var(--accent-hover); }
+    .btn.secondary { background: var(--border); color: var(--text); }
+    .hidden { display: none !important; }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      background: rgba(61, 214, 140, 0.15);
+      color: var(--success);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 500; }
+    .answer-box {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .source { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+    #ws-banner {
+      background: rgba(91, 141, 239, 0.1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+    }
+    .dropzone {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .dropzone:hover { border-color: var(--accent); color: var(--text); }
+  </style>
+</head>
+<body>
+  <aside>
+    <div class="logo">Col<span>tex</span></div>
+    <nav>
+      <button data-page="dashboard" class="active">Dashboard</button>
+      <button data-page="workspace">Workspace</button>
+      <button data-page="knowledge">Knowledge</button>
+      <button data-page="sources">Sources</button>
+      <button data-page="search">Search</button>
+      <button data-page="ask">Ask Knowledge</button>
+      <button data-page="settings">Settings</button>
+    </nav>
+  </aside>
+  <main>
+    <div id="ws-banner">Loading workspace…</div>
+
+    <section id="page-dashboard">
+      <h1>Dashboard</h1>
+      <p class="subtitle">Knowledge health and workspace metrics</p>
+      <div class="grid" id="dash-stats"></div>
+      <button class="btn" onclick="doBuild()">Build Workspace</button>
+      <button class="btn secondary" onclick="doValidate()">Validate</button>
+    </section>
+
+    <section id="page-workspace" class="hidden">
+      <h1>Workspace</h1>
+      <p class="subtitle">Create or open a .ctex workspace</p>
+      <div class="panel">
+        <h3 style="margin-bottom:1rem">New workspace</h3>
+        <input id="ws-name" placeholder="MyWorkspace" />
+        <button class="btn" onclick="createWorkspace()">Create</button>
+      </div>
+      <div class="panel">
+        <h3 style="margin-bottom:1rem">Open workspace</h3>
+        <input id="ws-path" placeholder="C:\path\to\MyWorkspace\MyWorkspace.ctex" />
+        <button class="btn" onclick="openWorkspace()">Open</button>
+      </div>
+    </section>
+
+    <section id="page-knowledge" class="hidden">
+      <h1>Knowledge</h1>
+      <p class="subtitle">Browse knowledge objects</p>
+      <div class="panel"><table><thead><tr><th>Title</th><th>ID</th><th>Type</th></tr></thead><tbody id="knowledge-list"></tbody></table></div>
+    </section>
+
+    <section id="page-sources" class="hidden">
+      <h1>Sources</h1>
+      <p class="subtitle">Upload PDF, DOCX, MD, TXT, HTML, JSON</p>
+      <div class="panel">
+        <div class="dropzone" onclick="document.getElementById('file-input').click()">
+          Click or drop files to upload
+        </div>
+        <input type="file" id="file-input" class="hidden" multiple accept=".pdf,.docx,.md,.txt,.html,.json" onchange="uploadFiles(this.files)" />
+      </div>
+      <div class="panel"><table><thead><tr><th>Name</th><th>Format</th><th>Status</th></tr></thead><tbody id="sources-list"></tbody></table></div>
+    </section>
+
+    <section id="page-search" class="hidden">
+      <h1>Search</h1>
+      <p class="subtitle">Universal search across your knowledge</p>
+      <input id="search-q" placeholder="Search…" onkeydown="if(event.key==='Enter')doSearch()" />
+      <button class="btn" onclick="doSearch()">Search</button>
+      <div class="panel" id="search-results"></div>
+    </section>
+
+    <section id="page-ask" class="hidden">
+      <h1>Ask Knowledge</h1>
+      <p class="subtitle">Question → answer with sources</p>
+      <textarea id="ask-q" placeholder="Ask a question…"></textarea>
+      <button class="btn" onclick="doAsk()">Ask</button>
+      <div class="panel hidden" id="ask-result"></div>
+    </section>
+
+    <section id="page-settings" class="hidden">
+      <h1>Settings</h1>
+      <p class="subtitle">Workspace configuration</p>
+      <div class="panel" id="settings-form"></div>
+      <button class="btn" onclick="saveSettings()">Save</button>
+    </section>
+  </main>
+
+  <script>
+    const api = (path, opts) => fetch(path, opts).then(r => r.json());
+
+    document.querySelectorAll('nav button').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+        document.getElementById('page-' + btn.dataset.page).classList.remove('hidden');
+        loadPage(btn.dataset.page);
+      };
+    });
+
+    async function loadBanner() {
+      const s = await api('/api/status');
+      const el = document.getElementById('ws-banner');
+      if (s.workspace || s.name) {
+        const w = s.workspace || s.name;
+        el.innerHTML = `<strong>Workspace:</strong> ${s.name || w} &nbsp;·&nbsp; <span class="badge">Health ${s.knowledge_health ?? s.dashboard?.health?.knowledge_score ?? '—'}%</span>`;
+      } else {
+        el.innerHTML = 'No workspace open — go to <strong>Workspace</strong> to create or open one.';
+      }
+    }
+
+    async function loadDashboard() {
+      const d = await api('/api/dashboard');
+      const h = d.dashboard?.health || {};
+      document.getElementById('dash-stats').innerHTML = [
+        ['Documents', d.dashboard?.documents ?? 0],
+        ['Embeddings', h.embeddings ?? 0],
+        ['Graph Nodes', h.graph_nodes ?? 0],
+        ['Knowledge Score', (h.knowledge_score ?? 0) + '%'],
+        ['Sources', d.dashboard?.sources ?? 0],
+        ['AI Queries', d.dashboard?.ai_queries ?? 0],
+      ].map(([l,v]) => `<div class="card"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+      loadBanner();
+    }
+
+    async function loadKnowledge() {
+      const k = await api('/api/knowledge?limit=50');
+      document.getElementById('knowledge-list').innerHTML = (k.objects || []).map(o =>
+        `<tr><td>${o.title||'—'}</td><td>${o.document_id||o.id||'—'}</td><td>${o.doc_type||'—'}</td></tr>`
+      ).join('') || '<tr><td colspan="3">No documents yet</td></tr>';
+    }
+
+    async function loadSources() {
+      const s = await api('/api/sources');
+      document.getElementById('sources-list').innerHTML = (s.sources || []).map(x =>
+        `<tr><td>${x.name}</td><td>${x.format}</td><td>${x.status}</td></tr>`
+      ).join('') || '<tr><td colspan="3">No sources yet</td></tr>';
+    }
+
+    async function loadSettings() {
+      const s = await api('/api/settings');
+      document.getElementById('settings-form').innerHTML = Object.entries(s).map(([k,v]) =>
+        `<label style="display:block;margin-bottom:0.5rem;color:var(--muted);font-size:0.8rem">${k}</label><input data-key="${k}" value="${v}" />`
+      ).join('');
+    }
+
+    function loadPage(page) {
+      if (page === 'dashboard') loadDashboard();
+      if (page === 'knowledge') loadKnowledge();
+      if (page === 'sources') loadSources();
+      if (page === 'settings') loadSettings();
+    }
+
+    async function createWorkspace() {
+      const name = document.getElementById('ws-name').value.trim();
+      if (!name) return alert('Enter a workspace name');
+      const r = await api('/api/workspace/new', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name}) });
+      if (r.error) return alert(r.error);
+      alert('Created: ' + r.name);
+      loadBanner(); loadDashboard();
+    }
+
+    async function openWorkspace() {
+      const manifest = document.getElementById('ws-path').value.trim();
+      if (!manifest) return alert('Enter path to .ctex file');
+      const r = await api('/api/workspace/open', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({manifest}) });
+      if (r.error) return alert(r.error);
+      loadBanner(); loadDashboard();
+    }
+
+    async function doBuild() {
+      const r = await api('/api/build', { method:'POST' });
+      alert(r.error || 'Build complete');
+      loadDashboard();
+    }
+
+    async function doValidate() {
+      const r = await api('/api/validate', { method:'POST' });
+      alert(r.passed ? 'Workspace valid' : (r.issues||[]).join('\n') || 'Validation failed');
+    }
+
+    async function uploadFiles(files) {
+      for (const f of files) {
+        const fd = new FormData();
+        fd.append('file', f);
+        const r = await fetch('/api/upload', { method:'POST', body: fd }).then(x => x.json());
+        if (r.error) alert(r.error);
+      }
+      loadSources(); loadDashboard();
+    }
+
+    async function doSearch() {
+      const q = document.getElementById('search-q').value.trim();
+      if (!q) return;
+      const r = await api('/api/search?q=' + encodeURIComponent(q));
+      document.getElementById('search-results').innerHTML = (r.results || r.hits || []).slice(0,15).map(x =>
+        `<div style="margin-bottom:0.75rem"><strong>${x.title||x.document_id}</strong><br><span style="color:var(--muted);font-size:0.85rem">${(x.snippet||x.content||'').slice(0,200)}</span></div>`
+      ).join('') || JSON.stringify(r, null, 2);
+    }
+
+    async function doAsk() {
+      const q = document.getElementById('ask-q').value.trim();
+      if (!q) return;
+      const r = await api('/api/ask?q=' + encodeURIComponent(q));
+      const el = document.getElementById('ask-result');
+      el.classList.remove('hidden');
+      el.innerHTML = `<div class="answer-box">${r.answer||'No answer'}</div>` +
+        (r.sources||[]).map(s => `<div class="source">📄 ${s.title} (${s.confidence}% confidence)</div>`).join('');
+    }
+
+    async function saveSettings() {
+      const data = {};
+      document.querySelectorAll('#settings-form input[data-key]').forEach(inp => { data[inp.dataset.key] = inp.value; });
+      await api('/api/settings', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+      alert('Settings saved');
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

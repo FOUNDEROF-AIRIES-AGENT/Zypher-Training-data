@@ -47,6 +47,11 @@ class WorkspaceManager:
 
     def open(self, manifest_path: Path, activate: bool = True) -> WorkspaceContext:
         manifest_path = Path(manifest_path).expanduser().resolve()
+        if manifest_path.is_dir():
+            matches = list(manifest_path.glob("*.ctex"))
+            if not matches:
+                raise FileNotFoundError(f"No .ctex manifest in directory: {manifest_path}")
+            manifest_path = matches[0]
         if not manifest_path.exists():
             raise FileNotFoundError(f"Workspace not found: {manifest_path}")
         ctx = WorkspaceContext.from_manifest(manifest_path)

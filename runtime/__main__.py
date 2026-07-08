@@ -165,7 +165,14 @@ def cmd_connector(args: argparse.Namespace) -> None:
     print(json.dumps(_rt(args).sync_connector(args.connector_id), indent=2))
 
 
+def cmd_serve(args: argparse.Namespace) -> None:
+    from runtime.studio.server import serve
+    serve(host=args.host, port=args.port, open_browser=not args.no_browser)
+
+
 def main(argv: list[str] | None = None) -> None:
+    if argv is None and len(sys.argv) == 1:
+        sys.argv.append("serve")
     parser = argparse.ArgumentParser(
         prog="coltex",
         description="Coltex — local AI knowledge workspaces (.ctex)",
@@ -245,6 +252,12 @@ def main(argv: list[str] | None = None) -> None:
     p_conn = sub.add_parser("connector", help="Sync a connector")
     p_conn.add_argument("connector_id", choices=["filesystem", "github"])
     p_conn.set_defaults(func=cmd_connector)
+
+    p_serve = sub.add_parser("serve", help="Start localhost web UI (default)")
+    p_serve.add_argument("--host", default="127.0.0.1")
+    p_serve.add_argument("--port", type=int, default=8787)
+    p_serve.add_argument("--no-browser", action="store_true")
+    p_serve.set_defaults(func=cmd_serve)
 
     args = parser.parse_args(argv)
     args.func(args)

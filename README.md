@@ -2,88 +2,67 @@
 
 **The AI Knowledge Platform for Modern Organizations**
 
-Turn scattered business knowledge into AI-ready intelligence in under 10 minutes — from your terminal.
+Turn scattered business knowledge into AI-ready intelligence — runs locally in your browser.
 
-## Install
+## Install & run (localhost)
 
-```bash
-git clone https://github.com/FounderOfColtex/Coltex-Knowledge-Platform.git
+```cmd
 cd Coltex-Knowledge-Platform
-
-python3 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-
+python -m venv .venv
+.venv\Scripts\activate.bat
 pip install -e .
-coltex --help
+coltex serve
 ```
 
-`pip install -e .` installs the `coltex` command into your virtualenv. After that, run `coltex` from **any directory**.
+Opens **http://127.0.0.1:8787** automatically.
 
-### Without installing (from repo root only)
+Or just:
 
-```bash
-pip install -r requirements.txt
-./coltex --help
+```cmd
+coltex
 ```
 
-You must be inside the cloned repo when using `./coltex` or `python3 coltex`.
-
-```bash
-coltex new MyWorkspace
-coltex upload document.pdf
-coltex ask "What is our policy?"
-```
-
-Coltex is a **local CLI**. Your project is a **`.ctex` workspace** — like `.uproject` for Unreal or `.blend` for Blender.
+(`coltex` with no arguments starts the localhost server.)
 
 ---
 
-## Workspace commands
+## What you get
 
-| Command | Purpose |
-|---------|---------|
-| `coltex new <name>` | Create a new `.ctex` workspace |
-| `coltex open <workspace>.ctex` | Open a workspace |
-| `coltex build` | Process documents, embed, index, update manifest |
-| `coltex status` | Workspace info, health, document counts |
-| `coltex validate` | Check workspace integrity |
-| `coltex export` | Portable workspace archive |
-| `coltex import <archive>` | Restore a workspace |
+| Page | Purpose |
+|------|---------|
+| **Dashboard** | Documents, embeddings, health, build workspace |
+| **Workspace** | Create or open a `.ctex` workspace |
+| **Knowledge** | Browse knowledge objects |
+| **Sources** | Upload PDF, DOCX, MD, TXT, HTML, JSON |
+| **Search** | Universal search |
+| **Ask Knowledge** | Q&A with sources |
+| **Settings** | Embedding model, chunk size, etc. |
 
-## Knowledge commands
-
-| Command | Purpose |
-|---------|---------|
-| `coltex upload file.pdf` | Upload and process a source |
-| `coltex search "query"` | Universal search |
-| `coltex ask "question"` | Ask Knowledge — answer with sources |
-| `coltex sources` | List uploaded sources |
-| `coltex knowledge` | Browse knowledge objects |
-| `coltex settings` | View or update workspace settings |
-| `coltex health` | Knowledge Health score |
-| `coltex curator` | Proactive knowledge alerts |
-
-Supported uploads: **PDF · DOCX · Markdown · TXT · HTML · JSON**
-
-Also available after install: `coltex` (recommended) or `python3 -m runtime` (repo root only)
+No cloud. Everything runs on **127.0.0.1** on your machine.
 
 ---
 
-## Workspace layout
+## Workspace (.ctex)
+
+From the **Workspace** page, click **Create** to make a new workspace, or **Open** with the path to your `.ctex` file:
 
 ```
-MyWorkspace/
-├── MyWorkspace.ctex      ← workspace manifest (auto-managed)
-├── knowledge/
-├── documents/
-├── embeddings/
-├── graph/
-├── metadata/
-├── settings/
-└── runtime/
+C:\Users\you\Coltex-Knowledge-Platform\workspaces\MyWorkspace\MyWorkspace.ctex
 ```
 
-The `.ctex` file stores metadata only — never embeddings or documents. The CLI updates it automatically.
+Then use **Build Workspace** on the Dashboard to process documents and generate embeddings.
+
+---
+
+## Windows cmd quick start
+
+```cmd
+cd C:\Users\elija\Coltex-Knowledge-Platform
+git pull origin main
+.venv\Scripts\activate.bat
+pip install -e .
+coltex serve
+```
 
 ---
 
