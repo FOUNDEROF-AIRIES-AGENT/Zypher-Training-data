@@ -2,6 +2,19 @@
 
 All notable changes to the Coltex product package are documented here.
 
+## [4.7.0] - 2026-07-07
+
+### Added — Knowledge Studio, monitoring, explainability, proactive curator
+
+- **Knowledge Studio** — `python3 -m runtime studio` web UI (Health, Curator, Monitor, Explorer, Search, Explain)
+- **Runtime Monitor** — `python3 -m runtime monitor` (memory, docs, embeddings, events/sec, latency)
+- **Explainability** — `python3 -m runtime explain` with similarity, graph, metadata, API match reasons
+- **Proactive AI Curator** — actionable alerts; auto-runs after ingest pipeline
+- **Filesystem + GitHub connectors** — `python3 -m runtime connector filesystem|github`
+- **Plugin SDK** — `runtime/plugins/sdk.py` for connectors, processors, curators, search algorithms
+- Expanded Memory Engine (5 tiers) and Knowledge Evolution (incl. deleted state)
+- Knowledge Health: disconnected_graphs metric; honest README "Use today" table
+
 ## [4.6.0] - 2026-07-07
 
 ### Added — Coltex Runtime (live platform centerpiece)

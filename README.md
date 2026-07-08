@@ -1,18 +1,34 @@
 # Coltex — The Knowledge Operating System for AI
 
-**Coltex Runtime** is the platform centerpiece — a live, event-driven knowledge operating system. Not a repository. Not a specification. A runtime.
+**Start here:** `python3 -m runtime studio` — Knowledge Studio is the product.
 
 ```bash
-python3 -m runtime status       # All engines online
-python3 -m runtime health       # Knowledge analytics
-python3 -m runtime curator      # AI Curator recommendations
-python3 -m runtime ingest DOC   # Event-driven pipeline
+pip install -r requirements.txt
+python3 -m runtime studio          # Knowledge Studio (web UI)
+python3 -m runtime health          # Knowledge Health dashboard
+python3 -m runtime curator         # AI Curator proactive alerts
+python3 -m runtime monitor         # Runtime monitoring
+python3 -m runtime explain "query" # Retrieval explainability
 ```
 
-[![Runtime](https://img.shields.io/badge/runtime-active-brightgreen.svg)](docs/platform/runtime.md)
-[![Knowledge Score](https://img.shields.io/badge/knowledge%20OS-live-blue.svg)](docs/platform/knowledge-os.md)
-[![Documents: 13k+](https://img.shields.io/badge/documents-13k%2B-green.svg)](docs/commercial/datasheet.md)
-[![Graph edges: 52k+](https://img.shields.io/badge/graph%20edges-52k%2B-purple.svg)](docs/commercial/datasheet.md)
+---
+
+## Use today
+
+| Capability | Command | Status |
+|------------|---------|--------|
+| **Knowledge Studio** | `python3 -m runtime studio` | **Available** — Explorer, Health, Curator, Monitor, Search, Explain |
+| **Knowledge Health** | `python3 -m runtime health` | **Available** — Score, Coverage, Duplicate Risk, Broken Refs |
+| **AI Curator** | `python3 -m runtime curator` | **Available** — Proactive merge, quality, regen alerts |
+| **Runtime Monitor** | `python3 -m runtime monitor` | **Available** — Memory, docs, embeddings, events, latency |
+| **Explainability** | `python3 -m runtime explain "..."` | **Available** — Why each result was retrieved |
+| **Event pipeline** | `python3 -m runtime ingest DOC` | **Available** — Full cascade + auto-curator |
+| **Filesystem connector** | `python3 -m runtime connector filesystem` | **Available** |
+| **Knowledge DNA** | `python3 -m runtime dna` | **Available** |
+| **Plugin SDK** | `runtime/plugins/sdk.py` | **Available** — register connectors, curators, processors |
+| GitHub / Notion / Slack sync | — | Roadmap |
+| Marketplace | — | Roadmap |
+| AI Knowledge Builder | — | Roadmap |
 
 ---
 
@@ -20,122 +36,131 @@ python3 -m runtime ingest DOC   # Event-driven pipeline
 
 ```
 Coltex Runtime
-├── Intelligence Engine      ├── Event Bus
-├── Search Engine            ├── Plugin Manager
-├── Memory Engine            ├── Knowledge Studio
-├── Scheduler                ├── Retrieval Engine
-├── Graph Engine             ├── AI Curator
-├── Analytics Engine         ├── API Gateway
-└── Security
-```
-
-| Command | Purpose |
-|---------|---------|
-| `python3 -m runtime status` | Engine status and platform health |
-| `python3 -m runtime health` | Knowledge Quality, Coverage, Graph Integrity |
-| `python3 -m runtime curator` | Merge, regen, disconnect, quality recommendations |
-| `python3 -m runtime ingest <id>` | Full event pipeline |
-| `python3 -m runtime dna` | Knowledge DNA for objects |
-| `python3 -m runtime search "<query>"` | Search knowledge objects |
-
-Full runtime docs: [docs/platform/runtime.md](docs/platform/runtime.md)
-
----
-
-## Intelligence loop
-
-```
-Understand  →  Connect  →  Reason  →  Retrieve  →  Improve
-```
-
-The runtime executes this loop continuously — powered by the **Knowledge Intelligence Engine** and **AI Curator**.
-
----
-
-## Event-driven — Coltex stays alive
-
-```
-Document Uploaded → Chunk Created → Embedding Generated → Graph Updated
-    → Search Index Updated → Health Score Updated → Analytics Updated → Subscribers Notified
-```
-
-Every change propagates through the event bus. Log: `data/runtime/events.jsonl`
-
----
-
-## Knowledge DNA
-
-AI retrieves **knowledge objects**, not files. Every object stores:
-
-`source` · `parent` · `children` · `dependencies` · `confidence` · `freshness` · `quality_score` · `usage_count` · `related_concepts` · `evolution_state`
-
----
-
-## Knowledge Evolution
-
-```
-v1 → v2 → Merged → Expanded → Deprecated → Archived
+├── Intelligence Engine    ├── Event Bus
+├── Search Engine          ├── Plugin Manager
+├── Memory Engine          ├── Knowledge Studio ★
+├── Scheduler              ├── Retrieval Engine
+├── Graph Engine           ├── AI Curator
+├── Analytics Engine       ├── Explain Engine
+├── API Gateway            └── Security
+└── Runtime Monitor
 ```
 
 ---
 
 ## Knowledge Studio
 
-Unified surface for: **Explorer · Search · Graph · Relationships · Analytics · Health · Lifecycle · Scheduler · Plugins · Connectors**
+Everything lives in one place:
 
-Runtime API available today. Visual UI on roadmap.
+**Explorer · Search · Graph · Analytics · Health · Curator · Lifecycle · Plugins · Connectors · Monitor · Explain**
 
----
-
-## Connectors → Runtime
-
-```
-GitHub → Confluence → Notion → Google Drive → Jira → Slack → SharePoint → SQL → Coltex Runtime
-```
-
-Everything synchronized through the event pipeline. [Connector manifest](config/connectors.yaml) · [Marketplace](config/marketplace.yaml)
+Launch: `python3 -m runtime studio` → http://127.0.0.1:8787
 
 ---
 
-## Platform components
+## Knowledge Health
 
-| Component | Status |
-|-----------|--------|
-| **Coltex Runtime** | **Available** |
-| Event Bus & ingest pipeline | Available |
-| Knowledge DNA schema | Available |
-| AI Curator | Available |
-| Knowledge Analytics | Available |
-| Intelligence / Search / Graph / Memory engines | Available |
-| Knowledge Studio UI | Roadmap |
-| Connector sync | Roadmap |
-| Marketplace | Roadmap |
-| AI Knowledge Builder | Roadmap |
+Metrics about **knowledge**, not users:
 
-Vision: [Knowledge OS](docs/platform/knowledge-os.md) · [Intelligence Engine](docs/platform/intelligence-engine.md) · [Roadmap](docs/platform/roadmap.md)
-
----
-
-## Build the knowledge dataset
-
-The enterprise RAG vector dataset is the foundation layer the runtime operates on:
+| Metric | What it means |
+|--------|---------------|
+| Knowledge Score | Composite corpus health |
+| Coverage | Domain/taxonomy completeness |
+| Freshness | Recency and connectivity |
+| Duplicate Risk | Near-duplicate document ratio |
+| Disconnected Graphs | Orphan documents |
+| Broken References | Invalid graph links |
+| Graph Integrity | Documents with valid edges |
 
 ```bash
-pip install -r requirements.txt
-make corpus-mega
-make product-enterprise
-make audit-distribution
-make runtime-status
+python3 -m runtime health
 ```
 
-| Metric | Value |
-|--------|-------|
-| Curated documents | **12,993** |
-| Vector chunks | **83,612** |
-| Graph edges | **52,490** |
-| Technology domains | **63** |
+---
 
-[Technical datasheet](docs/commercial/datasheet.md) · [Product setup](docs/product-setup.md)
+## AI Curator (proactive)
+
+Coltex tells you what to fix — you don't go looking:
+
+- "24 documents should be merged"
+- "Embeddings should be regenerated"
+- "API documentation may be outdated"
+- "These chunks have poor quality"
+- "Graph has disconnected nodes"
+
+Runs automatically after every ingest. Manual scan: `python3 -m runtime curator`
+
+---
+
+## Explainability
+
+Ask why Coltex retrieved a result:
+
+```bash
+python3 -m runtime explain "JWT authentication flow"
+```
+
+Returns: Similarity · Graph Relationship · Metadata Match · API Match · Same Repository · Content Match
+
+---
+
+## Event-driven pipeline
+
+```
+Document Uploaded → Chunk Created → Embedding Generated → Graph Updated
+  → Search Updated → Health Rescored → Analytics Updated → Curator Scan → Subscribers Notified
+```
+
+---
+
+## Memory tiers
+
+```
+Working Memory → Project Memory → Organization Memory → Historical Memory → Archive
+```
+
+---
+
+## Knowledge Evolution
+
+```
+Created → Reviewed → Verified → Published → Deprecated → Archived → Deleted
+```
+
+Also: Merged · Expanded evolution paths.
+
+---
+
+## Connectors & Plugin SDK
+
+```bash
+python3 -m runtime connector filesystem
+python3 -m runtime connector github    # ready for webhook wiring
+```
+
+Extend via `runtime/plugins/sdk.py`:
+
+```python
+from runtime.plugins import sdk
+sdk.register_connector("my_source", my_ingest_fn)
+sdk.register_curator("my_curator", my_scan_fn)
+```
+
+---
+
+## Build the dataset (foundation layer)
+
+```bash
+make product-enterprise
+make audit-distribution
+make runtime-health
+```
+
+| Documents | Chunks | Graph edges |
+|-----------|--------|-------------|
+| 12,993 | 83,612 | 52,490 |
+
+[Technical datasheet](docs/commercial/datasheet.md) · [Runtime docs](docs/platform/runtime.md)
 
 ---
 
@@ -143,12 +168,11 @@ make runtime-status
 
 | Document | Description |
 |----------|-------------|
-| [**Coltex Runtime**](docs/platform/runtime.md) | **Runtime architecture and CLI** |
-| [Knowledge OS](docs/platform/knowledge-os.md) | Platform vision |
-| [Intelligence Engine](docs/platform/intelligence-engine.md) | Core intelligence |
-| [Platform roadmap](docs/platform/roadmap.md) | Feature specifications |
+| [**Knowledge Studio / Runtime**](docs/platform/runtime.md) | Runtime CLI and architecture |
+| [Knowledge OS vision](docs/platform/knowledge-os.md) | Platform vision |
+| [Intelligence Engine](docs/platform/intelligence-engine.md) | Intelligence architecture |
+| [Roadmap](docs/platform/roadmap.md) | What's next |
 | [Licenses](licenses/README.md) | License tiers |
-| [SKU matrix](docs/commercial/sku-matrix.md) | Package comparison |
 
 ---
 

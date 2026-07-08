@@ -2,7 +2,7 @@
 Coltex Runtime — the live Knowledge Operating System.
 
 Orchestrates intelligence, search, memory, graph, retrieval, events,
-scheduler, plugins, curator, analytics, security, and API gateway.
+scheduler, plugins, curator, analytics, security, studio, and monitoring.
 """
 
 from __future__ import annotations
@@ -14,8 +14,12 @@ import yaml
 
 from brain.brain import Coltex
 from runtime.api.gateway import APIGateway
+from runtime.connectors.base import ConnectorRegistry
+from runtime.connectors.filesystem import FilesystemConnector
+from runtime.connectors.github import GitHubConnector
 from runtime.engines.analytics import AnalyticsEngine
 from runtime.engines.curator import CuratorEngine
+from runtime.engines.explain import ExplainEngine
 from runtime.engines.graph import GraphEngine
 from runtime.engines.intelligence import IntelligenceEngine
 from runtime.engines.memory import MemoryEngine
@@ -24,30 +28,17 @@ from runtime.engines.scheduler import SchedulerEngine
 from runtime.engines.search import SearchEngine
 from runtime.events.bus import EventBus
 from runtime.knowledge.dna import KnowledgeDNA
+from runtime.monitoring.metrics import RuntimeMonitor
+from runtime.plugins import sdk as plugin_sdk
 from runtime.plugins.manager import PluginManager
 from runtime.security.gateway import SecurityGateway
+from runtime.studio.studio import KnowledgeStudio
 
 ROOT = Path(__file__).resolve().parent.parent
 
 
 class ColtexRuntime:
-    """
-    Coltex Runtime — platform centerpiece.
-
-    ├── Intelligence Engine
-    ├── Search Engine
-    ├── Memory Engine
-    ├── Scheduler
-    ├── Event Bus
-    ├── Plugin Manager
-    ├── Knowledge Studio (API)
-    ├── Retrieval Engine
-    ├── Graph Engine
-    ├── AI Curator
-    ├── Analytics Engine
-    ├── API Gateway
-    └── Security
-    """
+    """Coltex Runtime — platform centerpiece with Knowledge Studio."""
 
     def __init__(self, config_path: str | Path = "config/runtime.yaml"):
         self.config_path = Path(config_path)
@@ -63,17 +54,25 @@ class ColtexRuntime:
         log_path = self.config.get("runtime", {}).get("event_log", "data/runtime/events.jsonl")
         self.event_bus = EventBus(log_path=log_path)
 
+        self.monitor = RuntimeMonitor(self)
         self.intelligence = IntelligenceEngine(self.brain, self.event_bus)
         self.search = SearchEngine(self.brain)
         self.memory = MemoryEngine(self.brain)
         self.scheduler = SchedulerEngine()
         self.plugins = PluginManager()
+        plugin_sdk.init(self.plugins)
         self.retrieval = RetrievalEngine(self.brain)
         self.graph = GraphEngine(self.brain)
-        self.curator = CuratorEngine(self.brain, self.event_bus)
+        self.curator = CuratorEngine(self.brain, self.event_bus, self.data_dir)
         self.analytics = AnalyticsEngine(self.brain)
+        self.explain = ExplainEngine(self.brain, self.monitor)
         self.security = SecurityGateway()
         self.api = APIGateway(self)
+        self.studio = KnowledgeStudio(self)
+
+        self.connectors = ConnectorRegistry()
+        self.connectors.register(FilesystemConnector())
+        self.connectors.register(GitHubConnector())
 
         self._wire_default_subscribers()
 
@@ -84,14 +83,26 @@ class ColtexRuntime:
             return yaml.safe_load(f)
 
     def _wire_default_subscribers(self) -> None:
-        self.event_bus.subscribe("health.rescored", lambda _: None)
-        self.event_bus.subscribe("analytics.updated", lambda _: None)
+        def on_pipeline_complete(event):
+            if event.id == "analytics.updated":
+                self.curator.proactive_scan(save=True)
+
+        self.event_bus.subscribe("analytics.updated", on_pipeline_complete)
 
     def status(self) -> dict[str, Any]:
         return {
             "runtime": "coltex-runtime",
             "version": self.config.get("version", "1.0.0"),
             "platform": "Knowledge Operating System for AI",
+            "use_today": {
+                "knowledge_studio": "python3 -m runtime studio",
+                "health_dashboard": "python3 -m runtime health",
+                "ai_curator": "python3 -m runtime curator",
+                "monitoring": "python3 -m runtime monitor",
+                "explainability": "python3 -m runtime explain \"query\"",
+                "connectors": "python3 -m runtime connector filesystem",
+                "search": "python3 -m runtime search \"query\"",
+            },
             "engines": {
                 "intelligence": self.intelligence.stats(),
                 "search": self.search.stats(),
@@ -103,31 +114,46 @@ class ColtexRuntime:
                 "graph": self.graph.stats(),
                 "curator": self.curator.stats(),
                 "analytics": self.analytics.stats(),
+                "monitor": {"status": "active"},
+                "explain": {"status": "active"},
                 "security": self.security.stats(),
             },
-            "knowledge_studio": self.config.get("knowledge_studio", {}),
+            "knowledge_studio": {
+                **self.config.get("knowledge_studio", {}),
+                "status": "active",
+                "command": "python3 -m runtime studio",
+            },
         }
 
     def ingest(self, document_id: str, source: str = "upload") -> dict[str, Any]:
-        """Run event-driven ingest pipeline for a knowledge object."""
         if not self.security.authorize("ingest"):
             return {"error": "unauthorized"}
         payload = {"document_id": document_id, "source": source}
         events = self.event_bus.run_pipeline(payload)
+        curator = self.curator.proactive_scan(save=True)
         return {
             "document_id": document_id,
             "pipeline_events": [e.id for e in events],
             "subscribers_notified": True,
+            "curator_alerts": curator.get("alert_count", 0),
         }
+
+    def sync_connector(self, connector_id: str) -> dict[str, Any]:
+        result = self.connectors.sync(connector_id)
+        if "ingest_payloads" in result:
+            for item in result["ingest_payloads"][:5]:
+                self.ingest(item["document_id"], source=connector_id)
+        return result
 
     def knowledge_dna(self, document_id: str) -> dict[str, Any]:
         for doc in self.brain.kb.documents:
             if doc.doc_id == document_id:
-                return KnowledgeDNA.from_document(doc).to_dict()
+                dna = KnowledgeDNA.from_document(doc)
+                data = dna.to_dict()
+                data["memory_tier"] = self.memory.resolve_tier(doc)
+                data["evolution_state"] = self.memory.evolution_state(doc)
+                return data
         return {"error": "not_found", "document_id": document_id}
 
     def knowledge_objects(self, limit: int = 10) -> list[dict[str, Any]]:
-        return [
-            KnowledgeDNA.from_document(d).to_dict()
-            for d in self.brain.kb.documents[:limit]
-        ]
+        return [self.knowledge_dna(d.doc_id) for d in self.brain.kb.documents[:limit]]

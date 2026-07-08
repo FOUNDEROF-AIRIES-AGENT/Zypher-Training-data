@@ -50,6 +50,18 @@ runtime-events:
 runtime-dna:
 	python3 -m runtime dna --limit 3
 
+runtime-studio:
+	python3 -m runtime studio
+
+runtime-monitor:
+	python3 -m runtime monitor
+
+runtime-explain:
+	python3 -m runtime explain "How does GraphRAG routing work?"
+
+runtime-connector:
+	python3 -m runtime connector filesystem
+
 # Coltex retrieval engine
 index:
 	python3 -m brain index --reindex

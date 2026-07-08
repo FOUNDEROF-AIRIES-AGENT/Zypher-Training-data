@@ -1,18 +1,28 @@
 # Coltex Runtime
 
-The live centerpiece of the Knowledge Operating System — not a specification, not a repository layout.
+The live centerpiece of the Knowledge Operating System.
+
+## Start here — Knowledge Studio
 
 ```bash
-python3 -m runtime status      # All engines
-python3 -m runtime health      # Knowledge analytics
-python3 -m runtime curator     # AI Curator recommendations
-python3 -m runtime ingest DOC  # Event-driven pipeline
-python3 -m runtime events --simulate
-python3 -m runtime dna --limit 5
-python3 -m runtime search "GraphRAG routing"
+python3 -m runtime studio
 ```
 
-Makefile shortcuts: `make runtime-status`, `make runtime-health`, `make runtime-curator`, `make runtime-events`
+Open http://127.0.0.1:8787 — Explorer, Health, Curator, Monitor, Search, Explain, Connectors.
+
+## Use today
+
+| Command | Capability |
+|---------|------------|
+| `python3 -m runtime studio` | Knowledge Studio web UI |
+| `python3 -m runtime health` | Knowledge Health scores |
+| `python3 -m runtime curator` | Proactive AI Curator alerts |
+| `python3 -m runtime monitor` | Runtime monitoring |
+| `python3 -m runtime explain "..."` | Retrieval explainability |
+| `python3 -m runtime connector filesystem` | Filesystem connector sync |
+| `python3 -m runtime ingest DOC` | Event pipeline + auto-curator |
+
+Full CLI reference below.
 
 ---
 

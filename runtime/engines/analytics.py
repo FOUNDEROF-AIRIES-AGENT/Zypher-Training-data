@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from typing import Any
 
 from runtime.knowledge.dna import KnowledgeDNA
@@ -23,16 +24,23 @@ class AnalyticsEngine:
         with_links = sum(1 for d in docs if d.related or any(d.relationships.values()))
         graph_integrity = with_links / len(docs)
 
+        disconnected = sum(
+            1 for d in docs if not d.related and not any(d.relationships.values())
+        )
+
         broken = 0
         for doc in docs:
             for ref in doc.related or []:
                 if ref not in ids:
                     broken += 1
+            for targets in doc.relationships.values():
+                for ref in targets:
+                    if ref not in ids:
+                        broken += 1
 
         titles = [d.title.strip().lower() for d in docs if d.title]
         dup_risk = 0.0
         if titles:
-            from collections import Counter
             counts = Counter(titles)
             dups = sum(c - 1 for c in counts.values() if c > 1)
             dup_risk = dups / len(docs)
@@ -45,22 +53,23 @@ class AnalyticsEngine:
         retrieval_ready = min(1.0, indexed / max(len(docs), 1))
 
         knowledge_score = round(
-            0.30 * avg_quality + 0.25 * graph_integrity + 0.20 * coverage
-            + 0.15 * (1 - dup_risk) + 0.10 * retrieval_ready,
+            0.28 * avg_quality + 0.22 * graph_integrity + 0.20 * coverage
+            + 0.15 * (1 - dup_risk) + 0.15 * retrieval_ready,
             3,
         )
 
         return {
             "engine": "analytics",
             "status": "active",
+            "knowledge_score": round(knowledge_score * 100, 1),
             "knowledge_quality": round(avg_quality * 100, 1),
             "coverage": round(coverage * 100, 1),
-            "freshness": 89.0,  # placeholder until sync timestamps wired
+            "freshness": round(max(0, 100 - disconnected / max(len(docs), 1) * 100), 1),
             "duplicate_risk": round(dup_risk * 100, 1),
             "retrieval_success": round(retrieval_ready * 100, 1),
             "broken_references": broken,
+            "disconnected_graphs": disconnected,
             "graph_integrity": round(graph_integrity * 100, 1),
-            "knowledge_score": round(knowledge_score * 100, 1),
         }
 
     def _empty_health(self) -> dict[str, Any]:

@@ -1,44 +1,63 @@
-# Knowledge Evolution — how knowledge changes over time
-# Stronger than version history: v1 → v2 → Merged → Expanded → Deprecated → Archived
+# Knowledge Evolution — governed lifecycle for knowledge objects
+# Created → Reviewed → Verified → Published → Deprecated → Archived → Deleted
 
 version: 1.0.0
 updated: 2026-07-07
 
 states:
-  - id: v1
-    label: Initial
-    description: First version of knowledge object
+  - id: created
+    label: Created
+    description: Initial ingest; unreviewed
 
-  - id: v2
-    label: Revised
-    description: Updated revision with tracked lineage
+  - id: reviewed
+    label: Reviewed
+    description: Human or automated review completed
 
-  - id: merged
-    label: Merged
-    description: Combined from duplicate or overlapping objects
+  - id: verified
+    label: Verified
+    description: Accuracy and provenance confirmed
 
-  - id: expanded
-    label: Expanded
-    description: Enriched with additional content or relationships
+  - id: published
+    label: Published
+    description: Active, searchable, retrieval-preferred
 
   - id: deprecated
     label: Deprecated
-    description: Superseded; lower retrieval priority
+    description: Superseded; lower retrieval rank; dependents flagged
 
   - id: archived
     label: Archived
     description: Retained for audit; excluded from active retrieval
 
+  - id: deleted
+    label: Deleted
+    description: Soft-deleted; recoverable within retention window
+
+  # Evolution paths (merged / expanded from prior model)
+  - id: merged
+    label: Merged
+    description: Combined from duplicate objects
+
+  - id: expanded
+    label: Expanded
+    description: Enriched with additional content
+
 transitions:
-  v1: [v2, merged, expanded, deprecated, archived]
-  v2: [merged, expanded, deprecated, archived]
-  merged: [expanded, deprecated, archived]
-  expanded: [v2, deprecated, archived]
-  deprecated: [archived, expanded]
-  archived: []
+  created: [reviewed, merged, expanded, deprecated, archived, deleted]
+  reviewed: [verified, created, deprecated, archived, deleted]
+  verified: [published, reviewed, deprecated]
+  published: [deprecated, verified, expanded]
+  deprecated: [archived, published, deleted]
+  archived: [deleted]
+  deleted: []
+  merged: [expanded, published, deprecated, archived]
+  expanded: [reviewed, published, deprecated, archived]
+
+retrieval_preference_order: [published, verified, reviewed, expanded, created, merged, deprecated, archived]
 
 events:
   - knowledge.evolution.transition
   - knowledge.evolution.merged
   - knowledge.evolution.expanded
   - knowledge.evolution.deprecated
+  - knowledge.evolution.deleted

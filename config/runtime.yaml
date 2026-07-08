@@ -25,15 +25,17 @@ knowledge_studio:
     - explorer
     - search
     - graph
-    - relationships
     - analytics
     - health
+    - curator
     - lifecycle
     - scheduler
     - plugins
     - connectors
-  status: planned_ui
-  runtime_api: available
+    - monitor
+    - explain
+  status: active
+  command: python3 -m runtime studio
 
 brain_config: config/brain.yaml
 product_config: config/product_enterprise.yaml
