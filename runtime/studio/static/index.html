@@ -3,237 +3,913 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coltex</title>
+  <title>Coltex — Knowledge Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --border: #2a2f3d;
-      --text: #e8eaef;
-      --muted: #8b92a5;
-      --accent: #5b8def;
-      --accent-hover: #4a7de0;
-      --success: #3dd68c;
-      --warn: #f5a623;
+      --bg-base: #09090b;
+      --bg-elevated: #111114;
+      --bg-surface: #18181b;
+      --bg-hover: #27272a;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.12);
+      --text: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --accent-glow: rgba(99,102,241,0.25);
+      --success: #22c55e;
+      --success-bg: rgba(34,197,94,0.12);
+      --warn: #f59e0b;
+      --warn-bg: rgba(245,158,11,0.12);
+      --danger: #ef4444;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --sidebar-w: 260px;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: "Segoe UI", system-ui, sans-serif;
-      background: var(--bg);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-base);
       color: var(--text);
       min-height: 100vh;
       display: flex;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
-    aside {
-      width: 220px;
-      background: var(--surface);
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--bg-elevated);
       border-right: 1px solid var(--border);
-      padding: 1.25rem 0;
+      display: flex;
+      flex-direction: column;
       flex-shrink: 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
     }
-    .logo {
-      padding: 0 1.25rem 1.5rem;
+
+    .brand {
+      padding: 1.5rem 1.25rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .brand-icon svg { width: 20px; height: 20px; color: #fff; }
+
+    .brand-text h1 {
+      font-size: 1.125rem;
       font-weight: 700;
-      font-size: 1.15rem;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
     }
-    .logo span { color: var(--accent); }
-    nav button {
-      display: block;
+
+    .brand-text p {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 1px;
+    }
+
+    .nav-section {
+      padding: 1rem 0.75rem 0.5rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .nav { flex: 1; padding: 0.5rem 0.75rem; overflow-y: auto; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
       width: 100%;
-      text-align: left;
-      padding: 0.65rem 1.25rem;
+      padding: 0.625rem 0.875rem;
       background: none;
       border: none;
-      color: var(--muted);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: inherit;
+      text-align: left;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
     }
-    nav button:hover, nav button.active {
-      background: rgba(91, 141, 239, 0.12);
+
+    .nav-item svg { width: 18px; height: 18px; opacity: 0.7; flex-shrink: 0; }
+
+    .nav-item:hover {
+      background: var(--bg-hover);
       color: var(--text);
     }
-    nav button.active { border-left: 3px solid var(--accent); }
+
+    .nav-item.active {
+      background: rgba(99,102,241,0.15);
+      color: var(--accent-light);
+    }
+
+    .nav-item.active svg { opacity: 1; color: var(--accent-light); }
+
+    .sidebar-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-footer .version {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.5rem;
+      background: var(--bg-surface);
+      border-radius: 6px;
+      font-size: 0.7rem;
+      margin-top: 0.5rem;
+    }
+
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    /* Main layout */
+    .main-wrap {
+      flex: 1;
+      margin-left: var(--sidebar-w);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 64px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(9,9,11,0.8);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .workspace-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.8125rem;
+    }
+
+    .workspace-chip.empty { border-color: var(--warn); background: var(--warn-bg); }
+
+    .workspace-chip .name { font-weight: 600; color: var(--text); }
+
+    .health-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .health-pill.good { background: var(--success-bg); color: var(--success); }
+    .health-pill.mid { background: var(--warn-bg); color: var(--warn); }
+    .health-pill.low { background: rgba(239,68,68,0.12); color: var(--danger); }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+
     main {
       flex: 1;
       padding: 2rem;
-      overflow-y: auto;
+      max-width: 1200px;
+      width: 100%;
     }
-    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
-    .subtitle { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
-    .grid {
+
+    .page-header { margin-bottom: 2rem; }
+
+    .page-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.35rem;
+    }
+
+    .page-header p { color: var(--text-secondary); font-size: 0.9375rem; }
+
+    .hidden { display: none !important; }
+
+    /* Cards & grid */
+    .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
-    }
-    .card .label { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .card .value { font-size: 1.75rem; font-weight: 600; margin-top: 0.35rem; }
-    .panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.5rem;
       margin-bottom: 1.5rem;
     }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    .stat-card .icon-wrap {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.875rem;
+    }
+
+    .stat-card .icon-wrap svg { width: 18px; height: 18px; color: var(--accent-light); }
+
+    .stat-card .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .stat-card .value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-top: 0.25rem;
+    }
+
+    .hero-health {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.05));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .health-ring {
+      position: relative;
+      width: 120px; height: 120px;
+      flex-shrink: 0;
+    }
+
+    .health-ring svg { transform: rotate(-90deg); }
+
+    .health-ring .score {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .health-ring .score .num { font-size: 2rem; font-weight: 700; letter-spacing: -0.04em; }
+    .health-ring .score .lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+
+    .hero-health .meta h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .hero-health .meta p { color: var(--text-secondary); font-size: 0.875rem; max-width: 420px; }
+
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .panel-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Forms */
+    .field { margin-bottom: 1rem; }
+
+    .field label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+    }
+
     input, textarea, select {
       width: 100%;
-      padding: 0.65rem 0.85rem;
-      background: var(--bg);
+      padding: 0.625rem 0.875rem;
+      background: var(--bg-base);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       color: var(--text);
-      font-size: 0.95rem;
-      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    textarea { min-height: 100px; resize: vertical; }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    /* Buttons */
     .btn {
-      display: inline-block;
-      padding: 0.6rem 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.125rem;
       background: var(--accent);
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      font-size: 0.9rem;
-      margin-right: 0.5rem;
-      margin-top: 0.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 8px var(--accent-glow);
     }
-    .btn:hover { background: var(--accent-hover); }
-    .btn.secondary { background: var(--border); color: var(--text); }
-    .hidden { display: none !important; }
-    .badge {
+
+    .btn:hover { background: var(--accent-light); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn.secondary {
+      background: var(--bg-hover);
+      color: var(--text);
+      box-shadow: none;
+      border: 1px solid var(--border);
+    }
+
+    .btn.secondary:hover { background: var(--bg-surface); border-color: var(--border-strong); }
+
+    .btn.ghost {
+      background: transparent;
+      box-shadow: none;
+      color: var(--text-secondary);
+    }
+
+    .btn.ghost:hover { background: var(--bg-hover); color: var(--text); }
+
+    .btn svg { width: 16px; height: 16px; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; border-radius: var(--radius-sm); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      background: var(--bg-base);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    tr:hover td { background: rgba(255,255,255,0.02); color: var(--text); }
+
+    .tag {
       display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--bg-hover);
+      color: var(--text-secondary);
+    }
+
+    .tag.inbox { background: var(--warn-bg); color: var(--warn); }
+    .tag.processed { background: var(--success-bg); color: var(--success); }
+
+    /* Dropzone */
+    .dropzone {
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--radius);
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: var(--bg-base);
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--accent);
+      background: rgba(99,102,241,0.05);
+    }
+
+    .dropzone svg { width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 1rem; }
+    .dropzone h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .dropzone p { color: var(--text-muted); font-size: 0.8125rem; }
+
+    .format-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .format-tags span {
+      padding: 0.2rem 0.5rem;
+      background: var(--bg-hover);
+      border-radius: 4px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* Search */
+    .search-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .search-bar input { flex: 1; padding-left: 2.75rem; }
+
+    .search-wrap { position: relative; flex: 1; }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 0.875rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px; height: 18px;
+      color: var(--text-muted);
+    }
+
+    .result-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-item:last-child { border-bottom: none; }
+
+    .result-item h4 { font-size: 0.9375rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .result-item p { color: var(--text-muted); font-size: 0.8125rem; line-height: 1.5; }
+    .result-item .score { font-size: 0.75rem; color: var(--accent-light); margin-top: 0.35rem; }
+
+    /* Ask */
+    .ask-compose {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .ask-compose textarea { border: none; background: transparent; padding: 0; margin-bottom: 1rem; }
+    .ask-compose textarea:focus { box-shadow: none; }
+
+    .answer-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .answer-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .answer-body {
+      padding: 1.25rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      color: var(--text-secondary);
+    }
+
+    .sources-list { padding: 0 1.25rem 1.25rem; }
+
+    .source-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.875rem;
+      background: var(--bg-base);
+      border-radius: var(--radius-sm);
+      margin-top: 0.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .source-card .conf {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--success);
+      background: var(--success-bg);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      font-size: 0.75rem;
-      background: rgba(61, 214, 140, 0.15);
-      color: var(--success);
+      flex-shrink: 0;
     }
-    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid var(--border); }
-    th { color: var(--muted); font-weight: 500; }
-    .answer-box {
-      background: var(--bg);
-      border-radius: 8px;
-      padding: 1rem;
-      margin-top: 1rem;
-      line-height: 1.6;
-      white-space: pre-wrap;
-    }
-    .source { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
-    #ws-banner {
-      background: rgba(91, 141, 239, 0.1);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.85rem;
-    }
-    .dropzone {
-      border: 2px dashed var(--border);
-      border-radius: 10px;
-      padding: 2rem;
+
+    .source-card .info h5 { font-size: 0.8125rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .source-card .info p { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Empty state */
+    .empty {
       text-align: center;
-      color: var(--muted);
-      cursor: pointer;
+      padding: 3rem 2rem;
+      color: var(--text-muted);
     }
-    .dropzone:hover { border-color: var(--accent); color: var(--text); }
+
+    .empty svg { width: 48px; height: 48px; opacity: 0.4; margin-bottom: 1rem; }
+
+    /* Toast */
+    .toast-wrap {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .toast {
+      padding: 0.875rem 1.25rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow);
+      font-size: 0.875rem;
+      animation: slideIn 0.3s ease;
+      max-width: 360px;
+    }
+
+    .toast.success { border-left: 3px solid var(--success); }
+    .toast.error { border-left: 3px solid var(--danger); }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Loading */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(9,9,11,0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .split-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .main-wrap { margin-left: 0; }
+      .split-panels { grid-template-columns: 1fr; }
+      main { padding: 1.25rem; }
+    }
   </style>
 </head>
 <body>
-  <aside>
-    <div class="logo">Col<span>tex</span></div>
-    <nav>
-      <button data-page="dashboard" class="active">Dashboard</button>
-      <button data-page="workspace">Workspace</button>
-      <button data-page="knowledge">Knowledge</button>
-      <button data-page="sources">Sources</button>
-      <button data-page="search">Search</button>
-      <button data-page="ask">Ask Knowledge</button>
-      <button data-page="settings">Settings</button>
-    </nav>
-  </aside>
-  <main>
-    <div id="ws-banner">Loading workspace…</div>
-
-    <section id="page-dashboard">
-      <h1>Dashboard</h1>
-      <p class="subtitle">Knowledge health and workspace metrics</p>
-      <div class="grid" id="dash-stats"></div>
-      <button class="btn" onclick="doBuild()">Build Workspace</button>
-      <button class="btn secondary" onclick="doValidate()">Validate</button>
-    </section>
-
-    <section id="page-workspace" class="hidden">
-      <h1>Workspace</h1>
-      <p class="subtitle">Create or open a .ctex workspace</p>
-      <div class="panel">
-        <h3 style="margin-bottom:1rem">New workspace</h3>
-        <input id="ws-name" placeholder="MyWorkspace" />
-        <button class="btn" onclick="createWorkspace()">Create</button>
-      </div>
-      <div class="panel">
-        <h3 style="margin-bottom:1rem">Open workspace</h3>
-        <input id="ws-path" placeholder="C:\path\to\MyWorkspace\MyWorkspace.ctex" />
-        <button class="btn" onclick="openWorkspace()">Open</button>
-      </div>
-    </section>
-
-    <section id="page-knowledge" class="hidden">
-      <h1>Knowledge</h1>
-      <p class="subtitle">Browse knowledge objects</p>
-      <div class="panel"><table><thead><tr><th>Title</th><th>ID</th><th>Type</th></tr></thead><tbody id="knowledge-list"></tbody></table></div>
-    </section>
-
-    <section id="page-sources" class="hidden">
-      <h1>Sources</h1>
-      <p class="subtitle">Upload PDF, DOCX, MD, TXT, HTML, JSON</p>
-      <div class="panel">
-        <div class="dropzone" onclick="document.getElementById('file-input').click()">
-          Click or drop files to upload
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
-        <input type="file" id="file-input" class="hidden" multiple accept=".pdf,.docx,.md,.txt,.html,.json" onchange="uploadFiles(this.files)" />
+        <div class="brand-text">
+          <h1>Coltex</h1>
+          <p>Knowledge Platform</p>
+        </div>
       </div>
-      <div class="panel"><table><thead><tr><th>Name</th><th>Format</th><th>Status</th></tr></thead><tbody id="sources-list"></tbody></table></div>
-    </section>
+    </div>
 
-    <section id="page-search" class="hidden">
-      <h1>Search</h1>
-      <p class="subtitle">Universal search across your knowledge</p>
-      <input id="search-q" placeholder="Search…" onkeydown="if(event.key==='Enter')doSearch()" />
-      <button class="btn" onclick="doSearch()">Search</button>
-      <div class="panel" id="search-results"></div>
-    </section>
+    <div class="nav-section">Overview</div>
+    <nav class="nav">
+      <button class="nav-item active" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" data-page="workspace">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        Workspace
+      </button>
+    </nav>
 
-    <section id="page-ask" class="hidden">
-      <h1>Ask Knowledge</h1>
-      <p class="subtitle">Question → answer with sources</p>
-      <textarea id="ask-q" placeholder="Ask a question…"></textarea>
-      <button class="btn" onclick="doAsk()">Ask</button>
-      <div class="panel hidden" id="ask-result"></div>
-    </section>
+    <div class="nav-section">Knowledge</div>
+    <nav class="nav" style="padding-top:0">
+      <button class="nav-item" data-page="knowledge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Knowledge
+      </button>
+      <button class="nav-item" data-page="sources">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        Sources
+      </button>
+      <button class="nav-item" data-page="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        Search
+      </button>
+      <button class="nav-item" data-page="ask">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Ask Knowledge
+      </button>
+    </nav>
 
-    <section id="page-settings" class="hidden">
-      <h1>Settings</h1>
-      <p class="subtitle">Workspace configuration</p>
-      <div class="panel" id="settings-form"></div>
-      <button class="btn" onclick="saveSettings()">Save</button>
-    </section>
-  </main>
+    <div class="nav-section">System</div>
+    <nav class="nav" style="padding-top:0">
+      <button class="nav-item" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        Settings
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>Localhost · Private</div>
+      <div class="version"><span class="status-dot"></span> Coltex v1.0</div>
+    </div>
+  </aside>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <div id="workspace-chip" class="workspace-chip empty">
+        <span>No workspace</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn secondary" onclick="doValidate()">Validate</button>
+        <button class="btn" onclick="doBuild()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          Build
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Dashboard -->
+      <section id="page-dashboard">
+        <div class="page-header">
+          <h2>Dashboard</h2>
+          <p>Knowledge health and workspace metrics at a glance</p>
+        </div>
+        <div class="hero-health" id="hero-health"></div>
+        <div class="stats-grid" id="dash-stats"></div>
+      </section>
+
+      <!-- Workspace -->
+      <section id="page-workspace" class="hidden">
+        <div class="page-header">
+          <h2>Workspace</h2>
+          <p>Create or open a Coltex `.ctex` project file</p>
+        </div>
+        <div class="split-panels">
+          <div class="panel">
+            <div class="panel-title">Create new workspace</div>
+            <div class="field">
+              <label>Workspace name</label>
+              <input id="ws-name" placeholder="MyWorkspace" />
+            </div>
+            <button class="btn" onclick="createWorkspace()">Create workspace</button>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Open existing workspace</div>
+            <div class="field">
+              <label>Path to .ctex file</label>
+              <input id="ws-path" placeholder="C:\Users\you\workspaces\MyWorkspace\MyWorkspace.ctex" />
+            </div>
+            <button class="btn secondary" onclick="openWorkspace()">Open workspace</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Knowledge -->
+      <section id="page-knowledge" class="hidden">
+        <div class="page-header">
+          <h2>Knowledge</h2>
+          <p>Browse indexed knowledge objects in your workspace</p>
+        </div>
+        <div class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Title</th><th>Document ID</th><th>Type</th></tr></thead>
+              <tbody id="knowledge-list"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sources -->
+      <section id="page-sources" class="hidden">
+        <div class="page-header">
+          <h2>Sources</h2>
+          <p>Upload documents to process into AI-ready knowledge</p>
+        </div>
+        <div class="panel">
+          <div class="dropzone" id="dropzone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            <h4>Drop files here or click to upload</h4>
+            <p>Files are automatically parsed, chunked, and indexed</p>
+            <div class="format-tags">
+              <span>PDF</span><span>DOCX</span><span>Markdown</span><span>TXT</span><span>HTML</span><span>JSON</span>
+            </div>
+          </div>
+          <input type="file" id="file-input" class="hidden" multiple accept=".pdf,.docx,.md,.txt,.html,.json" />
+        </div>
+        <div class="panel">
+          <div class="panel-title">Uploaded sources</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Format</th><th>Status</th></tr></thead>
+              <tbody id="sources-list"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search -->
+      <section id="page-search" class="hidden">
+        <div class="page-header">
+          <h2>Search</h2>
+          <p>Universal search across documents, metadata, and knowledge graph</p>
+        </div>
+        <div class="search-bar">
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input id="search-q" placeholder="Search your knowledge base…" onkeydown="if(event.key==='Enter')doSearch()" />
+          </div>
+          <button class="btn" onclick="doSearch()">Search</button>
+        </div>
+        <div class="panel" id="search-results">
+          <div class="empty"><p>Enter a query to search your workspace</p></div>
+        </div>
+      </section>
+
+      <!-- Ask -->
+      <section id="page-ask" class="hidden">
+        <div class="page-header">
+          <h2>Ask Knowledge</h2>
+          <p>Get answers grounded in your workspace with sources and confidence scores</p>
+        </div>
+        <div class="ask-compose">
+          <textarea id="ask-q" placeholder="Ask anything about your knowledge base…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();doAsk()}"></textarea>
+          <button class="btn" onclick="doAsk()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            Ask Knowledge
+          </button>
+        </div>
+        <div id="ask-result" class="hidden"></div>
+      </section>
+
+      <!-- Settings -->
+      <section id="page-settings" class="hidden">
+        <div class="page-header">
+          <h2>Settings</h2>
+          <p>Configure AI provider, embedding model, and workspace preferences</p>
+        </div>
+        <div class="panel">
+          <div class="form-grid" id="settings-form"></div>
+          <div style="margin-top:1.25rem">
+            <button class="btn" onclick="saveSettings()">Save settings</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast-wrap" id="toasts"></div>
+  <div class="loading-overlay hidden" id="loading"><div class="spinner"></div></div>
 
   <script>
-    const api = (path, opts) => fetch(path, opts).then(r => r.json());
+    const ICONS = {
+      docs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>',
+      embed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2"/></svg>',
+      graph: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>',
+      search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>',
+      ask: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>',
+      src: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>',
+    };
 
-    document.querySelectorAll('nav button').forEach(btn => {
+    const fmt = n => Number(n).toLocaleString();
+
+    function toast(msg, type = 'success') {
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.textContent = msg;
+      document.getElementById('toasts').appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+
+    function setLoading(on) {
+      document.getElementById('loading').classList.toggle('hidden', !on);
+    }
+
+    async function api(path, opts) {
+      try {
+        const r = await fetch(path, opts);
+        return await r.json();
+      } catch (e) {
+        toast('Request failed: ' + e.message, 'error');
+        return { error: e.message };
+      }
+    }
+
+    document.querySelectorAll('.nav-item').forEach(btn => {
       btn.onclick = () => {
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
         document.getElementById('page-' + btn.dataset.page).classList.remove('hidden');
@@ -241,50 +917,114 @@
       };
     });
 
+    function healthClass(score) {
+      if (score >= 80) return 'good';
+      if (score >= 50) return 'mid';
+      return 'low';
+    }
+
     async function loadBanner() {
       const s = await api('/api/status');
-      const el = document.getElementById('ws-banner');
-      if (s.workspace || s.name) {
-        const w = s.workspace || s.name;
-        el.innerHTML = `<strong>Workspace:</strong> ${s.name || w} &nbsp;·&nbsp; <span class="badge">Health ${s.knowledge_health ?? s.dashboard?.health?.knowledge_score ?? '—'}%</span>`;
+      const chip = document.getElementById('workspace-chip');
+      if (s.name || s.workspace) {
+        const health = s.knowledge_health ?? 0;
+        chip.className = 'workspace-chip';
+        chip.innerHTML = `
+          <span class="name">${s.name || s.workspace}</span>
+          <span class="health-pill ${healthClass(health)}">${health}% health</span>`;
       } else {
-        el.innerHTML = 'No workspace open — go to <strong>Workspace</strong> to create or open one.';
+        chip.className = 'workspace-chip empty';
+        chip.innerHTML = '<span>No workspace — open or create one</span>';
       }
+      return s;
+    }
+
+    function renderHealthRing(score) {
+      const pct = Math.min(100, Math.max(0, score));
+      const circ = 2 * Math.PI * 52;
+      const offset = circ - (pct / 100) * circ;
+      return `
+        <div class="health-ring">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--bg-hover)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8"
+              stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+          </svg>
+          <div class="score">
+            <span class="num">${Math.round(pct)}</span>
+            <span class="lbl">Health</span>
+          </div>
+        </div>`;
     }
 
     async function loadDashboard() {
       const d = await api('/api/dashboard');
       const h = d.dashboard?.health || {};
-      document.getElementById('dash-stats').innerHTML = [
-        ['Documents', d.dashboard?.documents ?? 0],
-        ['Embeddings', h.embeddings ?? 0],
-        ['Graph Nodes', h.graph_nodes ?? 0],
-        ['Knowledge Score', (h.knowledge_score ?? 0) + '%'],
-        ['Sources', d.dashboard?.sources ?? 0],
-        ['AI Queries', d.dashboard?.ai_queries ?? 0],
-      ].map(([l,v]) => `<div class="card"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+      const score = h.knowledge_score ?? 0;
+
+      document.getElementById('hero-health').innerHTML = `
+        ${renderHealthRing(score)}
+        <div class="meta">
+          <h3>Knowledge Health</h3>
+          <p>Your workspace intelligence score reflects document coverage, embedding quality, graph connectivity, and content freshness.</p>
+        </div>`;
+
+      const stats = [
+        ['Documents', fmt(d.dashboard?.documents ?? 0), ICONS.docs],
+        ['Embeddings', fmt(h.embeddings ?? 0), ICONS.embed],
+        ['Graph Nodes', fmt(h.graph_nodes ?? 0), ICONS.graph],
+        ['Sources', fmt(d.dashboard?.sources ?? 0), ICONS.src],
+        ['Searches', fmt(d.dashboard?.searches ?? 0), ICONS.search],
+        ['AI Queries', fmt(d.dashboard?.ai_queries ?? 0), ICONS.ask],
+      ];
+
+      document.getElementById('dash-stats').innerHTML = stats.map(([l, v, icon]) => `
+        <div class="stat-card">
+          <div class="icon-wrap">${icon}</div>
+          <div class="label">${l}</div>
+          <div class="value">${v}</div>
+        </div>`).join('');
+
       loadBanner();
     }
 
     async function loadKnowledge() {
       const k = await api('/api/knowledge?limit=50');
-      document.getElementById('knowledge-list').innerHTML = (k.objects || []).map(o =>
-        `<tr><td>${o.title||'—'}</td><td>${o.document_id||o.id||'—'}</td><td>${o.doc_type||'—'}</td></tr>`
-      ).join('') || '<tr><td colspan="3">No documents yet</td></tr>';
+      const rows = (k.objects || []).map(o => `
+        <tr>
+          <td><strong>${esc(o.title || '—')}</strong></td>
+          <td><code style="font-size:0.8rem;color:var(--text-muted)">${esc(o.document_id || o.id || '—')}</code></td>
+          <td><span class="tag">${esc(o.doc_type || 'doc')}</span></td>
+        </tr>`).join('');
+      document.getElementById('knowledge-list').innerHTML = rows ||
+        '<tr><td colspan="3"><div class="empty"><p>No knowledge objects yet — upload sources and build</p></div></td></tr>';
     }
 
     async function loadSources() {
       const s = await api('/api/sources');
-      document.getElementById('sources-list').innerHTML = (s.sources || []).map(x =>
-        `<tr><td>${x.name}</td><td>${x.format}</td><td>${x.status}</td></tr>`
-      ).join('') || '<tr><td colspan="3">No sources yet</td></tr>';
+      const rows = (s.sources || []).map(x => `
+        <tr>
+          <td><strong>${esc(x.name)}</strong></td>
+          <td><span class="tag">${esc(x.format)}</span></td>
+          <td><span class="tag ${x.status}">${esc(x.status)}</span></td>
+        </tr>`).join('');
+      document.getElementById('sources-list').innerHTML = rows ||
+        '<tr><td colspan="3"><div class="empty"><p>No sources uploaded yet</p></div></td></tr>';
     }
 
     async function loadSettings() {
       const s = await api('/api/settings');
-      document.getElementById('settings-form').innerHTML = Object.entries(s).map(([k,v]) =>
-        `<label style="display:block;margin-bottom:0.5rem;color:var(--muted);font-size:0.8rem">${k}</label><input data-key="${k}" value="${v}" />`
-      ).join('');
+      document.getElementById('settings-form').innerHTML = Object.entries(s).map(([k, v]) => `
+        <div class="field">
+          <label>${esc(k.replace(/_/g, ' '))}</label>
+          <input data-key="${esc(k)}" value="${esc(String(v))}" />
+        </div>`).join('');
+    }
+
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
     }
 
     function loadPage(page) {
@@ -296,66 +1036,136 @@
 
     async function createWorkspace() {
       const name = document.getElementById('ws-name').value.trim();
-      if (!name) return alert('Enter a workspace name');
-      const r = await api('/api/workspace/new', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name}) });
-      if (r.error) return alert(r.error);
-      alert('Created: ' + r.name);
-      loadBanner(); loadDashboard();
+      if (!name) return toast('Enter a workspace name', 'error');
+      setLoading(true);
+      const r = await api('/api/workspace/new', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      setLoading(false);
+      if (r.error) return toast(r.error, 'error');
+      toast(`Workspace "${r.name}" created`);
+      loadDashboard();
     }
 
     async function openWorkspace() {
       const manifest = document.getElementById('ws-path').value.trim();
-      if (!manifest) return alert('Enter path to .ctex file');
-      const r = await api('/api/workspace/open', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({manifest}) });
-      if (r.error) return alert(r.error);
-      loadBanner(); loadDashboard();
+      if (!manifest) return toast('Enter path to .ctex file', 'error');
+      setLoading(true);
+      const r = await api('/api/workspace/open', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ manifest }),
+      });
+      setLoading(false);
+      if (r.error) return toast(r.error, 'error');
+      toast('Workspace opened');
+      loadDashboard();
     }
 
     async function doBuild() {
-      const r = await api('/api/build', { method:'POST' });
-      alert(r.error || 'Build complete');
+      setLoading(true);
+      const r = await api('/api/build', { method: 'POST' });
+      setLoading(false);
+      if (r.error) return toast(r.error, 'error');
+      toast('Workspace build complete');
       loadDashboard();
     }
 
     async function doValidate() {
-      const r = await api('/api/validate', { method:'POST' });
-      alert(r.passed ? 'Workspace valid' : (r.issues||[]).join('\n') || 'Validation failed');
+      setLoading(true);
+      const r = await api('/api/validate', { method: 'POST' });
+      setLoading(false);
+      if (r.error) return toast(r.error, 'error');
+      toast(r.passed ? 'Workspace validation passed' : (r.issues || ['Validation failed']).join(', '), r.passed ? 'success' : 'error');
     }
 
     async function uploadFiles(files) {
+      if (!files.length) return;
+      setLoading(true);
+      let ok = 0;
       for (const f of files) {
         const fd = new FormData();
         fd.append('file', f);
-        const r = await fetch('/api/upload', { method:'POST', body: fd }).then(x => x.json());
-        if (r.error) alert(r.error);
+        const r = await fetch('/api/upload', { method: 'POST', body: fd }).then(x => x.json());
+        if (r.error) toast(r.error, 'error');
+        else ok++;
       }
-      loadSources(); loadDashboard();
+      setLoading(false);
+      if (ok) toast(`${ok} file(s) uploaded and processed`);
+      loadSources();
+      loadDashboard();
     }
+
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('file-input');
+    dropzone.onclick = () => fileInput.click();
+    fileInput.onchange = e => uploadFiles(e.target.files);
+    dropzone.ondragover = e => { e.preventDefault(); dropzone.classList.add('dragover'); };
+    dropzone.ondragleave = () => dropzone.classList.remove('dragover');
+    dropzone.ondrop = e => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      uploadFiles(e.dataTransfer.files);
+    };
 
     async function doSearch() {
       const q = document.getElementById('search-q').value.trim();
       if (!q) return;
+      setLoading(true);
       const r = await api('/api/search?q=' + encodeURIComponent(q));
-      document.getElementById('search-results').innerHTML = (r.results || r.hits || []).slice(0,15).map(x =>
-        `<div style="margin-bottom:0.75rem"><strong>${x.title||x.document_id}</strong><br><span style="color:var(--muted);font-size:0.85rem">${(x.snippet||x.content||'').slice(0,200)}</span></div>`
-      ).join('') || JSON.stringify(r, null, 2);
+      setLoading(false);
+      const results = r.results || [];
+      document.getElementById('search-results').innerHTML = results.length
+        ? results.slice(0, 20).map(x => `
+          <div class="result-item">
+            <h4>${esc(x.title || x.id || 'Untitled')}</h4>
+            <p>${esc(x.source || 'document')} · score ${(x.score || 0).toFixed(3)}</p>
+          </div>`).join('')
+        : '<div class="empty"><p>No results found</p></div>';
     }
 
     async function doAsk() {
       const q = document.getElementById('ask-q').value.trim();
       if (!q) return;
+      setLoading(true);
       const r = await api('/api/ask?q=' + encodeURIComponent(q));
+      setLoading(false);
       const el = document.getElementById('ask-result');
       el.classList.remove('hidden');
-      el.innerHTML = `<div class="answer-box">${r.answer||'No answer'}</div>` +
-        (r.sources||[]).map(s => `<div class="source">📄 ${s.title} (${s.confidence}% confidence)</div>`).join('');
+      const sources = (r.sources || []).map(s => `
+        <div class="source-card">
+          <span class="conf">${s.confidence}%</span>
+          <div class="info">
+            <h5>${esc(s.title || s.document_id)}</h5>
+            <p>${esc((s.why || '').slice(0, 120))}</p>
+          </div>
+        </div>`).join('');
+      el.innerHTML = `
+        <div class="answer-card">
+          <div class="answer-header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Answer
+          </div>
+          <div class="answer-body">${esc(r.answer || 'No answer available')}</div>
+          ${sources ? `<div class="sources-list"><div class="panel-title" style="padding:0 0 0.5rem">Sources</div>${sources}</div>` : ''}
+        </div>`;
     }
 
     async function saveSettings() {
       const data = {};
-      document.querySelectorAll('#settings-form input[data-key]').forEach(inp => { data[inp.dataset.key] = inp.value; });
-      await api('/api/settings', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
-      alert('Settings saved');
+      document.querySelectorAll('#settings-form input[data-key]').forEach(inp => {
+        data[inp.dataset.key] = inp.value;
+      });
+      setLoading(true);
+      await api('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      setLoading(false);
+      toast('Settings saved');
     }
 
     loadDashboard();

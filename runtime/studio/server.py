@@ -245,10 +245,12 @@ def serve(
     url = f"http://{host}:{port}/"
 
     print("")
-    print("  Coltex — localhost")
-    print("  The AI Knowledge Platform for Modern Organizations")
+    print("  ┌─────────────────────────────────────────────┐")
+    print("  │  Coltex — The AI Knowledge Platform         │")
+    print("  └─────────────────────────────────────────────┘")
     print("")
-    print(f"  Open {url}")
+    print(f"  Localhost  {url}")
+    print("")
     print("  Press Ctrl+C to stop")
     print("")
 
