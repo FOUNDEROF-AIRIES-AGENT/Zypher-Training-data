@@ -1,0 +1,76 @@
+# Coltex V1 — Product Configuration
+
+version: "1.0.0"
+tagline: "The AI Knowledge Platform for Modern Organizations"
+goal: "Turn scattered business knowledge into AI-ready intelligence in under 10 minutes"
+
+product:
+  name: Coltex
+  edition: V1
+  home: Knowledge Studio
+
+studio:
+  modules:
+    - dashboard
+    - knowledge
+    - sources
+    - search
+    - ask
+    - analytics
+    - settings
+
+sources:
+  supported_now:
+    - pdf
+    - docx
+    - md
+    - markdown
+    - txt
+    - html
+    - json
+  coming_soon:
+    - github
+    - notion
+    - google_drive
+  inbox_dir: data/sources/inbox
+  processed_dir: knowledge-base/uploads
+
+processing:
+  steps:
+    - upload
+    - parse
+    - clean
+    - chunk
+    - metadata
+    - embeddings
+    - index
+    - done
+  chunk_size: 2000
+  chunk_overlap: 200
+  hidden_from_user: true
+
+search:
+  modes: [documents, metadata, code, api, sql]
+
+ask:
+  name: Ask Knowledge
+  show_sources: true
+  show_confidence: true
+  show_why: true
+
+health:
+  display:
+    - knowledge_score
+    - documents
+    - embeddings
+    - duplicates
+    - outdated
+
+settings:
+  defaults:
+    workspace: default
+    ai_provider: local
+    embedding_model: sentence-transformers/all-MiniLM-L6-v2
+    chunk_size: 2000
+    users: 1
+    backup_enabled: false

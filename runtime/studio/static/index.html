@@ -3,146 +3,225 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coltex Knowledge Studio</title>
+  <title>Coltex — Knowledge Studio</title>
   <style>
-    :root { --bg:#0f1419; --card:#1a2332; --accent:#3b82f6; --green:#22c55e; --warn:#f59e0b; --text:#e2e8f0; --muted:#94a3b8; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    header { padding: 1.25rem 2rem; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
-    header h1 { font-size: 1.25rem; font-weight: 600; }
-    header span { color: var(--muted); font-size: 0.875rem; }
-    nav { display: flex; gap: 0.5rem; padding: 0.75rem 2rem; border-bottom: 1px solid #334155; flex-wrap: wrap; }
-    nav button { background: var(--card); border: 1px solid #334155; color: var(--text); padding: 0.4rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
-    nav button.active { background: var(--accent); border-color: var(--accent); }
-    main { padding: 1.5rem 2rem; max-width: 1200px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .metric { background: var(--card); border-radius: 10px; padding: 1rem; border: 1px solid #334155; }
-    .metric label { display: block; font-size: 0.75rem; color: var(--muted); margin-bottom: 0.25rem; }
-    .metric value { font-size: 1.75rem; font-weight: 700; }
-    .metric value.good { color: var(--green); }
-    .metric value.warn { color: var(--warn); }
-    section { background: var(--card); border-radius: 10px; padding: 1rem 1.25rem; border: 1px solid #334155; margin-bottom: 1rem; }
-    section h2 { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .alert { padding: 0.6rem 0.75rem; border-radius: 6px; margin-bottom: 0.5rem; font-size: 0.875rem; background: #1e293b; border-left: 3px solid var(--warn); }
-    .alert.high { border-left-color: #ef4444; }
-    input[type=text] { width: 100%; max-width: 480px; padding: 0.6rem; border-radius: 6px; border: 1px solid #334155; background: #0f1419; color: var(--text); margin-bottom: 0.75rem; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    td, th { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #334155; }
-    th { color: var(--muted); font-weight: 500; }
-    .hidden { display: none; }
+    :root { --bg:#0b0f14; --sidebar:#111827; --card:#1a2332; --accent:#2563eb; --green:#22c55e; --text:#f1f5f9; --muted:#94a3b8; --border:#334155; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; }
+    aside { width:220px; background:var(--sidebar); border-right:1px solid var(--border); padding:1.25rem 0; flex-shrink:0; }
+    .brand { padding:0 1.25rem 1.5rem; border-bottom:1px solid var(--border); margin-bottom:1rem; }
+    .brand h1 { font-size:1.1rem; font-weight:700; }
+    .brand p { font-size:0.7rem; color:var(--muted); margin-top:0.25rem; line-height:1.4; }
+    nav button { display:block; width:100%; text-align:left; background:none; border:none; color:var(--muted); padding:0.65rem 1.25rem; cursor:pointer; font-size:0.875rem; }
+    nav button:hover { background:#1e293b; color:var(--text); }
+    nav button.active { background:#1e3a5f; color:var(--text); border-left:3px solid var(--accent); }
+    main { flex:1; padding:1.75rem 2rem; overflow:auto; }
+    h2 { font-size:1.35rem; margin-bottom:0.25rem; }
+    .subtitle { color:var(--muted); font-size:0.875rem; margin-bottom:1.5rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+    .metric { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem; }
+    .metric label { font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em; }
+    .metric value { display:block; font-size:1.6rem; font-weight:700; margin-top:0.25rem; }
+    .metric value.green { color:var(--green); }
+    section { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.25rem; margin-bottom:1rem; }
+    section h3 { font-size:0.75rem; color:var(--muted); text-transform:uppercase; margin-bottom:0.75rem; }
+    input[type=text], input[type=number], select { width:100%; max-width:520px; padding:0.65rem 0.85rem; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:0.75rem; font-size:0.95rem; }
+    input[type=file] { margin-bottom:1rem; color:var(--muted); }
+    button.btn { background:var(--accent); color:white; border:none; padding:0.55rem 1rem; border-radius:8px; cursor:pointer; font-size:0.875rem; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    th, td { text-align:left; padding:0.5rem; border-bottom:1px solid var(--border); }
+    th { color:var(--muted); font-weight:500; }
+    .hidden { display:none; }
+    .answer { line-height:1.6; white-space:pre-wrap; margin:1rem 0; }
+    .source { background:#0f172a; border-left:3px solid var(--accent); padding:0.75rem; margin:0.5rem 0; border-radius:0 6px 6px 0; font-size:0.85rem; }
+    .badge { display:inline-block; background:#1e3a5f; color:#93c5fd; padding:0.15rem 0.5rem; border-radius:4px; font-size:0.7rem; margin-right:0.35rem; }
+    .processing { color:var(--muted); font-size:0.8rem; margin-top:0.5rem; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Knowledge Studio</h1>
-    <span>Coltex Knowledge OS · Runtime Active</span>
-  </header>
-  <nav id="nav">
-    <button class="active" data-panel="health">Health</button>
-    <button data-panel="curator">Curator</button>
-    <button data-panel="monitor">Monitor</button>
-    <button data-panel="explorer">Explorer</button>
-    <button data-panel="search">Search</button>
-    <button data-panel="explain">Explain</button>
-    <button data-panel="connectors">Connectors</button>
-  </nav>
+  <aside>
+    <div class="brand">
+      <h1>Coltex V1</h1>
+      <p>The AI Knowledge Platform for Modern Organizations</p>
+    </div>
+    <nav id="nav">
+      <button class="active" data-panel="dashboard">Dashboard</button>
+      <button data-panel="knowledge">Knowledge</button>
+      <button data-panel="sources">Sources</button>
+      <button data-panel="search">Search</button>
+      <button data-panel="ask">Ask Knowledge</button>
+      <button data-panel="analytics">Analytics</button>
+      <button data-panel="settings">Settings</button>
+    </nav>
+  </aside>
   <main>
-    <div id="panel-health">
-      <div class="grid" id="health-metrics"></div>
+    <div id="panel-dashboard">
+      <h2>Dashboard</h2>
+      <p class="subtitle">Your knowledge at a glance — real metrics, nothing fake.</p>
+      <div class="grid" id="dash-metrics"></div>
+      <section><h3>Knowledge Health</h3><div class="grid" id="health-metrics"></div></section>
     </div>
-    <div id="panel-curator" class="hidden">
-      <section><h2>AI Curator — Proactive Alerts</h2><div id="curator-list"></div></section>
+    <div id="panel-knowledge" class="hidden">
+      <h2>Knowledge</h2>
+      <p class="subtitle">All knowledge objects in your workspace.</p>
+      <section><table><thead><tr><th>ID</th><th>Title</th><th>Quality</th><th>Tier</th></tr></thead><tbody id="knowledge-body"></tbody></table></section>
     </div>
-    <div id="panel-monitor" class="hidden">
-      <div class="grid" id="monitor-metrics"></div>
-    </div>
-    <div id="panel-explorer" class="hidden">
-      <section><h2>Knowledge Explorer</h2><table><thead><tr><th>ID</th><th>Title</th><th>Quality</th><th>Memory</th></tr></thead><tbody id="explorer-body"></tbody></table></section>
+    <div id="panel-sources" class="hidden">
+      <h2>Sources</h2>
+      <p class="subtitle">Upload PDF, DOCX, Markdown, TXT, HTML, or JSON. Processing is automatic.</p>
+      <section>
+        <h3>Upload</h3>
+        <input type="file" id="upload-file" accept=".pdf,.docx,.md,.txt,.html,.json" />
+        <button class="btn" id="upload-btn">Upload & Process</button>
+        <div class="processing" id="upload-status"></div>
+      </section>
+      <section><h3>Your Sources</h3><div id="sources-list"></div></section>
+      <p class="processing">Coming soon: GitHub · Notion · Google Drive</p>
     </div>
     <div id="panel-search" class="hidden">
-      <section><h2>Search</h2><input type="text" id="search-q" placeholder="Search knowledge objects..." /><div id="search-results"></div></section>
+      <h2>Universal Search</h2>
+      <p class="subtitle">One search bar — documents, metadata, APIs, code, SQL.</p>
+      <input type="text" id="search-q" placeholder="Search your knowledge..." />
+      <div id="search-results"></div>
     </div>
-    <div id="panel-explain" class="hidden">
-      <section><h2>Explainability — Why did Coltex retrieve this?</h2><input type="text" id="explain-q" placeholder="Ask a question..." /><div id="explain-results"></div></section>
+    <div id="panel-ask" class="hidden">
+      <h2>Ask Knowledge</h2>
+      <p class="subtitle">Question → Retrieve → Context → Answer with sources and confidence.</p>
+      <input type="text" id="ask-q" placeholder="Ask a question about your knowledge..." />
+      <button class="btn" id="ask-btn">Ask</button>
+      <div id="ask-answer"></div>
     </div>
-    <div id="panel-connectors" class="hidden">
-      <section><h2>Connectors</h2><div id="connector-list"></div></section>
+    <div id="panel-analytics" class="hidden">
+      <h2>Analytics</h2>
+      <p class="subtitle">Knowledge Health — metrics about your knowledge, not users.</p>
+      <div class="grid" id="analytics-metrics"></div>
+      <section><h3>Curator Alerts</h3><div id="curator-list"></div></section>
+    </div>
+    <div id="panel-settings" class="hidden">
+      <h2>Settings</h2>
+      <p class="subtitle">Workspace configuration.</p>
+      <section>
+        <label>Workspace</label><input type="text" id="set-workspace" />
+        <label>AI Provider</label><select id="set-provider"><option value="local">Local</option><option value="openai">OpenAI</option><option value="anthropic">Anthropic</option></select>
+        <label>Embedding Model</label><input type="text" id="set-embedding" />
+        <label>Chunk Size</label><input type="number" id="set-chunk" />
+        <button class="btn" id="save-settings">Save Settings</button>
+      </section>
     </div>
   </main>
   <script>
-    const $ = (s) => document.querySelector(s);
-    const panels = ['health','curator','monitor','explorer','search','explain','connectors'];
-    document.getElementById('nav').addEventListener('click', (e) => {
+    const $ = s => document.querySelector(s);
+    const panels = ['dashboard','knowledge','sources','search','ask','analytics','settings'];
+    document.getElementById('nav').onclick = e => {
       if (e.target.tagName !== 'BUTTON') return;
-      panels.forEach(p => { $('#panel-'+p).classList.add('hidden'); });
+      panels.forEach(p => $('#panel-'+p).classList.add('hidden'));
       $('#panel-'+e.target.dataset.panel).classList.remove('hidden');
       document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
-    });
-    async function api(path) { const r = await fetch(path); return r.json(); }
+    };
+    async function api(path, opts) {
+      const r = await fetch(path, opts);
+      return r.json();
+    }
     function metric(label, val, cls='') {
       return `<div class="metric"><label>${label}</label><value class="${cls}">${val}</value></div>`;
     }
-    async function loadHealth() {
-      const h = await api('/api/health');
+    async function loadDashboard() {
+      const d = await api('/api/v1/dashboard');
+      const dash = d.dashboard || {};
+      const h = dash.health || {};
+      $('#dash-metrics').innerHTML = [
+        metric('Documents', dash.documents ?? '—'),
+        metric('Sources', dash.sources ?? '—'),
+        metric('Searches', dash.searches ?? 0),
+        metric('AI Queries', dash.ai_queries ?? 0),
+        metric('Last Sync', dash.last_sync ? new Date(dash.last_sync).toLocaleString() : '—'),
+      ].join('');
       $('#health-metrics').innerHTML = [
-        metric('Knowledge Score', h.knowledge_score + '%', 'good'),
-        metric('Coverage', h.coverage + '%', 'good'),
-        metric('Freshness', h.freshness + '%'),
-        metric('Duplicate Risk', h.duplicate_risk + '%', h.duplicate_risk > 10 ? 'warn' : ''),
-        metric('Graph Integrity', h.graph_integrity + '%', 'good'),
-        metric('Broken References', h.broken_references, h.broken_references > 0 ? 'warn' : 'good'),
-        metric('Disconnected Graphs', h.disconnected_graphs ?? 0),
+        metric('Knowledge Score', (h.knowledge_score ?? '—') + (h.knowledge_score ? '%' : ''), 'green'),
+        metric('Documents', h.documents ?? '—'),
+        metric('Embeddings', h.embeddings ?? '—'),
+        metric('Duplicates', h.duplicates ?? '—'),
+        metric('Outdated', h.outdated ?? '—'),
       ].join('');
     }
-    async function loadCurator() {
-      const c = await api('/api/curator');
-      $('#curator-list').innerHTML = (c.alerts || []).map(a =>
-        `<div class="alert ${a.severity}"><strong>${a.title}</strong><br>${a.message}${a.action ? '<br><em>Action: '+a.action+'</em>' : ''}</div>`
-      ).join('') || '<p style="color:#94a3b8">No alerts — knowledge base looks healthy.</p>';
-    }
-    async function loadMonitor() {
-      const m = await api('/api/monitor');
-      const k = m.knowledge || {}, r = m.runtime || {}, p = m.pipeline || {};
-      $('#monitor-metrics').innerHTML = [
-        metric('CPU', (r.cpu_percent||0) + '%'),
-        metric('Memory', (r.memory_mb||0) + ' MB'),
-        metric('Documents', k.documents||0),
-        metric('Embeddings', k.embeddings||0),
-        metric('Graph Edges', k.graph_edges||0),
-        metric('Events/sec', p.events_per_sec||0),
-        metric('Search Latency', (p.search_latency_ms||'—') + (p.search_latency_ms ? ' ms' : '')),
-        metric('Knowledge Score', (m.health?.knowledge_score||'—') + (m.health?.knowledge_score ? '%' : '')),
-      ].join('');
-    }
-    async function loadExplorer() {
-      const e = await api('/api/explorer?limit=15');
-      $('#explorer-body').innerHTML = (e.objects||[]).map(o =>
+    async function loadKnowledge() {
+      const k = await api('/api/v1/knowledge?limit=25');
+      $('#knowledge-body').innerHTML = (k.objects||[]).map(o =>
         `<tr><td>${o.id}</td><td>${o.title||'—'}</td><td>${Math.round((o.quality_score||0)*100)}%</td><td>${o.memory_tier||'—'}</td></tr>`
       ).join('');
     }
-    $('#search-q').addEventListener('keydown', async (e) => {
-      if (e.key !== 'Enter') return;
-      const r = await api('/api/search?q=' + encodeURIComponent(e.target.value));
-      $('#search-results').innerHTML = (r.results||[]).map(x =>
-        `<div class="alert"><strong>${x.title}</strong> (${x.score})</div>`
-      ).join('');
-    });
-    $('#explain-q').addEventListener('keydown', async (e) => {
-      if (e.key !== 'Enter') return;
-      const r = await api('/api/explain?q=' + encodeURIComponent(e.target.value));
-      $('#explain-results').innerHTML = (r.results||[]).map(x =>
-        `<div class="alert"><strong>${x.title}</strong><br>${x.summary}<ul>${(x.why||[]).map(w=>'<li>'+w.label+(w.score?': '+w.score+'%':'')+(w.detail?' — '+w.detail:'')+'</li>').join('')}</ul></div>`
-      ).join('');
-    });
-    async function loadConnectors() {
-      const c = await api('/api/connectors');
-      $('#connector-list').innerHTML = (c.connectors||[]).map(x =>
-        `<div class="alert"><strong>${x.name}</strong> (${x.id})</div>`
-      ).join('');
+    async function loadSources() {
+      const s = await api('/api/v1/sources');
+      $('#sources-list').innerHTML = (s.sources||[]).slice(0,30).map(x =>
+        `<div class="source"><span class="badge">${x.format}</span> ${x.name} <span style="color:#64748b">(${x.status})</span></div>`
+      ).join('') || '<p style="color:#64748b">No sources yet. Upload a document above.</p>';
     }
-    loadHealth(); loadCurator(); loadMonitor(); loadExplorer(); loadConnectors();
-    setInterval(loadHealth, 30000);
+    async function loadAnalytics() {
+      const h = await api('/api/v1/health');
+      $('#analytics-metrics').innerHTML = [
+        metric('Knowledge Score', h.knowledge_score+'%', 'green'),
+        metric('Coverage', h.coverage+'%'),
+        metric('Freshness', h.freshness+'%'),
+        metric('Duplicate Risk', h.duplicate_risk+'%'),
+        metric('Broken Refs', h.broken_references),
+        metric('Graph Integrity', h.graph_integrity+'%'),
+      ].join('');
+      const c = await api('/api/curator');
+      $('#curator-list').innerHTML = (c.alerts||[]).map(a =>
+        `<div class="source"><strong>${a.title}</strong><br>${a.message}</div>`
+      ).join('') || '<p style="color:#64748b">No alerts.</p>';
+    }
+    async function loadSettings() {
+      const s = await api('/api/v1/settings');
+      $('#set-workspace').value = s.workspace || 'default';
+      $('#set-provider').value = s.ai_provider || 'local';
+      $('#set-embedding').value = s.embedding_model || '';
+      $('#set-chunk').value = s.chunk_size || 2000;
+    }
+    $('#search-q').addEventListener('keydown', async e => {
+      if (e.key !== 'Enter') return;
+      const r = await api('/api/v1/search?q='+encodeURIComponent(e.target.value));
+      $('#search-results').innerHTML = (r.results||[]).map(x =>
+        `<div class="source"><strong>${x.title}</strong> — score ${x.score}</div>`
+      ).join('') || '<p>No results.</p>';
+    });
+    $('#ask-btn').onclick = async () => {
+      const q = $('#ask-q').value;
+      if (!q) return;
+      $('#ask-answer').innerHTML = '<p class="processing">Thinking...</p>';
+      const r = await api('/api/v1/ask?q='+encodeURIComponent(q));
+      let html = `<div class="answer">${r.answer||'No answer.'}</div>`;
+      html += `<p><span class="badge">Confidence ${r.confidence||0}%</span></p>`;
+      html += (r.sources||[]).map(s =>
+        `<div class="source"><strong>${s.title}</strong> — ${s.confidence}% confidence<br><em>${s.why}</em></div>`
+      ).join('');
+      $('#ask-answer').innerHTML = html;
+      loadDashboard();
+    };
+    $('#upload-btn').onclick = async () => {
+      const f = $('#upload-file').files[0];
+      if (!f) return;
+      $('#upload-status').textContent = 'Processing: Upload → Parse → Clean → Chunk → Metadata → Embeddings → Index → Done';
+      const fd = new FormData();
+      fd.append('file', f);
+      const r = await fetch('/api/v1/upload', {method:'POST', body:fd});
+      const j = await r.json();
+      $('#upload-status').textContent = j.status === 'done'
+        ? `Done — ${j.title} (${j.document_id})`
+        : (j.error || JSON.stringify(j));
+      loadDashboard(); loadSources(); loadKnowledge();
+    };
+    $('#save-settings').onclick = async () => {
+      await api('/api/v1/settings', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({
+        workspace: $('#set-workspace').value,
+        ai_provider: $('#set-provider').value,
+        embedding_model: $('#set-embedding').value,
+        chunk_size: parseInt($('#set-chunk').value, 10),
+      })});
+    };
+    loadDashboard(); loadKnowledge(); loadSources(); loadAnalytics(); loadSettings();
+    setInterval(loadDashboard, 60000);
   </script>
 </body>
 </html>

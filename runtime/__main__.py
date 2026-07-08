@@ -47,8 +47,16 @@ def cmd_ingest(args: argparse.Namespace) -> None:
 
 def cmd_search(args: argparse.Namespace) -> None:
     rt = _rt(args.config)
-    rt.brain.index(force=False)
-    print(json.dumps(rt.search.search(args.query), indent=2))
+    print(json.dumps(rt.universal_search(args.query), indent=2))
+
+
+def cmd_ask(args: argparse.Namespace) -> None:
+    rt = _rt(args.config)
+    print(json.dumps(rt.ask.ask(args.question), indent=2))
+
+
+def cmd_upload(args: argparse.Namespace) -> None:
+    print(json.dumps(_rt(args.config).upload_and_process(args.path), indent=2))
 
 
 def cmd_events(args: argparse.Namespace) -> None:
@@ -102,9 +110,17 @@ def main(argv: list[str] | None = None) -> None:
     p_ingest.add_argument("--source", default="upload")
     p_ingest.set_defaults(func=cmd_ingest)
 
-    p_search = sub.add_parser("search", help="Search knowledge objects")
+    p_search = sub.add_parser("search", help="Universal search")
     p_search.add_argument("query")
     p_search.set_defaults(func=cmd_search)
+
+    p_ask = sub.add_parser("ask", help="Ask Knowledge")
+    p_ask.add_argument("question")
+    p_ask.set_defaults(func=cmd_ask)
+
+    p_upload = sub.add_parser("upload", help="Upload and process a source file")
+    p_upload.add_argument("path")
+    p_upload.set_defaults(func=cmd_upload)
 
     p_events = sub.add_parser("events", help="Recent event bus activity")
     p_events.add_argument("--simulate", action="store_true")

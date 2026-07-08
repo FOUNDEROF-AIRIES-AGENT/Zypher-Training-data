@@ -53,6 +53,12 @@ runtime-dna:
 runtime-studio:
 	python3 -m runtime studio
 
+runtime-ask:
+	python3 -m runtime ask "What knowledge is in my workspace?"
+
+runtime-upload:
+	python3 -m runtime upload README.md
+
 runtime-monitor:
 	python3 -m runtime monitor
 

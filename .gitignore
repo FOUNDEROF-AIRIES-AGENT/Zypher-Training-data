@@ -19,6 +19,9 @@ mlruns/
 # Generated corpus (regenerate with `make generate`)
 knowledge-base/generated/
 
+# User uploads (created by runtime upload / Knowledge Studio)
+knowledge-base/uploads/
+
 # Premium streaming samples (regenerate with `make product-premium`)
 knowledge-base/distributable/_samples/
 

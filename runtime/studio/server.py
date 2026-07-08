@@ -1,13 +1,15 @@
-"""Knowledge Studio local web server."""
+"""Knowledge Studio local web server — Coltex V1."""
 
 from __future__ import annotations
 
+import cgi
 import json
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
 STATIC = Path(__file__).parent / "static"
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 class StudioHandler(BaseHTTPRequestHandler):
@@ -43,32 +45,35 @@ class StudioHandler(BaseHTTPRequestHandler):
         path = parsed.path
         qs = urllib.parse.parse_qs(parsed.query)
 
-        if path == "/" or path == "/index.html":
-            return self._file(STATIC / "index.html", "text/html; charset=utf-8")
+        routes = {
+            "/": lambda: self._file(STATIC / "index.html", "text/html; charset=utf-8"),
+            "/index.html": lambda: self._file(STATIC / "index.html", "text/html; charset=utf-8"),
+            "/api/v1/dashboard": lambda: self._json(rt.v1.snapshot()),
+            "/api/v1/health": lambda: self._json(rt.v1.snapshot()["dashboard"]["health"]),
+            "/api/v1/sources": lambda: self._json({"sources": rt.sources.list_sources(), "supported": [".pdf", ".docx", ".md", ".txt", ".html", ".json"], "coming_soon": ["github", "notion", "google_drive"]}),
+            "/api/v1/settings": lambda: self._json(rt.settings.load()),
+            "/api/dashboard": lambda: self._json(studio.dashboard()),
+            "/api/health": lambda: self._json(rt.analytics.health()),
+            "/api/curator": lambda: self._json(rt.curator.proactive_scan()),
+        }
+        if path in routes:
+            return routes[path]()
 
-        if path == "/api/dashboard":
-            return self._json(studio.dashboard())
-
-        if path == "/api/health":
-            return self._json(rt.analytics.health())
-
-        if path == "/api/monitor":
-            return self._json(rt.monitor.snapshot())
-
-        if path == "/api/curator":
-            return self._json(rt.curator.proactive_scan())
-
-        if path == "/api/explorer":
+        if path == "/api/v1/knowledge":
             limit = int(qs.get("limit", ["20"])[0])
-            offset = int(qs.get("offset", ["0"])[0])
-            return self._json(studio.explorer(limit=limit, offset=offset))
+            return self._json(studio.explorer(limit=limit))
 
-        if path == "/api/search":
+        if path in ("/api/v1/search", "/api/search"):
             q = qs.get("q", [""])[0]
             if not q:
                 return self._json({"error": "missing q"}, 400)
-            rt.brain.index(force=False)
-            return self._json(rt.search.search(q))
+            return self._json(rt.universal_search(q))
+
+        if path == "/api/v1/ask":
+            q = qs.get("q", [""])[0]
+            if not q:
+                return self._json({"error": "missing q"}, 400)
+            return self._json(rt.ask.ask(q))
 
         if path == "/api/explain":
             q = qs.get("q", [""])[0]
@@ -77,22 +82,51 @@ class StudioHandler(BaseHTTPRequestHandler):
             rt.brain.index(force=False)
             return self._json(rt.explain.explain(q))
 
-        if path == "/api/connectors":
-            return self._json({"connectors": rt.connectors.list_connectors()})
+        self.send_error(404)
 
-        if path == "/api/lifecycle":
-            doc_id = qs.get("id", [None])[0]
-            return self._json(studio.lifecycle(doc_id))
+    def do_POST(self):  # noqa: N802
+        rt = self.runtime
+        parsed = urllib.parse.urlparse(self.path)
 
-        if path == "/api/plugins":
-            return self._json(rt.plugins.stats())
+        if parsed.path == "/api/v1/upload":
+            return self._handle_upload()
+
+        if parsed.path == "/api/v1/settings":
+            length = int(self.headers.get("Content-Length", 0))
+            body = json.loads(self.rfile.read(length).decode("utf-8"))
+            return self._json(rt.settings.save(body))
 
         self.send_error(404)
+
+    def _handle_upload(self) -> None:
+        rt = self.runtime
+        content_type = self.headers.get("Content-Type", "")
+        if "multipart/form-data" not in content_type:
+            return self._json({"error": "expected multipart upload"}, 400)
+
+        form = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={"REQUEST_METHOD": "POST"})
+        if "file" not in form:
+            return self._json({"error": "missing file field"}, 400)
+
+        item = form["file"]
+        if not item.filename:
+            return self._json({"error": "empty filename"}, 400)
+
+        inbox = ROOT / "data/sources/inbox"
+        inbox.mkdir(parents=True, exist_ok=True)
+        dest = inbox / Path(item.filename).name
+        with dest.open("wb") as f:
+            f.write(item.file.read())
+
+        result = rt.processing.process(dest)
+        return self._json(result)
 
 
 def serve(runtime, host: str = "127.0.0.1", port: int = 8787) -> None:
     StudioHandler.runtime = runtime
     server = HTTPServer((host, port), StudioHandler)
-    print(f"Knowledge Studio running at http://{host}:{port}/")
-    print("Modules: Explorer · Search · Graph · Analytics · Curator · Lifecycle · Plugins · Monitor")
+    print("Coltex V1 — Knowledge Studio")
+    print("The AI Knowledge Platform for Modern Organizations")
+    print(f"Open http://{host}:{port}/")
+    print("Dashboard · Knowledge · Sources · Search · Ask Knowledge · Analytics · Settings")
     server.serve_forever()
